@@ -3,10 +3,10 @@ import { pageRoutes } from '../index.tsx'
 
 function RegistrationPage() {
   return (
-    <div className='flex flex-col gap-12'>
-      <span>TODO "Thesis Tracker" logo</span>
-      <form className='flex flex-col justify-center gap-4 rounded-2xl bg-white px-8 py-20 drop-shadow-2xl dark:bg-neutral-950 sm:px-20 md:px-[25vw] lg:px-64'>
-        <div className='flex min-w-[40rem] flex-col'>
+    <main className='center flex h-full flex-col items-center justify-center gap-12'>
+      <span className='text-center'>TODO "Thesis Tracker" logo</span>
+      <form className='flex max-w-fit flex-col justify-center gap-4 rounded-2xl bg-white px-8 py-16 drop-shadow-2xl dark:bg-neutral-950 sm:px-20 sm:py-24 md:px-[25vw] md:py-32 lg:px-64'>
+        <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
           <label className='text-left'>ПІП</label>
           <input
             required
@@ -15,7 +15,7 @@ function RegistrationPage() {
             placeholder='Введіть Ваше ПІП'
           />
         </div>
-        <div className='flex min-w-[40rem] flex-col'>
+        <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
           <label className='text-left'>Факультет</label>
           <input
             required
@@ -24,7 +24,7 @@ function RegistrationPage() {
             placeholder='Назва факультету'
           />
         </div>
-        <div className='flex min-w-[40rem] flex-col'>
+        <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
           <label className='text-left'>Група</label>
           <input
             required
@@ -33,7 +33,7 @@ function RegistrationPage() {
             placeholder='Номер групи'
           />
         </div>
-        <div className='flex min-w-[40rem] flex-col'>
+        <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
           <label className='text-left'>Рік випуску</label>
           <input
             required
@@ -42,7 +42,7 @@ function RegistrationPage() {
             placeholder='Введіть Ваш рік випуску'
           />
         </div>
-        <div className='flex min-w-[40rem] flex-col'>
+        <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
           <label className='text-left'>Освітній ступінь</label>
           <select
             required
@@ -56,7 +56,7 @@ function RegistrationPage() {
             <option>Магістр</option>
           </select>
         </div>
-        <div className='flex min-w-[40rem] flex-col'>
+        <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
           <label className='text-left'>Пароль</label>
           <input
             required
@@ -65,7 +65,7 @@ function RegistrationPage() {
             placeholder='Введіть Ваш пароль'
           />
         </div>
-        <div className='flex min-w-[40rem] flex-col'>
+        <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
           <label className='text-left'>Підтвердження паролю</label>
           <input
             required
@@ -88,7 +88,7 @@ function RegistrationPage() {
           </Link>
         </div>
       </form>
-    </div>
+    </main>
   )
 }
 
