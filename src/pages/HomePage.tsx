@@ -1,14 +1,12 @@
 import { Link } from 'react-router-dom'
-import { pageRoutes } from './index.tsx'
+import { routes } from './routes.ts'
 
-function HomePage() {
-  return (
-    <main className='flex h-full flex-col justify-center gap-4 text-center'>
-      <h1 className='mb-8'>Thesis Tracker</h1>
-      <Link to={pageRoutes.auth.login}>Увійти</Link>
-      <Link to={pageRoutes.auth.register}>Зареєструватися</Link>
-    </main>
-  )
+export function HomePage() {
+    return (
+        <main className='flex h-full flex-col justify-center gap-4 text-center'>
+            <h1 className='mb-8'>Thesis Tracker</h1>
+            <Link to={routes.signIn}>Увійти</Link>
+            <Link to={routes.signUp}>Зареєструватися</Link>
+        </main>
+    )
 }
-
-export default HomePage
