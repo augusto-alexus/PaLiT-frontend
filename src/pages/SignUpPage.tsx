@@ -1,125 +1,172 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { ISignUpForm, useSignUp } from '~/backend'
-import { Button, Logo, WithNulpBg } from '~/components'
+import { Button, Logo, Input, Select, WithNulpBg, Toggle } from '~/components'
 import { routes } from '~/pages'
 import { useForm } from '~/hooks'
 
 export function SignUpPage() {
-    const signUp = useSignUp()
-    const [form, onFieldChange, onSubmit] = useForm<ISignUpForm>(
-        {
-            fullName: '',
-            faculty: '',
-            group: '',
-            gradYear: '',
-            gradLevel: '',
-            password: '',
-            confirmPassword: '',
-        },
-        signUp
-    )
+    const navigate = useNavigate()
+    const { form, onFieldChange, onCheckboxFieldChange, onSubmit } =
+        useForm<ISignUpForm>(
+            {
+                firstName: '',
+                lastName: '',
+                email: '',
+                password: '',
+                confirmPassword: '',
+                isStudent: false,
+                faculty: '',
+                group: '',
+                gradYear: '',
+                gradLevel: '',
+            },
+            useSignUp(() => {
+                setInterval(() => {
+                    toast.dismiss()
+                    navigate(routes.signIn)
+                }, 2500)
+            })
+        )
 
     return (
-        <>
+        <div className='flex h-full place-content-center items-center'>
             <WithNulpBg />
-            <main className='center flex h-full flex-col items-center justify-center gap-12'>
-                <div className='place-self-center'>
+            <main className='flex flex-col gap-4 rounded-2xl bg-white px-8 py-12 drop-shadow-2xl dark:bg-neutral-950 sm:px-20 sm:py-16 md:px-[25vw] md:py-24 lg:px-64'>
+                <div className='mb-8 place-self-center'>
                     <Logo />
                 </div>
-                <h1>Реєстрація</h1>
+                <h1 className='text-center font-[Montserrat] text-2xl font-bold text-cs-text-dark dark:text-cs-text-light'>
+                    Реєстрація
+                </h1>
                 <form
                     onSubmit={onSubmit}
-                    className='flex max-w-fit flex-col justify-center gap-4 rounded-2xl bg-white px-8 py-16 drop-shadow-2xl dark:bg-neutral-950 sm:px-20 sm:py-24 md:px-[25vw] md:py-32 lg:px-64'
+                    className='flex w-[19.5rem] flex-col gap-4 sm:w-[24rem] lg:w-[32rem]'
                 >
-                    <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
-                        <label className='text-left'>ПІП</label>
-                        <input
+                    <div className='flex flex-col'>
+                        <label className='text-left'>Прізвище</label>
+                        <Input
                             required
-                            name='fullName'
+                            name='lastName'
                             type='text'
-                            value={form.fullName}
+                            value={form.lastName}
                             onChange={onFieldChange}
-                            placeholder='Введіть Ваше ПІП'
-                            className='rounded-md border-2 border-[#646cff77] bg-inherit px-4 py-2 focus:border-[#646cffbb]'
+                            placeholder='Введіть Ваше призвіще'
                         />
                     </div>
-                    <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
-                        <label className='text-left'>Факультет</label>
-                        <input
+                    <div className='flex flex-col'>
+                        <label className='text-left'>Ім'я</label>
+                        <Input
                             required
-                            name={'faculty'}
+                            name='firstName'
                             type='text'
-                            value={form.faculty}
+                            value={form.firstName}
                             onChange={onFieldChange}
-                            placeholder='Назва факультету'
-                            className='rounded-md border-2 border-[#646cff77] bg-inherit px-4 py-2 focus:border-[#646cffbb]'
+                            placeholder="Введіть Ваше ім'я"
                         />
                     </div>
-                    <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
-                        <label className='text-left'>Група</label>
-                        <input
+                    <div className='flex flex-col'>
+                        <label className='text-left'>Пошта</label>
+                        <Input
                             required
-                            name='group'
-                            type='text'
-                            value={form.group}
+                            name='email'
+                            type='email'
+                            value={form.email}
                             onChange={onFieldChange}
-                            placeholder='Номер групи'
-                            className='rounded-md border-2 border-[#646cff77] bg-inherit px-4 py-2 focus:border-[#646cffbb]'
+                            placeholder='Введіть Вашу пошту'
                         />
                     </div>
-                    <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
-                        <label className='text-left'>Рік випуску</label>
-                        <input
-                            required
-                            name='gradYear'
-                            type='text'
-                            value={form.gradYear}
-                            onChange={onFieldChange}
-                            placeholder='Введіть Ваш рік випуску'
-                            className='rounded-md border-2 border-[#646cff77] bg-inherit px-4 py-2 focus:border-[#646cffbb]'
-                        />
-                    </div>
-                    <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
-                        <label className='text-left'>Освітній ступінь</label>
-                        <select
-                            required
-                            name='gradLevel'
-                            value={form.gradLevel}
-                            onChange={onFieldChange}
-                            className='rounded-md border-2 border-[#646cff77] bg-inherit px-4 py-2 focus:border-[#646cffbb]'
-                        >
-                            <option disabled hidden value=''>
-                                Виберіть Ваш освітній ступінь
-                            </option>
-                            <option value='bachelor'>Бакалавр</option>
-                            <option value='master'>Магістр</option>
-                        </select>
-                    </div>
-                    <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
+                    <div className='flex flex-col'>
                         <label className='text-left'>Пароль</label>
-                        <input
+                        <Input
                             required
                             name='password'
                             type='password'
                             value={form.password}
                             onChange={onFieldChange}
                             placeholder='Введіть Ваш пароль'
-                            className='rounded-md border-2 border-[#646cff77] bg-inherit px-4 py-2 focus:border-red-300'
                         />
                     </div>
-                    <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
+                    <div className='flex flex-col'>
                         <label className='text-left'>
                             Підтвердження паролю
                         </label>
-                        <input
+                        <Input
                             required
                             name='confirmPassword'
                             type='password'
                             value={form.confirmPassword}
                             onChange={onFieldChange}
                             placeholder='Підтвердіть Ваш пароль'
-                            className='rounded-md border-2 border-[#646cff77] bg-inherit px-4 py-2 focus:border-[#646cffbb]'
                         />
+                    </div>
+                    <div className='flex flex-col'>
+                        <Toggle
+                            name='isStudent'
+                            checked={form.isStudent}
+                            onChange={onCheckboxFieldChange}
+                            label='Зареєструватися як студент'
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label hidden={!form.isStudent} className='text-left'>
+                            Факультет
+                        </label>
+                        <Input
+                            hidden={!form.isStudent}
+                            required={form.isStudent}
+                            name={'faculty'}
+                            type='text'
+                            value={form.faculty}
+                            onChange={onFieldChange}
+                            placeholder='Назва факультету'
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label hidden={!form.isStudent} className='text-left'>
+                            Група
+                        </label>
+                        <Input
+                            hidden={!form.isStudent}
+                            required={form.isStudent}
+                            name='group'
+                            type='text'
+                            value={form.group}
+                            onChange={onFieldChange}
+                            placeholder='Номер групи'
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label hidden={!form.isStudent} className='text-left'>
+                            Рік випуску
+                        </label>
+                        <Input
+                            hidden={!form.isStudent}
+                            required={form.isStudent}
+                            name='gradYear'
+                            type='date'
+                            value={form.gradYear}
+                            onChange={onFieldChange}
+                            placeholder='Введіть Ваш рік випуску'
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label hidden={!form.isStudent} className='text-left'>
+                            Освітній ступінь
+                        </label>
+                        <Select
+                            hidden={!form.isStudent}
+                            required={form.isStudent}
+                            name='gradLevel'
+                            value={form.gradLevel}
+                            onChange={onFieldChange}
+                        >
+                            <option disabled hidden value=''>
+                                Виберіть Ваш освітній ступінь
+                            </option>
+                            <option value='bachelor'>Бакалавр</option>
+                            <option value='master'>Магістр</option>
+                        </Select>
                     </div>
                     <Button>Реєстрація</Button>
                     <div className='self-start'>
@@ -130,6 +177,6 @@ export function SignUpPage() {
                     </div>
                 </form>
             </main>
-        </>
+        </div>
     )
 }

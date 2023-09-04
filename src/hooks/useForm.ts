@@ -3,26 +3,36 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 export function useForm<T extends Object>(
     defaultState: T,
     query: (form: T) => any
-): [
-    T,
-    (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => void,
-    (e: FormEvent<HTMLFormElement>) => void
-] {
-    const [formState, setFormState] = useState<T>(defaultState)
+): {
+    form: T
+    onFieldChange: (
+        e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => void
+    onCheckboxFieldChange: (e: ChangeEvent<HTMLInputElement>) => void
+    onSubmit: (e: FormEvent<HTMLFormElement>) => void
+} {
+    const [form, setForm] = useState<T>(defaultState)
 
     const onFieldChange = (
-        e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
+        e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
-        setFormState((v) => ({
+        setForm((v) => ({
             ...v,
             [e.target.name]: e.target.value,
         }))
     }
 
-    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        query(formState)
+    const onCheckboxFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setForm((v) => ({
+            ...v,
+            [e.target.name]: e.target.checked,
+        }))
     }
 
-    return [formState, onFieldChange, onSubmit]
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        query(form)
+    }
+
+    return { form, onFieldChange, onCheckboxFieldChange, onSubmit }
 }

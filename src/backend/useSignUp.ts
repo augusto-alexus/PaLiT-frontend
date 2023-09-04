@@ -1,41 +1,79 @@
 import axios from 'axios'
-import { toast } from 'react-toastify'
 import { endpoints } from './endpoints'
-import { useAuthStore } from '~/store/authStore.ts'
+import { toast } from '~/components'
 
 export interface ISignUpForm {
-    fullName: string
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    confirmPassword: string
+    isStudent: boolean
     faculty: string
     group: string
     gradYear: string
     gradLevel: string
-    password: string
-    confirmPassword: string
 }
 
-export function useSignUp() {
-    const authStore = useAuthStore()
+interface ITeacherSignUpDTO {
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+}
+
+function getTeacherSignUpDTO(form: ISignUpForm): ITeacherSignUpDTO {
+    return {
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        password: form.password,
+    }
+}
+
+interface IStudentSignUpDTO extends ITeacherSignUpDTO {
+    cluster: string
+    faculty: string
+    graduateDate: string
+    degree: string
+}
+
+function getStudentSignUpDTO(form: ISignUpForm): IStudentSignUpDTO {
+    return {
+        ...getTeacherSignUpDTO(form),
+        cluster: form.group,
+        faculty: form.faculty,
+        graduateDate: form.gradYear,
+        degree: form.gradLevel.toUpperCase(),
+    }
+}
+
+export function useSignUp(onSuccess?: () => void) {
     return (form: ISignUpForm) => {
-        axios
-            .post(endpoints.signUpTeacher, form)
-            .then(({ data }) => {
-                const accessToken = data['accessToken']
-                if (accessToken satisfies string) {
-                    authStore.setAccessToken(accessToken)
+        if (form.password !== form.confirmPassword) {
+            toast('Password not confirmed!')
+            return
+        }
+        if (form.isStudent) {
+            axios
+                .post(endpoints.signUpStudent, getStudentSignUpDTO(form))
+                .then(() => {
                     toast('Signed up successfully!')
-                } else throw new Error('Unexpected type for "accessToken"')
-            })
-            .catch((err) => {
-                toast(`Error! ${err}`, {
-                    position: 'top-right',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'dark',
+                    onSuccess?.()
                 })
-            })
+                .catch((err) => {
+                    toast(`Error! ${err}`)
+                })
+        } else {
+            axios
+                .post(endpoints.signUpTeacher, getTeacherSignUpDTO(form))
+                .then(() => {
+                    toast('Signed up successfully!')
+                    onSuccess?.()
+                })
+                .catch((err) => {
+                    toast(`Error! ${err}`)
+                })
+        }
     }
 }

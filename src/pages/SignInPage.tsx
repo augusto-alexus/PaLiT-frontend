@@ -1,64 +1,76 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { ISignInForm, useSignIn } from '~/backend'
-import { Button, Logo, WithNulpBg } from '~/components'
+import {
+    Button,
+    Logo,
+    Input,
+    WithNulpBg,
+    Password,
+    Checkbox,
+} from '~/components'
 import { useForm } from '~/hooks'
 import { routes } from '~/pages'
 
 export function SignInPage() {
-    const signIn = useSignIn()
-    const [form, onFieldChange, onSubmit] = useForm<ISignInForm>(
-        {
-            email: '',
-            password: '',
-            rememberMe: false,
-        },
-        signIn
-    )
+    const navigate = useNavigate()
+    const { form, onFieldChange, onCheckboxFieldChange, onSubmit } =
+        useForm<ISignInForm>(
+            {
+                email: '',
+                password: '',
+                rememberMe: false,
+            },
+            useSignIn(() => {
+                setInterval(() => {
+                    toast.dismiss()
+                    navigate(routes.home)
+                }, 2500)
+            })
+        )
 
     return (
-        <>
+        <div className='flex h-full place-content-center items-center'>
             <WithNulpBg />
-            <main className='center flex h-full flex-col items-center justify-center gap-12'>
+            <main className='flex flex-col gap-4 rounded-2xl bg-white px-8 py-12 drop-shadow-2xl dark:bg-neutral-950 sm:px-20 sm:py-16 md:px-[25vw] md:py-24 lg:px-64'>
+                <div className='mb-8 place-self-center'>
+                    <Logo />
+                </div>
+                <h1 className='mb-16 text-center font-[Montserrat] text-2xl font-bold text-cs-text-dark dark:text-cs-text-light'>
+                    Авторизація
+                </h1>
                 <form
                     onSubmit={onSubmit}
-                    className='flex max-w-fit flex-col justify-center gap-4 rounded-2xl bg-white px-8 py-16 drop-shadow-2xl dark:bg-neutral-950 sm:px-20 sm:py-24 md:px-[25vw] md:py-32 lg:px-64'
+                    className='flex w-[19.5rem] flex-col gap-4 sm:w-[24rem] lg:w-[32rem]'
                 >
-                    <div className='place-self-center'>
-                        <Logo />
-                    </div>
-                    <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
+                    <div className='flex flex-col'>
                         <label className='text-left'>Пошта</label>
-                        <input
+                        <Input
                             required
                             name='email'
                             type='email'
                             value={form.email}
                             onChange={onFieldChange}
                             placeholder='Введіть Вашу пошту'
-                            className='rounded-md border-2 border-[#646cff77] bg-inherit px-4 py-2 focus:border-[#646cffbb]'
                         />
                     </div>
-                    <div className='flex w-[19.5rem] flex-col sm:w-[24rem]'>
+                    <div className='flex flex-col'>
                         <label className='text-left'>Пароль</label>
-                        <input
+                        <Password
                             required
                             name='password'
-                            type='password'
                             value={form.password}
                             onChange={onFieldChange}
                             placeholder='Введіть Ваш пароль'
-                            className='rounded-md border-2 border-[#646cff77] bg-inherit px-4 py-2 focus:border-red-300'
                         />
                     </div>
-                    <div className='flex w-[19.5rem] flex-row gap-2 sm:w-[24rem]'>
-                        <input
+                    <div className='flex-row-[24rem] flex'>
+                        <Checkbox
+                            label={"Запам'ятати мене"}
                             name='rememberMe'
-                            type='checkbox'
                             checked={form.rememberMe}
-                            onChange={onFieldChange}
-                            className='rounded-none'
+                            onChange={onCheckboxFieldChange}
                         />
-                        <label className='text-left'>Запам'ятати мене</label>
                     </div>
                     <Button>Авторизація</Button>
                     <div className='self-start'>
@@ -69,6 +81,6 @@ export function SignInPage() {
                     </div>
                 </form>
             </main>
-        </>
+        </div>
     )
 }

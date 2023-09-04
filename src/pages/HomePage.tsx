@@ -1,12 +1,29 @@
-import { Link } from 'react-router-dom'
-import { routes } from './routes.ts'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { routes } from '~/pages/routes.ts'
+import { useAuthStore } from '~/store/authStore.ts'
+import { useCurrentUser } from '~/backend/useCurrentUser.ts'
 
 export function HomePage() {
+    const navigate = useNavigate()
+    const authStore = useAuthStore()
+    const currentUser = useCurrentUser()
+
+    useEffect(() => {
+        if (authStore.accessToken === null) {
+            navigate(routes.signIn)
+        } else {
+            currentUser(authStore.accessToken)
+        }
+    }, [authStore.accessToken])
+
     return (
-        <main className='flex h-full flex-col justify-center gap-4 text-center'>
-            <h1 className='mb-8'>Thesis Tracker</h1>
-            <Link to={routes.signIn}>Увійти</Link>
-            <Link to={routes.signUp}>Зареєструватися</Link>
+        <main>
+            <h1>TODO User info here</h1>
+            <h2>Access token: {authStore.accessToken}</h2>
+            <button onClick={authStore.resetAccessToken}>
+                Reset token (log out)
+            </button>
         </main>
     )
 }
