@@ -1,7 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { ISignUpForm, useSignUp } from '~/backend'
-import { Button, Logo, Input, Select, WithNulpBg, Toggle } from '~/components'
+import {
+    Button,
+    Logo,
+    Input,
+    Select,
+    WithNulpBg,
+    Toggle,
+    Password,
+} from '~/components'
 import { routes } from '~/pages'
 import { useForm } from '~/hooks'
 
@@ -78,7 +86,7 @@ export function SignUpPage() {
                     </div>
                     <div className='flex flex-col'>
                         <label className='text-left'>Пароль</label>
-                        <Input
+                        <Password
                             required
                             name='password'
                             type='password'
@@ -91,7 +99,7 @@ export function SignUpPage() {
                         <label className='text-left'>
                             Підтвердження паролю
                         </label>
-                        <Input
+                        <Password
                             required
                             name='confirmPassword'
                             type='password'
