@@ -30,7 +30,7 @@ export function SignUpPage() {
                 gradLevel: '',
             },
             useSignUp(() => {
-                setInterval(() => {
+                setTimeout(() => {
                     toast.dismiss()
                     navigate(routes.signIn)
                 }, 2500)

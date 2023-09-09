@@ -22,7 +22,7 @@ export function SignInPage() {
                 rememberMe: false,
             },
             useSignIn(() => {
-                setInterval(() => {
+                setTimeout(() => {
                     toast.dismiss()
                     navigate(routes.home)
                 }, 2500)
