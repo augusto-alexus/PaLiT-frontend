@@ -5,7 +5,7 @@ interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {}
 export function Input(props: IInputProps) {
     return (
         <input
-            className='w-full rounded-md border-2 border-[#646cff77] bg-inherit px-4 py-2 focus:border-[#646cffbb]'
+            className='w-full rounded-md border border-cs-additional-gray bg-inherit px-4 py-2 text-cs-additional-gray shadow hover:border-cs-secondary focus:border-cs-secondary focus:text-cs-text-dark focus:outline-none active:text-cs-text-dark'
             {...props}
         />
     )
@@ -16,12 +16,12 @@ interface IPasswordProps extends InputHTMLAttributes<HTMLInputElement> {}
 export function Password(props: IPasswordProps) {
     const [isHidden, setIsHidden] = useState<boolean>(true)
     return (
-        <div className='relative'>
+        <div className='relative focus-within:border-cs-secondary focus-within:text-cs-text-dark focus-within:outline-none'>
             <Input type={isHidden ? 'password' : 'text'} {...props} />
             <button
                 type='button'
                 onClick={() => setIsHidden((v) => !v)}
-                className='absolute right-0 top-0 border-0 bg-transparent'
+                className='absolute right-4 top-1/2 -translate-y-1/2 border-0 bg-transparent p-0 text-xl text-cs-additional-gray hover:border hover:border-cs-secondary focus:border active:text-cs-text-dark'
             >
                 {isHidden ? (
                     <i className='ri-eye-line'></i>
@@ -29,6 +29,19 @@ export function Password(props: IPasswordProps) {
                     <i className='ri-eye-off-line'></i>
                 )}
             </button>
+        </div>
+    )
+}
+
+interface ISearchProps extends InputHTMLAttributes<HTMLInputElement> {}
+
+export function Search(props: ISearchProps) {
+    return (
+        <div className='relative h-fit'>
+            <Input type='search' {...props} />
+            <div className='absolute right-4 top-1/2 -translate-y-1/2 text-xl'>
+                <i className='ri-search-line text-cs-additional-gray'></i>
+            </div>
         </div>
     )
 }

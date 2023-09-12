@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@tanstack/react-query": "^4.35.0",
+    "@tanstack/react-query-devtools": "^4.35.0",
     "axios": "^1.5.0",
     "pnpm": "^8.6.10",
     "react": "^18.2.0",
@@ -20,6 +23,7 @@
     "zustand": "^4.3.9"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^4.34.1",
     "@types/node": "^20.5.9",
     "@types/react": "^18.2.17",
     "@types/react-dom": "^18.2.7",

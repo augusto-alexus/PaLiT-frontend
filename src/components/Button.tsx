@@ -21,13 +21,17 @@ export function Button({ preset = 'filled', ...props }: IButtonProps) {
                     : ''
             } dark:text-inherit dark:brightness-75 `
         )
-    else if (preset == 'filled')
+    else if (preset === 'filled')
         stylesRaw.push(
             'bg-cs-primary text-white dark:text-inherit hover:bg-cs-accent-blue focus:bg-cs-accent-blue'
         )
-    else if (preset == 'outlined')
+    else if (preset === 'outlined')
         stylesRaw.push(
             'bg-transparent text-cs-primary border-cs-primary border-2 hover:text-cs-accent-blue hover:border-cs-accent-blue focus:text-cs-accent-blue focus:border-cs-accent-blue'
+        )
+    else if (preset === 'text')
+        stylesRaw.push(
+            'bg-transparent border-0 text-cs-primary hover:text-cs-secondary focus:text-cs-secondary hover:underline focus:underline'
         )
 
     return <button className={`${stylesRaw.join(' ')}`} {...props} />

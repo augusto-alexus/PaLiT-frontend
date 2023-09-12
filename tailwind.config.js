@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     theme: {
@@ -16,6 +16,8 @@ export default {
                 'cs-bg-neutral': '#ECF3F5',
                 'cs-warning': '#CF3C0E',
                 'cs-disabled': '#657671',
+                'cs-additional-gray': '#9BA5A2',
+                'cs-additional-green': '#A4C716',
             },
         },
     },

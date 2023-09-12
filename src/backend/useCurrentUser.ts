@@ -3,19 +3,22 @@ import { toast } from '~/components'
 import { endpoints } from './endpoints'
 
 export interface IRoleDTO {
-    id: number
+    id: string
     name: string
-    roleId: number
+}
+
+export interface IStudentDTO {
+    studentId: string
+    degree: string
 }
 
 export interface ICurrentUserDTO {
     firstName: string
     lastName: string
     email: string
-    password: string
     userId: number
-    role: IRoleDTO
-    id: number
+    roleDTO: IRoleDTO
+    studentDTO: IStudentDTO
 }
 
 export function useCurrentUser(
@@ -32,12 +35,7 @@ export function useCurrentUser(
                 },
             })
             .then(({ data }) => {
-                if (data satisfies ICurrentUserDTO) {
-                    onSuccess?.(data as ICurrentUserDTO)
-                } else {
-                    toast('Incoming data format error!')
-                    console.error(`Badly formatted incoming data:`, data)
-                }
+                onSuccess?.(data as ICurrentUserDTO)
             })
             .catch((err) => {
                 toast(`Error! ${err}`)
