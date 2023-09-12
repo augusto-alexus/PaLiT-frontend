@@ -1,22 +1,10 @@
 import axios from 'axios'
 import { toast } from '~/components'
 
-export interface IStageDTO {
-    stageId: number
-    name: string
-    serialOrder: number
-}
-
 export interface IDocumentDTO {
     documentId: string
-    contentId: string
-    studentId: string
     approved: string
-}
-
-export interface IStudentFileInfoDTO {
-    documentId: string
-    approved: boolean
+    originalName: string
 }
 
 export function useGetDocumentById() {
@@ -36,8 +24,11 @@ export function useGetStudentDocuments() {
     return (studentId: string) =>
         axios
             .get(`http://localhost:8080/api/student/${studentId}/file-info`)
-            .then(({ data }) => data)
-            .catch((err) => toast(`Error! ${err}`))
+            .then(({ data }) => data as IDocumentDTO[])
+            .catch((err) => {
+                toast(`Error while getting student files: ${err}`)
+                return [] as IDocumentDTO[]
+            })
 }
 
 export function useUploadDocument() {
@@ -50,7 +41,7 @@ export function useUploadDocument() {
             body: formData,
         })
             .then((response) => response.json())
-            .then((data) => console.log(data))
-            .catch((error) => console.log('error', error))
+            .then(() => toast('File uploaded successfully!'))
+            .catch((error) => toast(`Error during file upload: ${error}`))
     }
 }

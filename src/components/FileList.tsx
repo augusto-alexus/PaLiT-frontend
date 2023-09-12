@@ -7,9 +7,7 @@ export function FileList() {
     const getStudentDocuments = useGetStudentDocuments()
 
     const { isLoading, error, data, isFetching } = useQuery({
-        enabled:
-            authStore.currentUser !== null &&
-            !!authStore.currentUser.studentDTO?.studentId,
+        enabled: !!authStore.currentUser?.studentDTO?.studentId,
         queryKey: [
             'studentDocuments',
             authStore.currentUser?.studentDTO?.studentId || '???',
@@ -33,6 +31,13 @@ export function FileList() {
         )
     if (error)
         return <h2>Unknown error occurred while loading documents list</h2>
+
+    if (!data?.length)
+        return (
+            <h3 className='text-center text-3xl text-cs-text-dark'>
+                Наразі Ви не завантажили жодного файлу.
+            </h3>
+        )
 
     return (
         <div>
