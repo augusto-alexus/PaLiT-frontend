@@ -1,9 +1,11 @@
+import { useQuery } from '@tanstack/react-query'
 import { useAuthStore } from '~/store/authStore.ts'
 import { useGetStudentDocuments } from '~/backend/file'
-import { useQuery } from '@tanstack/react-query'
+import { useFileStore } from '~/store/fileStore.ts'
 
 export function FileList() {
     const authStore = useAuthStore()
+    const fileStore = useFileStore()
     const getStudentDocuments = useGetStudentDocuments()
 
     const { isLoading, error, data, isFetching } = useQuery({
@@ -21,7 +23,12 @@ export function FileList() {
         },
     })
 
-    if (isLoading) return <h2>Loading document list...</h2>
+    if (isLoading)
+        return (
+            <div className='h-fit w-fit animate-spin'>
+                <i className='ri-loader-2-line text-4xl'></i>
+            </div>
+        )
 
     if (error && error instanceof Error)
         return (
@@ -40,10 +47,37 @@ export function FileList() {
         )
 
     return (
-        <div>
-            <h2>Documents:</h2>
-            <div>{JSON.stringify(data, undefined, 2)}</div>
-            {isFetching && <div>fetching...</div>}
+        <div className='relative'>
+            <table className='table-auto'>
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Назва документа</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((row, idx) => (
+                        <tr
+                            key={idx}
+                            className='hover:cursor-pointer hover:bg-cs-neutral'
+                            onClick={() =>
+                                fileStore.setPreviewDocumentId(row.documentId)
+                            }
+                        >
+                            <td className='px-4 py-1'>{row.documentId}</td>
+                            <td className='px-4 py-1'>{row.originalName}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {isFetching && (
+                <div className='absolute flex flex-row place-items-center gap-2'>
+                    <div className='h-fit w-fit animate-spin'>
+                        <i className='ri-loader-2-line'></i>
+                    </div>
+                    <span className='align-middle'>оновлюємо...</span>
+                </div>
+            )}
         </div>
     )
 }

@@ -5,7 +5,7 @@ export function Logo() {
         <img
             src={logoSvg}
             alt='Thesis Tracker logo'
-            className='w-fit dark:invert md:scale-125 lg:scale-150'
+            className='w-fit md:scale-125 lg:scale-150'
         />
     )
 }

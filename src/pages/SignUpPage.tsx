@@ -40,11 +40,11 @@ export function SignUpPage() {
     return (
         <div className='flex h-full place-content-center items-center'>
             <WithNulpBg />
-            <main className='flex flex-col gap-4 rounded-2xl bg-white px-8 py-12 drop-shadow-2xl dark:bg-neutral-950 sm:px-20 sm:py-16 md:px-[25vw] md:py-24 lg:px-64'>
+            <main className='flex flex-col gap-4 rounded-2xl bg-white px-8 py-12 drop-shadow-2xl sm:px-20 sm:py-16 md:px-[25vw] md:py-24 lg:px-64'>
                 <div className='mb-8 place-self-center'>
                     <Logo />
                 </div>
-                <h1 className='text-center font-[Montserrat] text-2xl font-bold text-cs-text-dark dark:text-cs-text-light'>
+                <h1 className='text-center font-[Montserrat] text-2xl font-bold text-cs-text-dark'>
                     Реєстрація
                 </h1>
                 <form

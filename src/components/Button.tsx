@@ -19,11 +19,11 @@ export function Button({ preset = 'filled', ...props }: IButtonProps) {
                 preset === 'outlined'
                     ? 'border-1 border-cs-disabled hover:border-cs-disabled focus:border-cs-disabled'
                     : ''
-            } dark:text-inherit dark:brightness-75 `
+            }`
         )
     else if (preset === 'filled')
         stylesRaw.push(
-            'bg-cs-primary text-white dark:text-inherit hover:bg-cs-accent-blue focus:bg-cs-accent-blue'
+            'bg-cs-primary text-white hover:bg-cs-accent-blue focus:bg-cs-accent-blue'
         )
     else if (preset === 'outlined')
         stylesRaw.push(

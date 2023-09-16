@@ -1,6 +1,12 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FileList, Header, BodyInfo, FileInput } from '~/components'
+import {
+    FileList,
+    Header,
+    BodyInfo,
+    FileInput,
+    DocumentPreview,
+} from '~/components'
 import { routes } from '~/pages/routes.ts'
 import { useAuthStore } from '~/store/authStore.ts'
 import { useCurrentUser } from '~/backend/useCurrentUser.ts'
@@ -30,6 +36,7 @@ export function HomePage() {
                 <div className='flex w-full place-content-center'>
                     <FileInput />
                 </div>
+                <DocumentPreview />
             </BodyInfo>
         </>
     )
