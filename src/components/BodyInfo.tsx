@@ -7,7 +7,7 @@ export function BodyInfo(props: PropsWithChildren<{}>) {
     const [showExtendButton, setShowExtendButton] = useState<boolean>(false)
     return (
         <div className='mx-24 mt-6 flex flex-row justify-between border-t-2 pt-4'>
-            <main className='w-full'>{props.children}</main>
+            <main className='mr-6 w-10/12'>{props.children}</main>
             <div>
                 {showExtendButton && (
                     <button

@@ -24,7 +24,7 @@ export function SignInPage() {
             useSignIn(() => {
                 setTimeout(() => {
                     toast.dismiss()
-                    navigate(routes.home)
+                    navigate(routes.home.root)
                 }, 2500)
             })
         )

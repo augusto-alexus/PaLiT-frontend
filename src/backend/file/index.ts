@@ -7,25 +7,14 @@ export interface IDocumentDTO {
     originalName: string
 }
 
-export function useGetDocumentById() {
-    return (documentId: string) =>
-        axios
-            .get(`http://localhost:8080/api/file/${documentId}`)
-            .then((res) => {
-                console.log(res)
-                return res
-            })
-            .catch((err) => {
-                toast(`Error! ${err}`)
-                throw err
-            })
-}
-
 export function useGetStudentDocuments() {
     return (studentId: string) =>
         axios
             .get(`http://localhost:8080/api/student/${studentId}/file-info`)
-            .then(({ data }) => data as IDocumentDTO[])
+            .then(({ data }) => {
+                console.log(data)
+                return data as IDocumentDTO[]
+            })
             .catch((err) => {
                 toast(`Error while getting student files: ${err}`)
                 throw err

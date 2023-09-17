@@ -92,7 +92,7 @@ interface ISelectProps extends InputHTMLAttributes<HTMLSelectElement> {}
 export function Select(props: ISelectProps) {
     return (
         <select
-            className='rounded-md border-2 border-[#646cff77] bg-inherit px-4 py-2 focus:border-[#646cffbb]'
+            className='w-full rounded-md border border-cs-additional-gray bg-inherit px-4 py-2 text-cs-additional-gray shadow hover:border-cs-secondary focus:border-cs-secondary focus:text-cs-text-dark focus:outline-none active:text-cs-text-dark'
             {...props}
         />
     )

@@ -3,17 +3,17 @@ import { useUploadDocument } from '~/backend/file'
 import { useAuthStore } from '~/store/authStore.ts'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-type sizeUnit = 'Bi' | 'KBi' | 'MBi' | 'GBi'
+type sizeUnit = 'Bi' | 'KiB' | 'MiB' | 'GiB'
 
 function getNextSizeUnit(unit: sizeUnit) {
-    if (unit === 'Bi') return 'KBi'
-    if (unit === 'KBi') return 'MBi'
-    if (unit === 'MBi') return 'GBi'
+    if (unit === 'Bi') return 'KiB'
+    if (unit === 'KiB') return 'MiB'
+    if (unit === 'MiB') return 'GiB'
     throw new Error(`No size unit larger then '${unit}' is defined.`)
 }
 
 function getReadableFileSize(size: number, unit: sizeUnit = 'Bi') {
-    if (size < 1024 && unit != 'GBi') return `${size.toFixed(2)} ${unit}`
+    if (size < 1024 && unit != 'GiB') return `${size.toFixed(2)} ${unit}`
     return getReadableFileSize(size / 1024, getNextSizeUnit(unit))
 }
 

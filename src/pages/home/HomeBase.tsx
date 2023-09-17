@@ -1,17 +1,11 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import {
-    FileList,
-    Header,
-    BodyInfo,
-    FileInput,
-    DocumentPreview,
-} from '~/components'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { Header, BodyInfo } from '~/components'
 import { routes } from '~/pages/routes.ts'
 import { useAuthStore } from '~/store/authStore.ts'
 import { useCurrentUser } from '~/backend/useCurrentUser.ts'
 
-export function HomePage() {
+export function HomeBase() {
     const navigate = useNavigate()
     const authStore = useAuthStore()
     const currentUser = useCurrentUser((userData) =>
@@ -30,13 +24,7 @@ export function HomePage() {
         <>
             <Header />
             <BodyInfo>
-                <div className='my-24 w-full'>
-                    <FileList />
-                </div>
-                <div className='flex w-full place-content-center'>
-                    <FileInput />
-                </div>
-                <DocumentPreview />
+                <Outlet />
             </BodyInfo>
         </>
     )
