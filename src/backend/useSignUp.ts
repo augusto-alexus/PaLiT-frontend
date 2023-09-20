@@ -58,7 +58,7 @@ export function useSignUp(onSuccess?: () => void) {
             axios
                 .post(endpoints.signUpStudent, getStudentSignUpDTO(form))
                 .then(() => {
-                    toast('Signed up successfully!')
+                    toast('Реєстрація успішна!')
                     onSuccess?.()
                 })
                 .catch((err) => {
@@ -68,7 +68,7 @@ export function useSignUp(onSuccess?: () => void) {
             axios
                 .post(endpoints.signUpTeacher, getTeacherSignUpDTO(form))
                 .then(() => {
-                    toast('Signed up successfully!')
+                    toast('Реєстрація успішна!')
                     onSuccess?.()
                 })
                 .catch((err) => {

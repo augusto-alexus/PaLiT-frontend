@@ -7,4 +7,6 @@ export const endpoints = Object.freeze({
     signUpStudent: prefixEndpoints('auth/student/signup'),
     signUpTeacher: prefixEndpoints('auth/teacher/signup'),
     currentUser: prefixEndpoints('user/current'),
+    getAllStudents: prefixEndpoints('student/all'),
+    getAllTeachers: prefixEndpoints('teacher/all'),
 })

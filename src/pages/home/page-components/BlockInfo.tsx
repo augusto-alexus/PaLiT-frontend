@@ -3,14 +3,15 @@ import { useAuthStore } from '~/store/authStore.ts'
 
 export function BlockInfo() {
     const authStore = useAuthStore()
+    const isTeacher = authStore.currentUser?.roleDTO?.name === 'teacher'
     return (
         <div className='flex flex-col gap-2 border-l-2 px-6'>
             <InfoRow
-                infoKey='Студент'
+                infoKey={isTeacher ? 'Викладач' : 'Студент'}
                 value={
-                    authStore.currentUser?.lastName +
+                    (authStore.currentUser?.lastName || '') +
                     ' ' +
-                    authStore.currentUser?.firstName
+                    (authStore.currentUser?.firstName || '')
                 }
             />
             <InfoRow

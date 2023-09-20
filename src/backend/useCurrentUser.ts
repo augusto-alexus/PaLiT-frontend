@@ -38,7 +38,7 @@ export function useCurrentUser(
                 onSuccess?.(data as ICurrentUserDTO)
             })
             .catch((err) => {
-                toast(`Error! ${err}`)
+                toast(`Error! ${JSON.stringify(err, undefined, 2)}`)
             })
     }
 }

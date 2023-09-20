@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { routes } from '~/pages'
 import { useAuthStore } from '~/store/authStore.ts'
 import { useGetStudentDocuments } from '~/backend/file'
-import { Feed, FileInput } from '~/components'
+import { FileInput, Loading, DisplayError } from '~/components'
 
 export function HomeFiles() {
     const navigate = useNavigate()
@@ -25,74 +25,65 @@ export function HomeFiles() {
         },
     })
 
-    if (isLoading)
+    if (authStore.currentUser?.roleDTO?.name === 'teacher')
         return (
-            <div className='h-fit w-fit animate-spin'>
-                <i className='ri-loader-2-line text-4xl'></i>
-            </div>
-        )
-
-    if (error && error instanceof Error)
-        return (
-            <h2>
-                Error occurred while loading documents list: ${error.message}
+            <h2 className={'text-2xl'}>
+                Перегляд завантажених файлів доступний лише студентам
             </h2>
         )
-    if (error)
-        return <h2>Unknown error occurred while loading documents list</h2>
+
+    if (isLoading) return <Loading />
+    if (error) return <DisplayError error={error} />
 
     return (
         <div className='my-24'>
-            <div className='flex place-content-center'>
-                <Feed />
-            </div>
-            {/*{!!data?.length ? (*/}
-            {/*    <div className='relative flex place-content-center  '>*/}
-            {/*        <table className='table-auto'>*/}
-            {/*            <thead>*/}
-            {/*                <tr>*/}
-            {/*                    <th>№</th>*/}
-            {/*                    <th>Назва документа</th>*/}
-            {/*                </tr>*/}
-            {/*            </thead>*/}
-            {/*            <tbody>*/}
-            {/*                {data.map((row, idx) => (*/}
-            {/*                    <tr*/}
-            {/*                        key={idx}*/}
-            {/*                        className='hover:cursor-pointer hover:bg-cs-neutral'*/}
-            {/*                        onClick={() =>*/}
-            {/*                            navigate(*/}
-            {/*                                `../${routes.home.filePreview(*/}
-            {/*                                    row.documentId*/}
-            {/*                                )}`,*/}
-            {/*                                {*/}
-            {/*                                    relative: 'route',*/}
-            {/*                                }*/}
-            {/*                            )*/}
-            {/*                        }*/}
-            {/*                    >*/}
-            {/*                        <td className='px-4 py-1'>{idx + 1}</td>*/}
-            {/*                        <td className='px-4 py-1'>*/}
-            {/*                            {row.originalName}*/}
-            {/*                        </td>*/}
-            {/*                    </tr>*/}
-            {/*                ))}*/}
-            {/*            </tbody>*/}
-            {/*        </table>*/}
-            {/*        {isFetching && (*/}
-            {/*            <div className='absolute flex flex-row place-items-center gap-2'>*/}
-            {/*                <div className='h-fit w-fit animate-spin'>*/}
-            {/*                    <i className='ri-loader-2-line'></i>*/}
-            {/*                </div>*/}
-            {/*                <span className='align-middle'>оновлюємо...</span>*/}
-            {/*            </div>*/}
-            {/*        )}*/}
-            {/*    </div>*/}
-            {/*) : (*/}
-            {/*    <h3 className='text-center text-3xl text-cs-text-dark'>*/}
-            {/*        Наразі Ви не завантажили жодного файлу.*/}
-            {/*    </h3>*/}
-            {/*)}*/}
+            {data?.length ? (
+                <div className='relative flex place-content-center  '>
+                    <table className='table-auto'>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Назва документа</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map((row, idx) => (
+                                <tr
+                                    key={idx}
+                                    className='hover:cursor-pointer hover:bg-cs-neutral'
+                                    onClick={() =>
+                                        navigate(
+                                            `../${routes.home.filePreview(
+                                                row.documentId
+                                            )}`,
+                                            {
+                                                relative: 'route',
+                                            }
+                                        )
+                                    }
+                                >
+                                    <td className='px-4 py-1'>{idx + 1}</td>
+                                    <td className='px-4 py-1'>
+                                        {row.originalName}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    {isFetching && (
+                        <div className='absolute flex flex-row place-items-center gap-2'>
+                            <div className='h-fit w-fit animate-spin'>
+                                <i className='ri-loader-2-line'></i>
+                            </div>
+                            <span className='align-middle'>оновлюємо...</span>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <h3 className='text-center text-3xl text-cs-text-dark'>
+                    Наразі Ви не завантажили жодного файлу.
+                </h3>
+            )}
             <div className='mt-16'>
                 <FileInput />
             </div>

@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { toast } from '~/components'
 import { routes } from '~/pages'
 
 export function HomeFilePreview() {
@@ -7,8 +6,8 @@ export function HomeFilePreview() {
     const { documentId } = useParams()
 
     if (!documentId) {
-        toast("Can't show a preview: documentId is empty")
         navigate('..')
+        return <></>
     }
 
     return (

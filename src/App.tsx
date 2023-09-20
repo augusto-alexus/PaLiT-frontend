@@ -10,6 +10,8 @@ import {
     SignInPage,
     HomeFiles,
     HomeFilePreview,
+    StudentList,
+    TeacherList,
 } from '~/pages'
 import { HomeBase } from '~/pages/home/HomeBase.tsx'
 
@@ -22,6 +24,14 @@ function App() {
                 <Route path={routes.signUp} element={<SignUpPage />} />
                 <Route path={routes.home.root} element={<HomeBase />}>
                     <Route path={routes.home.files} element={<HomeFiles />} />
+                    <Route
+                        path={routes.home.studentList}
+                        element={<StudentList />}
+                    />
+                    <Route
+                        path={routes.home.teacherList}
+                        element={<TeacherList />}
+                    />
                     <Route
                         path={routes.home.filePreview()}
                         element={<HomeFilePreview />}

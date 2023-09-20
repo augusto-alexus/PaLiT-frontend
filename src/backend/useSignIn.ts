@@ -28,11 +28,11 @@ export function useSignIn(onSuccess?: () => void) {
             .post(endpoints.signIn, getSignInDTO(form))
             .then(({ data }) => {
                 const accessToken = data['accessToken']
-                if (accessToken satisfies string) {
+                if (accessToken) {
                     authStore.setAccessToken(accessToken)
-                    toast('Signed in successfully!')
+                    toast('Авторизація успішна!')
                     onSuccess?.()
-                } else toast('Unexpected type for "accessToken"')
+                } else throw Error('Unexpected return for "accessToken"')
             })
             .catch((err) => {
                 toast(`Error! ${err}`)

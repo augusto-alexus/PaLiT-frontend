@@ -6,5 +6,7 @@ export const routes = Object.freeze({
         files: 'files',
         filePreview: (documentId?: string) =>
             `file-preview/${documentId ? documentId : ':documentId'}`,
+        studentList: 'students',
+        teacherList: 'teachers',
     }),
 })

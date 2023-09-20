@@ -1,19 +1,15 @@
 import { InputHTMLAttributes, useState } from 'react'
 
-interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {}
-
-export function Input(props: IInputProps) {
+export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
     return (
         <input
-            className='w-full rounded-md border border-cs-additional-gray bg-inherit px-4 py-2 text-cs-additional-gray shadow hover:border-cs-secondary focus:border-cs-secondary focus:text-cs-text-dark focus:outline-none active:text-cs-text-dark'
+            className='w-full rounded-md border border-cs-additional-gray bg-inherit px-4 py-2 text-cs-text-dark shadow hover:border-cs-secondary focus:border-cs-secondary focus:outline-none'
             {...props}
         />
     )
 }
 
-interface IPasswordProps extends InputHTMLAttributes<HTMLInputElement> {}
-
-export function Password(props: IPasswordProps) {
+export function Password(props: InputHTMLAttributes<HTMLInputElement>) {
     const [isHidden, setIsHidden] = useState<boolean>(true)
     return (
         <div className='relative focus-within:border-cs-secondary focus-within:text-cs-text-dark focus-within:outline-none'>
@@ -33,9 +29,7 @@ export function Password(props: IPasswordProps) {
     )
 }
 
-interface ISearchProps extends InputHTMLAttributes<HTMLInputElement> {}
-
-export function Search(props: ISearchProps) {
+export function Search(props: InputHTMLAttributes<HTMLInputElement>) {
     return (
         <div className='relative h-fit'>
             <Input type='search' {...props} />
@@ -87,9 +81,7 @@ export function Toggle({ label, ...props }: IToggleProps) {
     )
 }
 
-interface ISelectProps extends InputHTMLAttributes<HTMLSelectElement> {}
-
-export function Select(props: ISelectProps) {
+export function Select(props: InputHTMLAttributes<HTMLSelectElement>) {
     return (
         <select
             className='w-full rounded-md border border-cs-additional-gray bg-inherit px-4 py-2 text-cs-additional-gray shadow hover:border-cs-secondary focus:border-cs-secondary focus:text-cs-text-dark focus:outline-none active:text-cs-text-dark'
