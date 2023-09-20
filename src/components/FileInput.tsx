@@ -1,21 +1,8 @@
 import { useState } from 'react'
-import { useUploadDocument } from '~/backend/file'
-import { useAuthStore } from '~/store/authStore.ts'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-
-type sizeUnit = 'Bi' | 'KiB' | 'MiB' | 'GiB'
-
-function getNextSizeUnit(unit: sizeUnit) {
-    if (unit === 'Bi') return 'KiB'
-    if (unit === 'KiB') return 'MiB'
-    if (unit === 'MiB') return 'GiB'
-    throw new Error(`No size unit larger then '${unit}' is defined.`)
-}
-
-function getReadableFileSize(size: number, unit: sizeUnit = 'Bi') {
-    if (size < 1024 && unit != 'GiB') return `${size.toFixed(2)} ${unit}`
-    return getReadableFileSize(size / 1024, getNextSizeUnit(unit))
-}
+import { useUploadDocument } from '~/backend/file'
+import { getReadableFileSize } from '~/lib/files.ts'
+import { useAuthStore } from '~/store/authStore'
 
 export function FileInput() {
     const authStore = useAuthStore()

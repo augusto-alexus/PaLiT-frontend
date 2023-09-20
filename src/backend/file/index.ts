@@ -11,10 +11,7 @@ export function useGetStudentDocuments() {
     return (studentId: string) =>
         axios
             .get(`http://localhost:8080/api/student/${studentId}/file-info`)
-            .then(({ data }) => {
-                console.log(data)
-                return data as IDocumentDTO[]
-            })
+            .then(({ data }) => data as IDocumentDTO[])
             .catch((err) => {
                 toast(`Error while getting student files: ${err}`)
                 throw err

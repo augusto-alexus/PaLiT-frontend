@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .scrollbar::-webkit-scrollbar {
+        width: 24px;
+        height: 20px;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+        background: #11698E65;
+        border-radius: 100vh;
+        border: 10px solid #fff;
+    }
+
+    .scrollbar::-webkit-scrollbar-track {
+        border: solid 5px transparent;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #16C79A88;
+    }
+}
+
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;

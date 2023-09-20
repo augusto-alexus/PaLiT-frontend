@@ -1,6 +1,6 @@
 import { Fragment, PropsWithChildren, useState } from 'react'
 import { Transition } from '@headlessui/react'
-import { BlockInfo } from './BlockInfo.tsx'
+import { BlockInfo } from './BlockInfo'
 
 export function BodyInfo(props: PropsWithChildren<{}>) {
     const [infoCollapsed, setInfoCollapsed] = useState<boolean>(false)

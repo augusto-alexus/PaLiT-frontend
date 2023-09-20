@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { Header, BodyInfo } from '~/components'
+import { BodyInfo, Header } from './page-components'
 import { routes } from '~/pages/routes.ts'
 import { useAuthStore } from '~/store/authStore.ts'
 import { useCurrentUser } from '~/backend/useCurrentUser.ts'

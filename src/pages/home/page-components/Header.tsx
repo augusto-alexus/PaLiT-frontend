@@ -1,7 +1,4 @@
-import { Logo } from './Logo.tsx'
-import { Button } from './Button.tsx'
-import { Search } from './Input.tsx'
-import { Avatar } from './Avatar.tsx'
+import { Avatar, Button, Search, Logo } from '~/components'
 import { useAuthStore } from '~/store/authStore.ts'
 
 export function Header() {
