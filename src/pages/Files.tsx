@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { routes } from '~/pages'
+import { routes } from '~/pages/index.ts'
 import { useAuthStore } from '~/store/authStore.ts'
 import { useGetStudentDocuments } from '~/backend/file'
 import { FileInput, Loading, DisplayError } from '~/components'
 
-export function HomeFiles() {
+export function Files() {
     const navigate = useNavigate()
     const authStore = useAuthStore()
     const getStudentDocuments = useGetStudentDocuments()

@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { routes } from '~/pages'
 
-export function HomeFilePreview() {
+export function FilePreview() {
     const navigate = useNavigate()
     const { documentId } = useParams()
 

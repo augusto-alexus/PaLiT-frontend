@@ -3,17 +3,17 @@ import { toast } from 'react-toastify'
 import { ISignUpForm, useSignUp } from '~/backend'
 import {
     Button,
-    Logo,
     Input,
-    Select,
-    WithNulpBg,
-    Toggle,
+    Logo,
     Password,
+    Select,
+    Toggle,
+    WithNulpBg,
 } from '~/components'
-import { routes } from '~/pages'
 import { useForm } from '~/hooks'
+import { routes } from '~/pages'
 
-export function SignUpPage() {
+export function SignUp() {
     const navigate = useNavigate()
     const { form, onFieldChange, onCheckboxFieldChange, onSubmit } =
         useForm<ISignUpForm>(

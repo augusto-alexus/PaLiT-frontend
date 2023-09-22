@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
+import { Fragment } from 'react'
 import { IStudentRequestDTO, useGetAllStudents } from '~/backend'
 import { DisplayError, Loading } from '~/components'
-import { Fragment } from 'react'
 
 export function StudentList() {
     const getAllStudents = useGetAllStudents()
@@ -16,8 +16,6 @@ export function StudentList() {
     if (error) return <DisplayError error={error} />
     if (!data?.length)
         return <h2 className='text-2xl'>Немає жодного студента</h2>
-
-
 
     return (
         <div className='mx-auto flex w-[420px] flex-col gap-4'>

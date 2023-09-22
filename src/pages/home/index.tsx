@@ -1,5 +1,0 @@
-export * from './HomeBase'
-export * from './HomeFiles'
-export * from './HomeFilePreview'
-export * from './StudentList'
-export * from './TeacherList'

@@ -1,5 +1,5 @@
-import { Fragment } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { Fragment } from 'react'
 import { ITeacherRequestDTO, useGetAllTeachers } from '~/backend'
 import { DisplayError, Loading } from '~/components'
 

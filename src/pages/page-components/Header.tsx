@@ -1,7 +1,7 @@
-import { Avatar, Button, Search, Logo } from '~/components'
-import { useAuthStore } from '~/store/authStore.ts'
 import { useNavigate } from 'react-router-dom'
+import { Avatar, Button, Logo, Search } from '~/components'
 import { routes } from '~/pages'
+import { useAuthStore } from '~/store/authStore.ts'
 
 export function Header() {
     const navigate = useNavigate()

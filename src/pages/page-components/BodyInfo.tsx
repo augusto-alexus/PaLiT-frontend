@@ -1,8 +1,8 @@
-import { Fragment, PropsWithChildren, useState } from 'react'
 import { Transition } from '@headlessui/react'
-import { BlockInfo } from './BlockInfo'
+import { Fragment, PropsWithChildren, useState } from 'react'
+import { BlockInfo } from './BlockInfo.tsx'
 
-export function BodyInfo(props: PropsWithChildren<{}>) {
+export function BodyInfo(props: PropsWithChildren<object>) {
     const [infoCollapsed, setInfoCollapsed] = useState<boolean>(false)
     const [showExtendButton, setShowExtendButton] = useState<boolean>(false)
     return (

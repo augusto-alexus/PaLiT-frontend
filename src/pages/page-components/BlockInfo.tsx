@@ -1,5 +1,5 @@
-import { InfoRow } from './InfoRow'
 import { useAuthStore } from '~/store/authStore.ts'
+import { InfoRow } from './InfoRow.tsx'
 
 export function BlockInfo() {
     const authStore = useAuthStore()
