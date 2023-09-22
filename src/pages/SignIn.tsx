@@ -1,6 +1,6 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { ISignInForm, useSignIn } from '~/backend'
+import { signIn } from '~/backend'
 import {
     Button,
     Checkbox,
@@ -11,9 +11,27 @@ import {
 } from '~/components'
 import { useForm } from '~/hooks'
 import { routes } from '~/pages'
+import { useAuthStore } from '~/store/authStore.ts'
 
 export function SignIn() {
     const navigate = useNavigate()
+    const authStore = useAuthStore()
+    const queryClient = useQueryClient()
+    const mutation = useMutation({
+        mutationFn: async ({
+            email,
+            password,
+        }: {
+            email: string
+            password: string
+        }) => signIn({ email, password }),
+        onSuccess: async ({ accessToken }) => {
+            authStore.reset()
+            authStore.setAccessToken(accessToken)
+            await queryClient.invalidateQueries(['currentUser'])
+            navigate(`/${routes.home.dashboard}`)
+        },
+    })
     const { form, onFieldChange, onCheckboxFieldChange, onSubmit } =
         useForm<ISignInForm>(
             {
@@ -21,12 +39,8 @@ export function SignIn() {
                 password: '',
                 rememberMe: false,
             },
-            useSignIn(() => {
-                setTimeout(() => {
-                    toast.dismiss()
-                    navigate(routes.home.root)
-                }, 2500)
-            })
+            (form) =>
+                mutation.mutate({ email: form.email, password: form.password })
         )
 
     return (
@@ -75,7 +89,7 @@ export function SignIn() {
                     <Button>Авторизація</Button>
                     <div className='self-start'>
                         Ще не зареєстровані?
-                        <Link to={routes.signUp} className='ml-4'>
+                        <Link to={`/${routes.signUp}`} className='ml-4'>
                             Реєстрація
                         </Link>
                     </div>
@@ -83,4 +97,10 @@ export function SignIn() {
             </main>
         </div>
     )
+}
+
+interface ISignInForm {
+    email: string
+    password: string
+    rememberMe: boolean
 }

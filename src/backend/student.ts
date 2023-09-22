@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { endpoints } from './endpoints'
+import endpoints from './endpoints'
 
 export interface IStudentRequestDTO {
     firstName: string

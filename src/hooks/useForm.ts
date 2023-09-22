@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 
-export function useForm<T extends Object>(
+export function useForm<T extends object>(
     defaultState: T,
-    query: (form: T) => any
+    query: (form: T) => void
 ): {
     form: T
     onFieldChange: (

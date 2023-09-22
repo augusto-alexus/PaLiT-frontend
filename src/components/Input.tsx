@@ -84,7 +84,7 @@ export function Toggle({ label, ...props }: IToggleProps) {
 export function Select(props: InputHTMLAttributes<HTMLSelectElement>) {
     return (
         <select
-            className='w-full rounded-md border border-cs-additional-gray bg-inherit px-4 py-2 text-cs-additional-gray shadow hover:border-cs-secondary focus:border-cs-secondary focus:text-cs-text-dark focus:outline-none active:text-cs-text-dark'
+            className='w-full rounded-md border border-cs-additional-gray bg-inherit px-4 py-2 text-cs-text-dark shadow hover:border-cs-secondary focus:border-cs-secondary focus:outline-none'
             {...props}
         />
     )

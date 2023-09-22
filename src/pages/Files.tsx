@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
+import { useGetStudentDocuments } from '~/backend/file.ts'
+import { DisplayError, FileInput, Loading } from '~/components'
 import { routes } from '~/pages/index.ts'
 import { useAuthStore } from '~/store/authStore.ts'
-import { useGetStudentDocuments } from '~/backend/file'
-import { FileInput, Loading, DisplayError } from '~/components'
 
 export function Files() {
     const navigate = useNavigate()
@@ -11,24 +11,19 @@ export function Files() {
     const getStudentDocuments = useGetStudentDocuments()
 
     const { isLoading, error, data, isFetching } = useQuery({
-        enabled: !!authStore.currentUser?.studentDTO?.studentId,
-        queryKey: [
-            'studentDocuments',
-            authStore.currentUser?.studentDTO?.studentId || '???',
-        ],
+        enabled: authStore.currentUser?.role === 'student',
+        queryKey: ['studentDocuments', authStore.currentUser?.studentId],
         queryFn: async () => {
-            if (authStore.currentUser === null)
+            if (!authStore.currentUser?.studentId)
                 throw new Error("Can't load document list: no authorized user.")
-            return getStudentDocuments(
-                authStore.currentUser.studentDTO.studentId
-            )
+            return getStudentDocuments(authStore.currentUser.studentId)
         },
     })
 
-    if (authStore.currentUser?.roleDTO?.name === 'teacher')
+    if (authStore.currentUser?.role === 'teacher')
         return (
             <h2 className={'text-2xl'}>
-                Перегляд завантажених файлів доступний лише студентам
+                Перегляд та завантаження власних файлів доступне лише студентам
             </h2>
         )
 

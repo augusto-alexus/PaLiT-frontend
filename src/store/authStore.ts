@@ -1,12 +1,12 @@
 import { create } from 'zustand'
-import { persist, devtools } from 'zustand/middleware'
-import { ICurrentUserDTO } from '~/backend/useCurrentUser.ts'
+import { devtools, persist } from 'zustand/middleware'
+import { ICurrentUser } from '~/models'
 
 interface IAuthState {
     accessToken: string | null
-    currentUser: ICurrentUserDTO | null
+    currentUser: ICurrentUser | null
     setAccessToken: (token: string) => void
-    setCurrentUser: (user: ICurrentUserDTO) => void
+    setCurrentUser: (user: ICurrentUser) => void
     reset: () => void
 }
 
@@ -22,7 +22,7 @@ export const useAuthStore = create<IAuthState>()(
                         false,
                         'setAccessToken'
                     ),
-                setCurrentUser: (user: ICurrentUserDTO) =>
+                setCurrentUser: (user: ICurrentUser) =>
                     set(() => ({ currentUser: user }), false, 'setCurrentUser'),
                 reset: () =>
                     set(

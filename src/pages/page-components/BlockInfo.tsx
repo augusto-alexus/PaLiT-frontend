@@ -1,18 +1,14 @@
-import { useAuthStore } from '~/store/authStore.ts'
+import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
 import { InfoRow } from './InfoRow.tsx'
 
 export function BlockInfo() {
-    const authStore = useAuthStore()
-    const isTeacher = authStore.currentUser?.roleDTO?.name === 'teacher'
+    const currentUser = useCurrentUser()
+    const isTeacher = currentUser.role === 'teacher'
     return (
         <div className='flex flex-col gap-2 border-l-2 px-6'>
             <InfoRow
                 infoKey={isTeacher ? 'Викладач' : 'Студент'}
-                value={
-                    (authStore.currentUser?.lastName || '') +
-                    ' ' +
-                    (authStore.currentUser?.firstName || '')
-                }
+                value={currentUser.lastName + ' ' + currentUser.firstName}
             />
             <InfoRow
                 infoKey='Куратор'

@@ -1,12 +1,14 @@
+import { useMutation } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { ISignUpForm, useSignUp } from '~/backend'
+import { useSignUpStudent, useSignUpTeacher } from '~/backend'
+import { IStudentSignUpDTO, ITeacherSignUpDTO } from '~/backend/auth.types.ts'
 import {
     Button,
     Input,
     Logo,
     Password,
     Select,
+    toast,
     Toggle,
     WithNulpBg,
 } from '~/components'
@@ -15,6 +17,18 @@ import { routes } from '~/pages'
 
 export function SignUp() {
     const navigate = useNavigate()
+    const signUpTeacher = useSignUpTeacher()
+    const signUpStudent = useSignUpStudent()
+    const mutationTeacher = useMutation({
+        mutationFn: async (signUpDTO: ITeacherSignUpDTO) =>
+            signUpTeacher(signUpDTO),
+        onSuccess: () => navigate(routes.signIn),
+    })
+    const mutationStudent = useMutation({
+        mutationFn: async (signUpDTO: IStudentSignUpDTO) =>
+            signUpStudent(signUpDTO),
+        onSuccess: () => navigate(routes.signIn),
+    })
     const { form, onFieldChange, onCheckboxFieldChange, onSubmit } =
         useForm<ISignUpForm>(
             {
@@ -26,15 +40,18 @@ export function SignUp() {
                 isStudent: false,
                 faculty: '',
                 group: '',
-                gradYear: '',
+                gradDate: '',
                 gradLevel: '',
             },
-            useSignUp(() => {
-                setTimeout(() => {
-                    toast.dismiss()
-                    navigate(routes.signIn)
-                }, 2500)
-            })
+            (form) => {
+                if (form.password !== form.confirmPassword) {
+                    toast('Паролі не співпадають!')
+                    return
+                }
+                if (form.isStudent)
+                    mutationStudent.mutate(getStudentSignUpDTO(form))
+                else mutationTeacher.mutate(getTeacherSignUpDTO(form))
+            }
         )
 
     return (
@@ -151,9 +168,9 @@ export function SignUp() {
                         <Input
                             hidden={!form.isStudent}
                             required={form.isStudent}
-                            name='gradYear'
+                            name='gradDate'
                             type='date'
-                            value={form.gradYear}
+                            value={form.gradDate}
                             onChange={onFieldChange}
                             placeholder='Введіть Ваш рік випуску'
                         />
@@ -172,14 +189,14 @@ export function SignUp() {
                             <option disabled hidden value=''>
                                 Виберіть Ваш освітній ступінь
                             </option>
-                            <option value='bachelor'>Бакалавр</option>
-                            <option value='master'>Магістр</option>
+                            <option value='BACHELOR'>Бакалавр</option>
+                            <option value='MASTER'>Магістр</option>
                         </Select>
                     </div>
                     <Button>Реєстрація</Button>
                     <div className='self-start'>
                         Уже зареєстровані?
-                        <Link to={routes.signIn} className='ml-4'>
+                        <Link to={`/${routes.signIn}`} className='ml-4'>
                             Увійти
                         </Link>
                     </div>
@@ -187,4 +204,39 @@ export function SignUp() {
             </main>
         </div>
     )
+}
+
+interface ISignUpForm {
+    lastName: string
+    firstName: string
+    email: string
+    password: string
+    confirmPassword: string
+    isStudent: boolean
+    gradDate: string
+    gradLevel: string
+    group: string
+    faculty: string
+}
+
+function getTeacherSignUpDTO(form: ISignUpForm): ITeacherSignUpDTO {
+    return {
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        password: form.password,
+    }
+}
+
+function getStudentSignUpDTO(form: ISignUpForm): IStudentSignUpDTO {
+    return {
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        password: form.password,
+        cluster: form.group,
+        faculty: form.faculty,
+        graduateDate: form.gradDate,
+        degree: form.gradLevel,
+    }
 }

@@ -1,5 +1,4 @@
-export * from './useSignIn'
-export * from './useSignUp'
+export * from './auth'
 export * from './student'
 export * from './teacher'
 export * from './request'

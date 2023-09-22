@@ -1,11 +1,11 @@
-import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useUploadDocument } from '~/backend/file'
+import { useState } from 'react'
+import { useUploadDocument } from '~/backend/file.ts'
+import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
 import { getReadableFileSize } from '~/lib/files.ts'
-import { useAuthStore } from '~/store/authStore'
 
 export function FileInput() {
-    const authStore = useAuthStore()
+    const currentUser = useCurrentUser()
     const uploadDocument = useUploadDocument()
     const queryClient = useQueryClient()
     const mutation = useMutation({
@@ -16,14 +16,10 @@ export function FileInput() {
             studentId: string
             file: File
         }) => uploadDocument(studentId, file),
-        onSuccess: () => {
+        onSuccess: () =>
             queryClient
-                .invalidateQueries([
-                    'studentDocuments',
-                    authStore.currentUser?.studentDTO?.studentId || '???',
-                ])
-                .then((_) => _)
-        },
+                .invalidateQueries(['studentDocuments', currentUser.studentId])
+                .then((_) => _),
     })
     const [file, setFile] = useState<File | null>(null)
 
@@ -34,21 +30,20 @@ export function FileInput() {
                     htmlFor='upload-document'
                     className={`block w-fit cursor-pointer rounded-md bg-cs-primary px-6 py-2 text-lg font-semibold text-cs-text-light`}
                     onClick={(e) => {
-                        if (!!file) {
+                        if (file) {
                             e.preventDefault()
-                            if (!authStore.currentUser?.studentDTO?.studentId)
+                            if (!currentUser.studentId)
                                 throw new Error(
                                     "Couldn't upload file: studentId not found."
                                 )
                             mutation.mutate({
-                                studentId:
-                                    authStore.currentUser.studentDTO.studentId,
+                                studentId: currentUser.studentId,
                                 file,
                             })
                         }
                     }}
                 >
-                    {!!file ? 'Підтвердити завантаження' : 'Завантажити роботу'}
+                    {file ? 'Підтвердити завантаження' : 'Завантажити роботу'}
                 </label>
                 <input
                     id='upload-document'

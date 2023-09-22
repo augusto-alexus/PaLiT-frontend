@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { Avatar, Button, Logo, Search } from '~/components'
+import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
 import { routes } from '~/pages'
 import { useAuthStore } from '~/store/authStore.ts'
 
 export function Header() {
     const navigate = useNavigate()
     const authStore = useAuthStore()
-    const isTeacher = authStore.currentUser?.roleDTO?.name === 'teacher'
+    const currentUser = useCurrentUser()
+    const isTeacher = currentUser.role === 'teacher'
     return (
         <header className='sticky left-0 top-0 mt-6 flex h-fit w-full flex-row place-content-around place-items-center p-4'>
             <div className='mr-20'>

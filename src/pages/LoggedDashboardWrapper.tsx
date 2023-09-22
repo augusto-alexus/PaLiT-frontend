@@ -1,24 +1,29 @@
-import { useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
-import { BodyInfo, Header } from './page-components'
-import { useCurrentUser } from '~/backend/useCurrentUser.ts'
-import { useAuthStore } from '~/store/authStore.ts'
+import { useQuery } from '@tanstack/react-query'
+import { Navigate, Outlet } from 'react-router-dom'
+import { getCurrentUser } from '~/backend'
+import { DisplayError, Loading } from '~/components'
+import { getCurrentUserFromDTO } from '~/models'
 import { routes } from '~/pages/routes.ts'
+import { useAuthStore } from '~/store/authStore.ts'
+import { BodyInfo, Header } from './page-components'
 
 export function LoggedDashboardWrapper() {
-    const navigate = useNavigate()
     const authStore = useAuthStore()
-    const currentUser = useCurrentUser((userData) =>
-        authStore.setCurrentUser(userData)
-    )
+    const { isLoading, error } = useQuery({
+        enabled: !!authStore.accessToken,
+        queryKey: ['currentUser'],
+        queryFn: async () => {
+            if (!authStore.accessToken) return Promise.resolve()
+            const currentUserDTO = await getCurrentUser(authStore.accessToken)
+            const currentUser = getCurrentUserFromDTO(currentUserDTO)
+            authStore.setCurrentUser(currentUser)
+            return currentUser
+        },
+    })
 
-    useEffect(() => {
-        if (authStore.accessToken === null) {
-            navigate(routes.signIn)
-        } else {
-            currentUser(authStore.accessToken)
-        }
-    }, [authStore.accessToken])
+    if (!authStore.accessToken) return <Navigate to={routes.signIn} />
+    if (isLoading) return <Loading />
+    if (error) return <DisplayError error={error} />
 
     return (
         <>

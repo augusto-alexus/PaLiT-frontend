@@ -1,18 +1,15 @@
-import { useAuthStore } from '~/store/authStore.ts'
+import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
 
 export function Avatar() {
-    const authStore = useAuthStore()
-    if (authStore.currentUser === null) return <></>
+    const currentUser = useCurrentUser()
     const bgColor =
-        authStore.currentUser.roleDTO.name === 'teacher'
-            ? 'bg-cs-primary'
-            : 'bg-cs-secondary'
+        currentUser.role === 'teacher' ? 'bg-cs-primary' : 'bg-cs-secondary'
     return (
         <div className='flex flex-row place-content-center place-items-center gap-2'>
             <div className={`relative h-10 w-10 rounded-[100%] ${bgColor} p-4`}>
                 <span className='text-md absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 align-middle font-semibold text-white'>
-                    {authStore.currentUser.lastName.charAt(0)}
-                    {authStore.currentUser.firstName.charAt(0)}
+                    {currentUser.lastName.charAt(0)}
+                    {currentUser.firstName.charAt(0)}
                 </span>
             </div>
             <div>
