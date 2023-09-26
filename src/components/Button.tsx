@@ -1,13 +1,16 @@
-import { ButtonHTMLAttributes } from 'react'
+import { ButtonHTMLAttributes, ReactElement } from 'react'
 
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    preset?: 'filled' | 'outlined' | 'text'
-    text?: string
-    iconUrl?: string
-    onClick?: () => void
+    preset?: 'filled' | 'outlined' | 'text' | 'icon'
+    icon?: ReactElement
 }
 
-export function Button({ preset = 'filled', ...props }: IButtonProps) {
+export function Button({
+    preset = 'filled',
+    icon,
+    className,
+    ...props
+}: IButtonProps) {
     const stylesRaw: string[] = []
     if (props.disabled)
         stylesRaw.push(
@@ -33,6 +36,13 @@ export function Button({ preset = 'filled', ...props }: IButtonProps) {
         stylesRaw.push(
             'bg-transparent border-0 text-cs-primary hover:text-cs-secondary focus:text-cs-secondary hover:underline focus:underline'
         )
+    else if (preset === 'icon') stylesRaw.push('bg-transparent border-0')
 
-    return <button className={`${stylesRaw.join(' ')}`} {...props} />
+    if (className) stylesRaw.push(className)
+
+    return (
+        <button className={stylesRaw.join(' ')} {...props}>
+            {preset === 'icon' ? icon : props.children}
+        </button>
+    )
 }

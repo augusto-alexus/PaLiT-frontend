@@ -1,9 +1,19 @@
+import { useQuery } from '@tanstack/react-query'
+import { getMyProject } from '~/backend'
+import { useAccessToken } from '~/hooks/useAccessToken.ts'
 import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
 import { InfoRow } from './InfoRow.tsx'
 
 export function BlockInfo() {
     const currentUser = useCurrentUser()
     const isTeacher = currentUser.role === 'teacher'
+    const accessToken = useAccessToken()
+    const { data } = useQuery({
+        enabled: !isTeacher,
+        queryKey: ['myProject'],
+        queryFn: () => getMyProject(accessToken),
+    })
+
     return (
         <div className='flex flex-col gap-2 border-l-2 px-6'>
             <InfoRow
@@ -12,7 +22,11 @@ export function BlockInfo() {
             />
             <InfoRow
                 infoKey='Куратор'
-                value='Мочурад Г. Г.'
+                value={
+                    data?.advisor?.lastName && data?.advisor?.firstName
+                        ? data.advisor.lastName + ' ' + data.advisor.firstName
+                        : undefined
+                }
                 editable
                 createPrompt='Вибрати куратора'
                 iconR={
@@ -24,7 +38,7 @@ export function BlockInfo() {
             />
             <InfoRow
                 infoKey='Мова'
-                value='Українська'
+                value={data?.language}
                 editable
                 createPrompt='Вибрати мову'
                 iconR={
@@ -36,7 +50,7 @@ export function BlockInfo() {
             />
             <InfoRow
                 infoKey='Тема'
-                value='“Програмний модуль системи управління подіями кібербезпеки”'
+                value={data?.theme}
                 editable
                 createPrompt='Вибрати тему'
                 iconR={
@@ -46,15 +60,14 @@ export function BlockInfo() {
                     />
                 }
             />
-            <InfoRow
-                infoKey='Статус'
-                value='Етап 1'
-                iconL={
-                    <div className='mr-1 h-6 w-6 rounded-[5px] bg-cs-additional-green text-center text-cs-text-light'>
-                        <i className='ri-check-fill'></i>
-                    </div>
-                }
-            />
+            {/*<InfoRow*/}
+            {/*    infoKey='Статус'*/}
+            {/*    iconL={*/}
+            {/*        <div className='mr-1 h-6 w-6 rounded-[5px] bg-cs-additional-green text-center text-cs-text-light'>*/}
+            {/*            <i className='ri-check-fill'></i>*/}
+            {/*        </div>*/}
+            {/*    }*/}
+            {/*/>*/}
         </div>
     )
 }

@@ -1,9 +1,10 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import '~/App.css'
 import {
+    Dashboard,
     FilePreview,
     Files,
     LoggedDashboardWrapper,
@@ -39,7 +40,7 @@ function App() {
                     <Route
                         index
                         path={routes.home.dashboard}
-                        element={<Navigate to={routes.home.files} />}
+                        element={<Dashboard />}
                     />
                 </Route>
             </Routes>

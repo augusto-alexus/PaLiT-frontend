@@ -1,2 +1,3 @@
-export * from './BodyInfo.tsx'
-export * from './Header.tsx'
+export * from './BodyInfo'
+export * from './Header'
+export * from './RequestForm'

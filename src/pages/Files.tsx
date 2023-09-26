@@ -12,7 +12,11 @@ export function Files() {
 
     const { isLoading, error, data, isFetching } = useQuery({
         enabled: authStore.currentUser?.role === 'student',
-        queryKey: ['studentDocuments', authStore.currentUser?.studentId],
+        queryKey: [
+            'currentUser',
+            'studentDocuments',
+            authStore.currentUser?.studentId,
+        ],
         queryFn: async () => {
             if (!authStore.currentUser?.studentId)
                 throw new Error("Can't load document list: no authorized user.")

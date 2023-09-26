@@ -18,7 +18,11 @@ export function FileInput() {
         }) => uploadDocument(studentId, file),
         onSuccess: () =>
             queryClient
-                .invalidateQueries(['studentDocuments', currentUser.studentId])
+                .invalidateQueries([
+                    'currentUser',
+                    'studentDocuments',
+                    currentUser.studentId,
+                ])
                 .then((_) => _),
     })
     const [file, setFile] = useState<File | null>(null)

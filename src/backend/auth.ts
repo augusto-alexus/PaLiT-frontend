@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { toast } from '~/components'
 import {
     ICurrentUserDTO,
@@ -8,16 +8,23 @@ import {
 } from './auth.types.ts'
 import endpoints from './endpoints'
 
+export class JWTExpiredError extends Error {}
+
 export async function getCurrentUser(accessToken: string) {
-    const response = await axios.get(endpoints.currentUser, {
-        data: {
-            user: accessToken,
-        },
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
-    return response.data as ICurrentUserDTO
+    return axios
+        .get(endpoints.currentUser, {
+            data: {
+                user: accessToken,
+            },
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
+        .then(({ data }) => data as ICurrentUserDTO)
+        .catch((error: AxiosError) => {
+            if (error.response?.status === 401) throw new JWTExpiredError()
+            else throw error
+        })
 }
 
 export async function signIn(form: ISignInDTO) {

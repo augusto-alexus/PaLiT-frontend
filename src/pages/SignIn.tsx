@@ -28,7 +28,7 @@ export function SignIn() {
         onSuccess: async ({ accessToken }) => {
             authStore.reset()
             authStore.setAccessToken(accessToken)
-            await queryClient.invalidateQueries(['currentUser'])
+            await queryClient.resetQueries()
             navigate(`/${routes.home.dashboard}`)
         },
     })

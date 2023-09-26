@@ -30,20 +30,26 @@ export function Header() {
                 >
                     {isTeacher ? 'Студенти' : 'Куратори'}
                 </Button>
-                <Button preset='text'>Теми</Button>
+                <Button
+                    preset='text'
+                    onClick={() => navigate(routes.home.dashboard)}
+                >
+                    Запрошення
+                </Button>
                 <Button preset='text'>Чат</Button>
             </nav>
             <div className='flex flex-row place-items-center gap-4'>
                 <Search placeholder='Пошук...' />
                 <Avatar />
                 <Button
-                    preset='text'
+                    preset='icon'
                     onClick={() => {
                         authStore.reset()
                     }}
-                >
-                    <i className='ri-logout-box-line text-cs-text-dark' />
-                </Button>
+                    icon={
+                        <i className='ri-logout-box-line text-cs-text-dark' />
+                    }
+                />
             </div>
         </header>
     )

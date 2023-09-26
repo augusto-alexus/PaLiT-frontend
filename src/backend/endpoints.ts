@@ -10,8 +10,19 @@ export default Object.freeze({
     getAllStudents: prefixEndpoints('student/all'),
     getAllTeachers: prefixEndpoints('teacher/all'),
     getAllRequestsTeacher: prefixEndpoints('teacher/request'),
-    getStudentDocuments: (studentId: string) =>
+    getAllRequestsStudent: prefixEndpoints('student/request'),
+    student2TeacherRequest: (teacherId: number) =>
+        prefixEndpoints(`student/request/${teacherId}`),
+    teacher2StudentRequest: (studentId: number) =>
+        prefixEndpoints(`teacher/request/${studentId}`),
+    getStudentDocuments: (studentId: number) =>
         prefixEndpoints(`student/${studentId}/file-info`),
-    uploadFile: (studentId: string) =>
-        prefixEndpoints(`/file/student/${studentId}`),
+    uploadFile: (studentId: number) =>
+        prefixEndpoints(`file/student/${studentId}`),
+    rejectRequest: (requestId: number) =>
+        prefixEndpoints(`request/${requestId}`),
+    approveRequest: (requestId: number) =>
+        prefixEndpoints(`request/${requestId}`),
+    currentAdvisor: prefixEndpoints('student/current-adviser'),
+    currentStudents: prefixEndpoints('teacher/current-student'),
 })
