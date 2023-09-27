@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
+import { Button } from '~/components'
 import { routes } from '~/pages'
 
 export function FilePreview() {
@@ -11,20 +12,21 @@ export function FilePreview() {
     }
 
     return (
-        <div className='relative'>
-            <button
-                onClick={() => navigate(routes.home.files)}
-                className='ri-arrow-go-back-line absolute left-4 top-0 rounded-full p-2 text-cs-text-dark hover:bg-cs-bg-neutral hover:text-cs-primary'
-            />
+        <div className='-mt-10'>
             <h2 className='mb-4 text-center text-3xl font-semibold text-cs-text-dark'>
+                <Button
+                    preset='icon'
+                    onClick={() => navigate(`/${routes.myProject}`)}
+                    className='ri-arrow-go-back-line mr-2 inline -translate-y-1 rounded-full p-2 text-lg text-cs-text-dark hover:bg-cs-bg-neutral hover:text-cs-primary'
+                />
                 Перегляд документа
             </h2>
             <object
-                className='resize'
+                className='mx-auto'
                 data={`http://localhost:8080/api/file/${documentId}`}
                 type='application/pdf'
-                width='100%'
-                height='1000px'
+                width='80%'
+                height='800px'
             >
                 <p>
                     It appears your web browser doesn't support embedding PDFs.

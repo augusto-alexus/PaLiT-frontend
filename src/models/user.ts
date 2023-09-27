@@ -2,7 +2,7 @@ import { ICurrentUserDTO } from '~/backend/auth.types.ts'
 
 export interface ICurrentUser {
     id: number
-    studentId?: string
+    studentId?: number
     firstName: string
     lastName: string
     email: string

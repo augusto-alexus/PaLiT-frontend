@@ -5,8 +5,8 @@ import {
     Button,
     Checkbox,
     Input,
-    Logo,
     Password,
+    ProjectLogo,
     WithNulpBg,
 } from '~/components'
 import { useForm } from '~/hooks'
@@ -29,7 +29,7 @@ export function SignIn() {
             authStore.reset()
             authStore.setAccessToken(accessToken)
             await queryClient.resetQueries()
-            navigate(`/${routes.home.dashboard}`)
+            navigate(`/${routes.authRedirect}`)
         },
     })
     const { form, onFieldChange, onCheckboxFieldChange, onSubmit } =
@@ -48,7 +48,7 @@ export function SignIn() {
             <WithNulpBg />
             <main className='flex flex-col gap-4 rounded-2xl bg-white px-8 py-12 drop-shadow-2xl sm:px-20 sm:py-16 md:px-[25vw] md:py-24 lg:px-64'>
                 <div className='mb-8 place-self-center'>
-                    <Logo />
+                    <ProjectLogo />
                 </div>
                 <h1 className='mb-16 text-center font-[Montserrat] text-2xl font-bold text-cs-text-dark'>
                     Авторизація

@@ -21,7 +21,7 @@ export function InfoRow({
 }: IInfoRowProps) {
     return (
         <div className='place- flex flex-row  content-center gap-4 bg-white py-2 text-cs-text-dark'>
-            <div className='basis-4/12'>{infoKey}</div>
+            <div className='basis-4/12 font-mono'>{infoKey}</div>
             <div className='flex basis-7/12 flex-row'>
                 {iconL}
                 {value || '—'}

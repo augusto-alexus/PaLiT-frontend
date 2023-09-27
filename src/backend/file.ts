@@ -8,20 +8,23 @@ export interface IDocumentDTO {
 }
 
 export function useGetStudentDocuments() {
-    return (studentId: string) =>
+    return (studentId: number) =>
         axios
             .get(endpoints.getStudentDocuments(studentId))
             .then(({ data }) => data as IDocumentDTO[])
 }
 
-export function useUploadDocument() {
-    return async (studentId: string, document: File) => {
+export function useUploadDocument(accessToken: string) {
+    return async (studentId: number, document: File) => {
         const formData = new FormData()
         formData.append('document', document)
 
         const response = await fetch(endpoints.uploadFile(studentId), {
             method: 'POST',
             body: formData,
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
         })
         return (await response.json()) as object
     }

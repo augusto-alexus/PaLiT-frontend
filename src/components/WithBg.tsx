@@ -1,15 +1,16 @@
 import nulpBgSrc from '../assets/lpnu-bg.jpg'
 
-export function WithBg({ bgSrc, alt }: { bgSrc: string; alt?: string }) {
+export function WithBg({ bgSrc }: { bgSrc: string }) {
     return (
-        <img
-            className='fixed left-0 top-0 h-full w-full bg-contain'
-            src={bgSrc}
-            alt={alt}
+        <div
+            className='fixed left-0 top-0 h-full w-full bg-cover bg-no-repeat'
+            style={{
+                backgroundImage: `url(${bgSrc})`,
+            }}
         />
     )
 }
 
 export function WithNulpBg() {
-    return <WithBg bgSrc={nulpBgSrc} alt={'NULP background scenery'} />
+    return <WithBg bgSrc={nulpBgSrc} />
 }

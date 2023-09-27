@@ -1,30 +1,26 @@
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { useGetStudentDocuments } from '~/backend/file.ts'
-import { DisplayError, FileInput, Loading } from '~/components'
-import { routes } from '~/pages/index.ts'
-import { useAuthStore } from '~/store/authStore.ts'
+import { DisplayError, FileUpload, Loading } from '~/components'
+import { useCurrentUser } from '~/hooks'
+import { routes } from '~/pages'
 
 export function Files() {
     const navigate = useNavigate()
-    const authStore = useAuthStore()
+    const currentUser = useCurrentUser()
     const getStudentDocuments = useGetStudentDocuments()
 
     const { isLoading, error, data, isFetching } = useQuery({
-        enabled: authStore.currentUser?.role === 'student',
-        queryKey: [
-            'currentUser',
-            'studentDocuments',
-            authStore.currentUser?.studentId,
-        ],
+        enabled: currentUser.role === 'student',
+        queryKey: ['studentDocuments', currentUser.id],
         queryFn: async () => {
-            if (!authStore.currentUser?.studentId)
+            if (!currentUser?.studentId)
                 throw new Error("Can't load document list: no authorized user.")
-            return getStudentDocuments(authStore.currentUser.studentId)
+            return getStudentDocuments(currentUser.studentId)
         },
     })
 
-    if (authStore.currentUser?.role === 'teacher')
+    if (currentUser.role === 'teacher')
         return (
             <h2 className={'text-2xl'}>
                 Перегляд та завантаження власних файлів доступне лише студентам
@@ -52,12 +48,7 @@ export function Files() {
                                     className='hover:cursor-pointer hover:bg-cs-neutral'
                                     onClick={() =>
                                         navigate(
-                                            `../${routes.home.filePreview(
-                                                row.documentId
-                                            )}`,
-                                            {
-                                                relative: 'route',
-                                            }
+                                            routes.filePreview(row.documentId)
                                         )
                                     }
                                 >
@@ -84,7 +75,7 @@ export function Files() {
                 </h3>
             )}
             <div className='mt-16'>
-                <FileInput />
+                <FileUpload />
             </div>
         </div>
     )

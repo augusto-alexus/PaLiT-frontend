@@ -4,10 +4,11 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import '~/App.css'
 import {
-    Dashboard,
     FilePreview,
     Files,
+    Invitations,
     LoggedDashboardWrapper,
+    MyProject,
     PlaceholderLanding,
     routes,
     SignIn,
@@ -15,6 +16,7 @@ import {
     StudentList,
     TeacherList,
 } from '~/pages'
+import { AuthLanding } from '~/pages/AuthLanding.tsx'
 
 function App() {
     return (
@@ -24,24 +26,31 @@ function App() {
                 <Route path={routes.signIn} element={<SignIn />} />
                 <Route path={routes.signUp} element={<SignUp />} />
                 <Route path='*' element={<LoggedDashboardWrapper />}>
-                    <Route path={routes.home.files} element={<Files />} />
                     <Route
-                        path={routes.home.studentList}
+                        index
+                        path={routes.authRedirect}
+                        element={<AuthLanding />}
+                    />
+                    <Route
+                        path={routes.studentList}
                         element={<StudentList />}
                     />
                     <Route
-                        path={routes.home.teacherList}
+                        path={routes.teacherList}
                         element={<TeacherList />}
                     />
+
                     <Route
-                        path={routes.home.filePreview()}
-                        element={<FilePreview />}
+                        path={routes.invitations}
+                        element={<Invitations />}
                     />
-                    <Route
-                        index
-                        path={routes.home.dashboard}
-                        element={<Dashboard />}
-                    />
+                    <Route path={routes.myProject} element={<MyProject />}>
+                        <Route index element={<Files />} />
+                        <Route
+                            path={routes.filePreview()}
+                            element={<FilePreview />}
+                        />
+                    </Route>
                 </Route>
             </Routes>
             <ToastContainer theme='dark' />

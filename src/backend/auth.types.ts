@@ -4,7 +4,7 @@ interface IRoleDTO {
 }
 
 interface IStudentDTO {
-    studentId: string
+    studentId: number
     degree: string
 }
 

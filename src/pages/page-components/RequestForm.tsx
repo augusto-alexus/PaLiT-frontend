@@ -52,7 +52,6 @@ export function RequestForm({ userId }: { userId: number }) {
     return (
         <form onSubmit={onSubmit} className='mt-4 flex flex-col gap-4'>
             <div className='flex flex-col'>
-                <label className='text-left'>Тема</label>
                 <Input
                     required
                     name='theme'
@@ -63,7 +62,6 @@ export function RequestForm({ userId }: { userId: number }) {
                 />
             </div>
             <div className='flex flex-col'>
-                <label className='text-left'>Мова</label>
                 <Select
                     required
                     name='language'

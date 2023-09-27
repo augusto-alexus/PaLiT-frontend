@@ -55,7 +55,7 @@ export function TeacherList() {
         )
 
     return (
-        <div className='mx-auto flex w-[420px] flex-col gap-4'>
+        <div className='mx-auto flex w-full max-w-md flex-col gap-8'>
             {data.map((teacher) => (
                 <Fragment key={teacher.teacherId}>
                     <TeacherInfoRow
@@ -86,7 +86,7 @@ function TeacherInfoRow({
     setShowRequestFormFor: (setFor: number) => void
 }) {
     return (
-        <div className='flex max-w-xs flex-col border-b pb-4'>
+        <div className='flex flex-col border-b border-b-cs-additional-gray pb-4'>
             <div className='flex flex-row justify-between'>
                 <div className='text-lg font-semibold'>
                     {teacher.lastName} {teacher.firstName}

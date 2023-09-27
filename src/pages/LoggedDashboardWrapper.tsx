@@ -5,7 +5,7 @@ import { DisplayError, Loading, toast } from '~/components'
 import { getCurrentUserFromDTO } from '~/models'
 import { routes } from '~/pages/routes.ts'
 import { useAuthStore } from '~/store/authStore.ts'
-import { BodyInfo, Header } from './page-components'
+import { Header } from './page-components'
 
 export function LoggedDashboardWrapper() {
     const authStore = useAuthStore()
@@ -39,9 +39,7 @@ export function LoggedDashboardWrapper() {
     return (
         <>
             <Header />
-            <BodyInfo>
-                <Outlet />
-            </BodyInfo>
+            <Outlet />
         </>
     )
 }

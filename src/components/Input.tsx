@@ -29,17 +29,6 @@ export function Password(props: InputHTMLAttributes<HTMLInputElement>) {
     )
 }
 
-export function Search(props: InputHTMLAttributes<HTMLInputElement>) {
-    return (
-        <div className='relative h-fit'>
-            <Input type='search' {...props} />
-            <div className='absolute right-4 top-1/2 -translate-y-1/2 text-xl'>
-                <i className='ri-search-line text-cs-additional-gray'></i>
-            </div>
-        </div>
-    )
-}
-
 interface ICheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
     label?: string
 }
