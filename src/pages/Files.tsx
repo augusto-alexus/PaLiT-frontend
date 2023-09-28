@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
+import { IMyStudent } from '~/backend'
 import { useGetStudentDocuments } from '~/backend/file.ts'
 import { DisplayError, FileUpload, Loading } from '~/components'
 import { useCurrentUser } from '~/hooks'
@@ -7,25 +8,24 @@ import { routes } from '~/pages'
 
 export function Files() {
     const navigate = useNavigate()
-    const currentUser = useCurrentUser()
+    const { role, id, studentId } = useCurrentUser()
+    const outletContext = useOutletContext<{ myStudent?: IMyStudent }>()
     const getStudentDocuments = useGetStudentDocuments()
 
     const { isLoading, error, data, isFetching } = useQuery({
-        enabled: currentUser.role === 'student',
-        queryKey: ['studentDocuments', currentUser.id],
+        enabled: role === 'student' || !!outletContext?.myStudent,
+        queryKey: [
+            'studentDocuments',
+            outletContext?.myStudent?.student.studentId || id,
+        ],
         queryFn: async () => {
-            if (!currentUser?.studentId)
-                throw new Error("Can't load document list: no authorized user.")
-            return getStudentDocuments(currentUser.studentId)
+            const myStudentId = outletContext?.myStudent?.student.studentId
+            const myId = studentId
+            if (myStudentId) return getStudentDocuments(myStudentId)
+            else if (myId) return getStudentDocuments(myId)
+            throw new Error("Can't load document list: no authorized user.")
         },
     })
-
-    if (currentUser.role === 'teacher')
-        return (
-            <h2 className={'text-2xl'}>
-                Перегляд та завантаження власних файлів доступне лише студентам
-            </h2>
-        )
 
     if (isLoading) return <Loading />
     if (error) return <DisplayError error={error} />
@@ -45,7 +45,7 @@ export function Files() {
                             {data.map((row, idx) => (
                                 <tr
                                     key={idx}
-                                    className='hover:cursor-pointer hover:bg-cs-neutral'
+                                    className='hover:cursor-pointer hover:bg-cs-bg-neutral'
                                     onClick={() =>
                                         navigate(
                                             routes.filePreview(row.documentId)
@@ -71,12 +71,16 @@ export function Files() {
                 </div>
             ) : (
                 <h3 className='text-center text-3xl text-cs-text-dark'>
-                    Наразі Ви не завантажили жодного файлу.
+                    {role === 'teacher'
+                        ? 'Наразі  студент не завантажив жодного файлу'
+                        : 'Наразі Ви не завантажили жодного файлу.'}
                 </h3>
             )}
-            <div className='mt-16'>
-                <FileUpload />
-            </div>
+            {role === 'student' && (
+                <div className='mt-16'>
+                    <FileUpload />
+                </div>
+            )}
         </div>
     )
 }

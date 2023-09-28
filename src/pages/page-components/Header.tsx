@@ -30,6 +30,18 @@ function HeaderNav() {
                     Моя робота
                 </NavLink>
             )}
+            {role === 'teacher' && (
+                <NavLink
+                    className={({ isActive }) =>
+                        isActive
+                            ? 'cursor-default select-none border-0 text-cs-secondary underline underline-offset-8 outline-none hover:text-cs-secondary'
+                            : ''
+                    }
+                    to={routes.myStudents}
+                >
+                    Мої студенти
+                </NavLink>
+            )}
             {role === 'student' && (
                 <NavLink
                     className={({ isActive }) =>

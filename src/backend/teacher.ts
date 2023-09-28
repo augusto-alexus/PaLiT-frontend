@@ -17,20 +17,28 @@ export function useGetAllTeachers() {
 interface IMyStudentDTO {
     language: 'UA' | 'ENG'
     theme: string
-    teacherRequestDTO: {
-        teacherId: number
+    studentRequestDTO: {
+        studentId: number
+        cluster: string
+        degree: string
+        faculty: string
         firstName: string
         lastName: string
+        graduateDate: string
     }
 }
 
-interface IMyStudent {
+export interface IMyStudent {
     language: 'Українська' | 'English'
     theme: string
-    advisor: {
-        id: number
+    student: {
+        studentId: number
+        cluster: string
+        degree: string
+        faculty: string
         firstName: string
         lastName: string
+        graduateDate: string
     }
 }
 
@@ -38,10 +46,12 @@ function parseMyStudentDTO(dto: IMyStudentDTO): IMyStudent {
     return {
         language: dto.language === 'UA' ? 'Українська' : 'English',
         theme: dto.theme,
-        advisor: {
-            id: dto.teacherRequestDTO.teacherId,
-            firstName: dto.teacherRequestDTO.firstName,
-            lastName: dto.teacherRequestDTO.lastName,
+        student: {
+            ...dto.studentRequestDTO,
+            degree:
+                dto.studentRequestDTO.degree === 'BACHELOR'
+                    ? 'Бакалавр'
+                    : 'Магістр',
         },
     }
 }
@@ -53,5 +63,5 @@ export async function getMyStudents(accessToken: string) {
                 Authorization: `Bearer ${accessToken}`,
             },
         })
-        .then(({ data }) => data as object) //parseMyStudentDTO(data as IMyStudentDTO))
+        .then(({ data }) => (data as IMyStudentDTO[]).map(parseMyStudentDTO))
 }

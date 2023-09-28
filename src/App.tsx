@@ -9,6 +9,8 @@ import {
     Invitations,
     LoggedDashboardWrapper,
     MyProject,
+    MyStudent,
+    MyStudents,
     PlaceholderLanding,
     routes,
     SignIn,
@@ -16,7 +18,7 @@ import {
     StudentList,
     TeacherList,
 } from '~/pages'
-import { AuthLanding } from '~/pages/AuthLanding.tsx'
+import { AuthRedirect } from '~/pages/AuthRedirect.tsx'
 
 function App() {
     return (
@@ -29,7 +31,7 @@ function App() {
                     <Route
                         index
                         path={routes.authRedirect}
-                        element={<AuthLanding />}
+                        element={<AuthRedirect />}
                     />
                     <Route
                         path={routes.studentList}
@@ -44,6 +46,14 @@ function App() {
                         path={routes.invitations}
                         element={<Invitations />}
                     />
+                    <Route path={routes.myStudents} element={<MyStudents />} />
+                    <Route path={routes.myStudent()} element={<MyStudent />}>
+                        <Route index element={<Files />} />
+                        <Route
+                            path={routes.filePreview()}
+                            element={<FilePreview />}
+                        />
+                    </Route>
                     <Route path={routes.myProject} element={<MyProject />}>
                         <Route index element={<Files />} />
                         <Route

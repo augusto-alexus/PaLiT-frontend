@@ -14,7 +14,8 @@ export function MyProject() {
         queryKey: ['myProject'],
         queryFn: () => getMyProject(accessToken),
     })
-    if (currentUser.role !== 'student') return <Navigate to='..' />
+    if (currentUser.role !== 'student')
+        return <Navigate to={`/${routes.authRedirect}`} />
     const projectExists = !!data && !!data?.advisor?.id
     if (!projectExists)
         return (

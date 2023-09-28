@@ -1,8 +1,11 @@
 import { Transition } from '@headlessui/react'
 import { Fragment, PropsWithChildren, useState } from 'react'
+import { IMyStudent } from '~/backend'
 import { ProjectInfo } from './ProjectInfo.tsx'
 
-export function SidebarContainer(props: PropsWithChildren<object>) {
+export function SidebarContainer(
+    props: PropsWithChildren<{ myStudent?: IMyStudent }>
+) {
     const [infoCollapsed, setInfoCollapsed] = useState<boolean>(false)
     const [showExtendButton, setShowExtendButton] = useState<boolean>(false)
     return (
@@ -31,7 +34,7 @@ export function SidebarContainer(props: PropsWithChildren<object>) {
                             >
                                 <i className='ri-arrow-right-s-line text-2xl'></i>
                             </button>
-                            <ProjectInfo />
+                            <ProjectInfo myStudent={props.myStudent} />
                         </div>
                     </Transition.Child>
                 </Transition.Root>

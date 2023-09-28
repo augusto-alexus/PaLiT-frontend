@@ -8,6 +8,9 @@ export const routes = Object.freeze({
     studentList: 'students',
     teacherList: 'teachers',
     myProject: 'my-project',
+    myStudents: 'my-students',
+    myStudent: (studentId?: number) =>
+        `my-student/${studentId ? studentId : ':studentId'}`,
     invitations: 'invitations',
     authRedirect: 'auth-redirect',
 })

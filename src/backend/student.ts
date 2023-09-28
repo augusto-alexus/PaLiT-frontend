@@ -36,7 +36,7 @@ interface IMyProjectDTO {
     }
 }
 
-interface IMyProject {
+export interface IMyProject {
     language?: 'Українська' | 'English'
     theme: string
     advisor: {
