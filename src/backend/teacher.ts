@@ -63,5 +63,5 @@ export async function getMyStudents(accessToken: string) {
                 Authorization: `Bearer ${accessToken}`,
             },
         })
-        .then(({ data }) => (data as IMyStudentDTO[]).map(parseMyStudentDTO))
+        .then(({ data }) => (data as IMyStudentDTO[])?.map(parseMyStudentDTO))
 }

@@ -100,7 +100,7 @@ export function useGetRequestsStudent(accessToken: string) {
                     Authorization: `Bearer ${accessToken}`,
                 },
             })
-            .then(({ data }) => (data as IRequestTeacher[]).map(parseRequest))
+            .then(({ data }) => (data as IRequestTeacher[])?.map(parseRequest))
 }
 
 interface IRequestBody {
