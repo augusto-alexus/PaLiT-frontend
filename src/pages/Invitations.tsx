@@ -64,21 +64,27 @@ export function Invitations() {
             </div>
         )
 
-    const othersRequests = data.filter(
-        (request) =>
-            (request.direction == 'STUDENT' && currentUser.role == 'student') ||
-            (request.direction == 'TEACHER' && currentUser.role == 'teacher')
-    )
-
-    const myRequests = data.filter(
-        (request) =>
-            !(
+    const othersRequests = data
+        .filter(
+            (request) =>
                 (request.direction == 'STUDENT' &&
                     currentUser.role == 'student') ||
                 (request.direction == 'TEACHER' &&
                     currentUser.role == 'teacher')
-            )
-    )
+        )
+        .filter((r) => !r.approved)
+
+    const myRequests = data
+        .filter(
+            (request) =>
+                !(
+                    (request.direction == 'STUDENT' &&
+                        currentUser.role == 'student') ||
+                    (request.direction == 'TEACHER' &&
+                        currentUser.role == 'teacher')
+                )
+        )
+        .filter((r) => !r.approved)
 
     return (
         <div className='mx-auto flex w-fit flex-col gap-20'>
