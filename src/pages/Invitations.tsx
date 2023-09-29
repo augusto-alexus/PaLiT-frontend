@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import {
     approveRequest,
@@ -32,10 +33,23 @@ export function Invitations() {
             return approveRequest({ accessToken, requestId })
         },
         onSuccess: async () => {
+            console.log(data)
             await queryClient.invalidateQueries(['requests'])
             await queryClient.invalidateQueries(['myProject'])
             toast('Запрошення прийнято!')
             navigate(`/${routes.authRedirect}`)
+        },
+        onError: (error) => {
+            if (error instanceof AxiosError) {
+                if (error.response?.status === 403) {
+                    if (currentUser.role === 'student')
+                        toast('Куратор більше не може прийняти студентів!')
+                    else toast('Ви не можете прийняти більше студентів!')
+                    return
+                }
+                toast(`Сталася невідома помилка! ${error.message}`)
+            }
+            toast(`Сталася невідома помилка!`)
         },
     })
     const { data } = useQuery(['requests'], () => {
