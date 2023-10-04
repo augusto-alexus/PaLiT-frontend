@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import {
     approveRequest,
@@ -13,6 +14,7 @@ import { routes } from '~/pages/routes.ts'
 import { Request } from './page-components'
 
 export function Invitations() {
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const currentUser = useCurrentUser()
     const accessToken = useAccessToken()
@@ -36,20 +38,21 @@ export function Invitations() {
             console.log(data)
             await queryClient.invalidateQueries(['requests'])
             await queryClient.invalidateQueries(['myProject'])
-            toast('Запрошення прийнято!')
+            toast(`${t('request.approved')}!`)
             navigate(`/${routes.authRedirect}`)
         },
         onError: (error) => {
             if (error instanceof AxiosError) {
                 if (error.response?.status === 403) {
                     if (currentUser.role === 'student')
-                        toast('Куратор більше не може прийняти студентів!')
-                    else toast('Ви не можете прийняти більше студентів!')
-                    return
+                        toast(`${t('error.inviteLimitTeacher')}!`)
+                    else toast(`${t('error.inviteLimitYou')}!`)
+                } else {
+                    toast(`${t('unknownError')}! ${error.message}`)
                 }
-                toast(`Сталася невідома помилка! ${error.message}`)
+            } else {
+                toast(`${t('unknownError')}!`)
             }
-            toast(`Сталася невідома помилка!`)
         },
     })
     const { data } = useQuery(['requests'], () => {
@@ -57,10 +60,10 @@ export function Invitations() {
         else return getRequestsStudent()
     })
 
-    if (!data?.length)
+    if (!data?.filter((r) => !r.approved)?.length)
         return (
             <div className='text-center text-2xl font-semibold'>
-                Запрошення відсутні
+                {t('request.empty')}
             </div>
         )
 
@@ -92,7 +95,7 @@ export function Invitations() {
                 {!!othersRequests.length && (
                     <div className='max-w-lg'>
                         <div className='mb-8 text-center text-2xl font-semibold'>
-                            Запрошення для мене
+                            ${t('request.forMe')}
                         </div>
                         {othersRequests.map((request) => (
                             <Request
@@ -111,7 +114,7 @@ export function Invitations() {
                 {!!myRequests.length && (
                     <div className='max-w-lg'>
                         <div className='mb-8 text-center text-2xl font-semibold'>
-                            Мої запрошення
+                            ${t('request.my')}
                         </div>
                         {myRequests.map((request) => (
                             <Request

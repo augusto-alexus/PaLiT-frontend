@@ -1,4 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSignUpStudent, useSignUpTeacher } from '~/backend'
 import { IStudentSignUpDTO, ITeacherSignUpDTO } from '~/backend/auth.types.ts'
@@ -16,6 +18,7 @@ import { useForm } from '~/hooks'
 import { routes } from '~/pages'
 
 export function SignUp() {
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const signUpTeacher = useSignUpTeacher()
     const signUpStudent = useSignUpStudent()
@@ -23,11 +26,33 @@ export function SignUp() {
         mutationFn: async (signUpDTO: ITeacherSignUpDTO) =>
             signUpTeacher(signUpDTO),
         onSuccess: () => navigate(routes.signIn),
+        onError: (error) => {
+            if (error instanceof AxiosError) {
+                if (error.response?.status === 409) {
+                    toast(`${t('error.userWithEmailExists')}!`)
+                } else {
+                    toast(`${t('error.unknownError')}! ${error.message}`)
+                }
+            } else {
+                toast(`${t('error.unknownError')}!`)
+            }
+        },
     })
     const mutationStudent = useMutation({
         mutationFn: async (signUpDTO: IStudentSignUpDTO) =>
             signUpStudent(signUpDTO),
         onSuccess: () => navigate(routes.signIn),
+        onError: (error) => {
+            if (error instanceof AxiosError) {
+                if (error.response?.status === 409) {
+                    toast(`${t('error.userWithEmailExists')}!`)
+                } else {
+                    toast(`${t('error.unknownError')}! ${error.message}`)
+                }
+            } else {
+                toast(`${t('error.unknownError')}!`)
+            }
+        },
     })
     const { form, onFieldChange, onCheckboxFieldChange, onSubmit } =
         useForm<ISignUpForm>(
@@ -45,7 +70,7 @@ export function SignUp() {
             },
             (form) => {
                 if (form.password !== form.confirmPassword) {
-                    toast('Паролі не співпадають!')
+                    toast(`${t('passwordsNotMatching')}!`)
                     return
                 }
                 if (form.isStudent)
@@ -62,59 +87,59 @@ export function SignUp() {
                     <ProjectLogo />
                 </div>
                 <h1 className='text-center font-[Montserrat] text-2xl font-bold text-cs-text-dark'>
-                    Реєстрація
+                    {t('signUpTitle')}
                 </h1>
                 <form
                     onSubmit={onSubmit}
                     className='flex w-[19.5rem] flex-col gap-4 sm:w-[24rem] lg:w-[32rem]'
                 >
                     <div className='flex flex-col'>
-                        <label className='text-left'>Прізвище</label>
+                        <label className='text-left'>{t('lastName')}</label>
                         <Input
                             required
                             name='lastName'
                             type='text'
                             value={form.lastName}
                             onChange={onFieldChange}
-                            placeholder='Введіть Ваше призвіще'
+                            placeholder={t('enterYourLastName')}
                         />
                     </div>
                     <div className='flex flex-col'>
-                        <label className='text-left'>Ім'я</label>
+                        <label className='text-left'>{t('firstName')}</label>
                         <Input
                             required
                             name='firstName'
                             type='text'
                             value={form.firstName}
                             onChange={onFieldChange}
-                            placeholder="Введіть Ваше ім'я"
+                            placeholder={t('enterYourFirstName')}
                         />
                     </div>
                     <div className='flex flex-col'>
-                        <label className='text-left'>Пошта</label>
+                        <label className='text-left'>{t('email')}</label>
                         <Input
                             required
                             name='email'
                             type='email'
                             value={form.email}
                             onChange={onFieldChange}
-                            placeholder='Введіть Вашу пошту'
+                            placeholder={t('enterYourEmail')}
                         />
                     </div>
                     <div className='flex flex-col'>
-                        <label className='text-left'>Пароль</label>
+                        <label className='text-left'>{t('password')}</label>
                         <Password
                             required
                             name='password'
                             type='password'
                             value={form.password}
                             onChange={onFieldChange}
-                            placeholder='Введіть Ваш пароль'
+                            placeholder={t('enterYourPassword')}
                         />
                     </div>
                     <div className='flex flex-col'>
                         <label className='text-left'>
-                            Підтвердження паролю
+                            {t('passwordConfirm')}
                         </label>
                         <Password
                             required
@@ -122,7 +147,7 @@ export function SignUp() {
                             type='password'
                             value={form.confirmPassword}
                             onChange={onFieldChange}
-                            placeholder='Підтвердіть Ваш пароль'
+                            placeholder={t('confirmYourPassword')}
                         />
                     </div>
                     <div className='flex flex-col'>
@@ -130,12 +155,12 @@ export function SignUp() {
                             name='isStudent'
                             checked={form.isStudent}
                             onChange={onCheckboxFieldChange}
-                            label='Зареєструватися як студент'
+                            label={t('registerAsStudent')}
                         />
                     </div>
                     <div className='flex flex-col'>
                         <label hidden={!form.isStudent} className='text-left'>
-                            Факультет
+                            {t('faculty')}
                         </label>
                         <Input
                             hidden={!form.isStudent}
@@ -144,12 +169,12 @@ export function SignUp() {
                             type='text'
                             value={form.faculty}
                             onChange={onFieldChange}
-                            placeholder='Назва факультету'
+                            placeholder={t('nameOfFaculty')}
                         />
                     </div>
                     <div className='flex flex-col'>
                         <label hidden={!form.isStudent} className='text-left'>
-                            Група
+                            {t('studentGroup')}
                         </label>
                         <Input
                             hidden={!form.isStudent}
@@ -158,12 +183,12 @@ export function SignUp() {
                             type='text'
                             value={form.group}
                             onChange={onFieldChange}
-                            placeholder='Номер групи'
+                            placeholder={t('studentGroupNumber')}
                         />
                     </div>
                     <div className='flex flex-col'>
                         <label hidden={!form.isStudent} className='text-left'>
-                            Рік випуску
+                            {t('graduationYear')}
                         </label>
                         <Input
                             hidden={!form.isStudent}
@@ -172,12 +197,12 @@ export function SignUp() {
                             type='date'
                             value={form.gradDate}
                             onChange={onFieldChange}
-                            placeholder='Введіть Ваш рік випуску'
+                            placeholder={t('enterGraduationYear')}
                         />
                     </div>
                     <div className='flex flex-col'>
                         <label hidden={!form.isStudent} className='text-left'>
-                            Освітній ступінь
+                            {t('degree')}
                         </label>
                         <Select
                             hidden={!form.isStudent}
@@ -187,17 +212,21 @@ export function SignUp() {
                             onChange={onFieldChange}
                         >
                             <option disabled hidden value=''>
-                                Виберіть Ваш освітній ступінь
+                                {t('selectYourDegree')}
                             </option>
-                            <option value='BACHELOR'>Бакалавр</option>
-                            <option value='MASTER'>Магістр</option>
+                            <option value='BACHELOR'>
+                                {t('degrees.bachelor')}
+                            </option>
+                            <option value='MASTER'>
+                                {t('degrees.master')}
+                            </option>
                         </Select>
                     </div>
-                    <Button>Реєстрація</Button>
+                    <Button>{t('signUpSubmit')}</Button>
                     <div className='self-start'>
-                        Уже зареєстровані?
+                        {t('registeredAlready')}?
                         <Link to={`/${routes.signIn}`} className='ml-4'>
-                            Увійти
+                            {t('signIn')}
                         </Link>
                     </div>
                 </form>

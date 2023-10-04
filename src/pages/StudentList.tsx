@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     IStudentRequestDTO,
     useGetAllStudents,
@@ -12,6 +13,7 @@ import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
 import { RequestForm } from '~/pages/page-components'
 
 export function StudentList() {
+    const { t } = useTranslation()
     const [showRequestFormFor, setShowRequestFormFor] = useState<number | null>(
         null
     )
@@ -40,7 +42,7 @@ export function StudentList() {
     if (!allStudents?.length)
         return (
             <h2 className='text-center text-2xl'>
-                В системі немає жодного студента
+                {t('noStudentsInTheSystem')}
             </h2>
         )
     const data = allStudents.filter((t) =>
@@ -49,7 +51,7 @@ export function StudentList() {
     if (!data?.length)
         return (
             <h2 className='text-center text-2xl'>
-                Запрошення були надіслані до усіх студентів
+                {t('everyStudentReceivedInvitation')}
             </h2>
         )
 
@@ -81,6 +83,7 @@ function StudentInfoRow({
     showRequestForm: boolean
     setShowRequestFormFor: (setFor: number) => void
 }) {
+    const { t } = useTranslation()
     return (
         <div className='flex max-w-md flex-col border-b pb-4'>
             <div className='my-1 grid grid-cols-5 gap-2'>
@@ -100,7 +103,9 @@ function StudentInfoRow({
                     onClick={() => setShowRequestFormFor(student.studentId)}
                     icon={<i className='ri-send-plane-fill' />}
                 />
-                <div className='col-span-3'>{student.degree}</div>
+                <div className='col-span-3'>
+                    {t(`degrees.${student.degree}`)}
+                </div>
                 <div className='col-span-1 place-self-end font-mono text-cs-text-neutral'>
                     {student.cluster}
                 </div>

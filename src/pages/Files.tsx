@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { IMyStudent } from '~/backend'
 import { useGetStudentDocuments } from '~/backend/file.ts'
@@ -7,6 +8,7 @@ import { useCurrentUser } from '~/hooks'
 import { routes } from '~/pages'
 
 export function Files() {
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const { role, id, studentId } = useCurrentUser()
     const outletContext = useOutletContext<{ myStudent?: IMyStudent }>()
@@ -38,7 +40,7 @@ export function Files() {
                         <thead>
                             <tr>
                                 <th>№</th>
-                                <th>Назва документа</th>
+                                <th>{t('documentName')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,15 +67,18 @@ export function Files() {
                             <div className='h-fit w-fit animate-spin'>
                                 <i className='ri-loader-2-line'></i>
                             </div>
-                            <span className='align-middle'>оновлюємо...</span>
+                            <span className='align-middle'>
+                                {t('updating')}...
+                            </span>
                         </div>
                     )}
                 </div>
             ) : (
                 <h3 className='text-center text-3xl text-cs-text-dark'>
                     {role === 'teacher'
-                        ? 'Наразі  студент не завантажив жодного файлу'
-                        : 'Наразі Ви не завантажили жодного файлу.'}
+                        ? t("studentHaven'tUploadedAnyFile")
+                        : t("youHaven'tUploadedAnyFile")}
+                    .
                 </h3>
             )}
             {role === 'student' && (

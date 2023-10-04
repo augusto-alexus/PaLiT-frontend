@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { getMyProject, IMyProject, IMyStudent } from '~/backend'
 import { Loading } from '~/components'
 import { useAccessToken } from '~/hooks/useAccessToken.ts'
@@ -24,32 +25,46 @@ export function ProjectInfo({ myStudent }: { myStudent?: IMyStudent }) {
 }
 
 function TeacherProjectInfo({ myStudent }: { myStudent: IMyStudent }) {
+    const { t } = useTranslation()
     const { student } = myStudent
     return (
         <div className='flex flex-col gap-2 border-l-2 px-6'>
             <InfoRow
-                infoKey='Студент'
+                infoKey={t('projectInfo.student')}
                 value={student.lastName + ' ' + student.firstName}
             />
-            <InfoRow infoKey='Ступінь' value={student.degree} />
-            <InfoRow infoKey='Факультет' value={student.faculty} />
-            <InfoRow infoKey='Група' value={student.cluster} />
-            <InfoRow infoKey='Мова' value={myStudent.language} />
-            <InfoRow infoKey='Тема' value={myStudent.theme} />
+            <InfoRow
+                infoKey={t('projectInfo.degree')}
+                value={t(`degrees.${student.degree}`)}
+            />
+            <InfoRow
+                infoKey={t('projectInfo.faculty')}
+                value={student.faculty}
+            />
+            <InfoRow infoKey={t('projectInfo.group')} value={student.cluster} />
+            <InfoRow
+                infoKey={t('projectInfo.language')}
+                value={myStudent.language}
+            />
+            <InfoRow infoKey={t('projectInfo.theme')} value={myStudent.theme} />
         </div>
     )
 }
 
 function StudentProjectInfo({ myProject }: { myProject: IMyProject }) {
+    const { t } = useTranslation()
     const { advisor } = myProject
     return (
         <div className='flex flex-col gap-2 border-l-2 px-6'>
             <InfoRow
-                infoKey='Куратор'
+                infoKey={t('projectInfo.teacher')}
                 value={advisor.lastName + ' ' + advisor.firstName}
             />
-            <InfoRow infoKey='Мова' value={myProject.language} />
-            <InfoRow infoKey='Тема' value={myProject.theme} />
+            <InfoRow
+                infoKey={t('projectInfo.language')}
+                value={myProject.language}
+            />
+            <InfoRow infoKey={t('projectInfo.theme')} value={myProject.theme} />
         </div>
     )
 }

@@ -8,6 +8,8 @@ export interface ICurrentUser {
     email: string
     role: 'student' | 'teacher'
     degree?: 'bachelor' | 'master'
+    bachelorStudentsLimit?: number
+    masterStudentsLimit?: number
 }
 
 export function getCurrentUserFromDTO(dto: ICurrentUserDTO): ICurrentUser {
@@ -25,5 +27,7 @@ export function getCurrentUserFromDTO(dto: ICurrentUserDTO): ICurrentUser {
         email: dto.email,
         role,
         degree,
+        bachelorStudentsLimit: dto.teacherDTO?.generalBachelor,
+        masterStudentsLimit: dto.teacherDTO?.generalMaster,
     }
 }

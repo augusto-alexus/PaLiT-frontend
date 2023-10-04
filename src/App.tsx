@@ -19,6 +19,7 @@ import {
     TeacherList,
 } from '~/pages'
 import { AuthRedirect } from '~/pages/AuthRedirect.tsx'
+import './i18.ts'
 
 function App() {
     return (

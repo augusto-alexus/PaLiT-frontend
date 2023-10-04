@@ -8,6 +8,12 @@ interface IStudentDTO {
     degree: string
 }
 
+interface ITeacherDTO {
+    teacherId: number
+    generalBachelor: number
+    generalMaster: number
+}
+
 export interface ICurrentUserDTO {
     firstName: string
     lastName: string
@@ -15,6 +21,7 @@ export interface ICurrentUserDTO {
     userId: number
     roleDTO: IRoleDTO
     studentDTO?: IStudentDTO
+    teacherDTO?: ITeacherDTO
 }
 
 export interface ISignInDTO {

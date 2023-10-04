@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '~/components'
 
 export function FilePreview() {
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const { documentId } = useParams()
 
@@ -18,7 +20,7 @@ export function FilePreview() {
                     onClick={() => navigate(`..`)}
                     className='ri-arrow-go-back-line mr-2 inline -translate-y-1 rounded-full p-2 text-lg text-cs-text-dark hover:bg-cs-bg-neutral hover:text-cs-primary'
                 />
-                Перегляд документа
+                {t('documentPreview')}
             </h2>
             <object
                 className='mx-auto'
@@ -28,13 +30,12 @@ export function FilePreview() {
                 height='800px'
             >
                 <p>
-                    It appears your web browser doesn't support embedding PDFs.
-                    You can download the PDF{' '}
+                    {t('previewNotSupported')}. {t('youCanDownload...')}{' '}
                     <a
                         href={`http://localhost:8080/api/file/${documentId}`}
                         download='test.pdf'
                     >
-                        here
+                        {t('...here')}
                     </a>
                     .
                 </p>

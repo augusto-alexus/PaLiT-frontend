@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Fragment, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     ITeacherRequestDTO,
     useGetAllTeachers,
@@ -12,6 +13,7 @@ import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
 import { RequestForm } from './page-components'
 
 export function TeacherList() {
+    const { t } = useTranslation()
     const [showRequestFormFor, setShowRequestFormFor] = useState<number | null>(
         null
     )
@@ -41,7 +43,7 @@ export function TeacherList() {
     if (!allTeachers?.length)
         return (
             <h2 className='text-center text-2xl'>
-                В системі немає жодного вчителя
+                {t('noTeachersInTheSystem')}
             </h2>
         )
     const data = allTeachers.filter((t) =>
@@ -50,7 +52,7 @@ export function TeacherList() {
     if (!data?.length)
         return (
             <h2 className='text-center text-2xl'>
-                Запрошення були надіслані до усіх вчителів
+                {t('everyTeacherReceivedInvitation')}
             </h2>
         )
 

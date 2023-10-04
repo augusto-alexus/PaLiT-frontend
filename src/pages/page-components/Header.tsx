@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 import { Avatar, Button, ProjectLogo } from '~/components'
 import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
@@ -15,6 +16,7 @@ export function Header() {
 }
 
 function HeaderNav() {
+    const { t } = useTranslation()
     const { role } = useCurrentUser()
     return (
         <nav className='flex flex-row place-items-center justify-center gap-8'>
@@ -27,7 +29,7 @@ function HeaderNav() {
                     }
                     to={routes.myProject}
                 >
-                    Моя робота
+                    {t('navigation.myProject')}
                 </NavLink>
             )}
             {role === 'teacher' && (
@@ -39,7 +41,7 @@ function HeaderNav() {
                     }
                     to={routes.myStudents}
                 >
-                    Мої студенти
+                    {t('navigation.myStudents')}
                 </NavLink>
             )}
             {role === 'student' && (
@@ -51,7 +53,7 @@ function HeaderNav() {
                     }
                     to={routes.teacherList}
                 >
-                    Куратори
+                    {t('navigation.teachers')}
                 </NavLink>
             )}
             {role === 'teacher' && (
@@ -63,7 +65,7 @@ function HeaderNav() {
                     }
                     to={routes.studentList}
                 >
-                    Студенти
+                    {t('navigation.students')}
                 </NavLink>
             )}
             <NavLink
@@ -75,20 +77,21 @@ function HeaderNav() {
                 }
                 to={routes.invitations}
             >
-                Запрошення
+                {t('navigation.invites')}
             </NavLink>
         </nav>
     )
 }
 
 function HeaderTools() {
+    const { t } = useTranslation()
     const authStore = useAuthStore()
     return (
         <div className='flex flex-row place-items-center gap-4'>
             <Avatar />
             <Button
                 preset='icon'
-                title='Вийти з системи'
+                title={t('logout')}
                 onClick={() => {
                     authStore.reset()
                 }}

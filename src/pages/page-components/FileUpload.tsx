@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useUploadDocument } from '~/backend/file.ts'
 import { toast } from '~/components/toast.ts'
 import { useAccessToken } from '~/hooks'
@@ -7,6 +8,7 @@ import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
 import { getReadableFileSize } from '~/lib/files.ts'
 
 export function FileUpload() {
+    const { t } = useTranslation()
     const accessToken = useAccessToken()
     const currentUser = useCurrentUser()
     const uploadDocument = useUploadDocument(accessToken)
@@ -21,15 +23,16 @@ export function FileUpload() {
         }) => uploadDocument(studentId, file),
         onSuccess: async (data) => {
             if ('status' in data) {
-                if (data.status === 409) toast('Попередній файл ще не оцінено!')
-                else toast('Сталася невідома помилка!')
+                if (data.status === 409)
+                    toast(`${t('error.previousFileNotReviewed')}!`)
+                else toast(`${t('error.unknownError')}!`)
                 return
             }
             await queryClient.invalidateQueries([
                 'studentDocuments',
                 currentUser.id,
             ])
-            toast('Файл завантажено успішно!')
+            toast(`${t('fileUploadedSuccessfully')}!`)
         },
     })
     const [file, setFile] = useState<File | null>(null)
@@ -54,7 +57,7 @@ export function FileUpload() {
                         }
                     }}
                 >
-                    {file ? 'Підтвердити завантаження' : 'Завантажити роботу'}
+                    {file ? t('confirmUploadWork') : t('uploadWork')}
                 </label>
                 <input
                     id='upload-document'

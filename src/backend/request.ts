@@ -34,7 +34,7 @@ interface IRequestUser {
     id: number
     firstName: string
     lastName: string
-    degree?: 'Бакалавр' | 'Магістр'
+    degree?: 'bachelor' | 'master'
     faculty?: string
     cluster?: string
     graduateDate?: string
@@ -53,8 +53,8 @@ function parseRequest(data: IRequestStudent | IRequestTeacher): IRequest {
             lastName: data.studentRequestDTO.lastName,
             degree:
                 data.studentRequestDTO.degree === 'BACHELOR'
-                    ? 'Бакалавр'
-                    : 'Магістр',
+                    ? 'bachelor'
+                    : 'master',
             faculty: data.studentRequestDTO.faculty,
             cluster: data.studentRequestDTO.cluster,
             graduateDate: data.studentRequestDTO.graduateDate,

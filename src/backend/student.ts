@@ -13,7 +13,7 @@ export interface IStudentRequestDTO {
 function parseStudentRequest(data: IStudentRequestDTO[]) {
     return data.map((s) => ({
         ...s,
-        degree: s.degree === 'BACHELOR' ? 'Бакалавр' : 'Магістр',
+        degree: s.degree === 'BACHELOR' ? 'bachelor' : 'master',
     }))
 }
 

@@ -1,11 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { getMyStudents, IMyStudent } from '~/backend'
 import { useAccessToken, useCurrentUser } from '~/hooks'
 import { routes } from '~/pages/routes.ts'
 
 export function MyStudents() {
-    const { role } = useCurrentUser()
+    const { t } = useTranslation()
+    const { role, bachelorStudentsLimit, masterStudentsLimit } =
+        useCurrentUser()
     const accessToken = useAccessToken()
     const { data } = useQuery({
         enabled: role === 'teacher',
@@ -18,22 +21,39 @@ export function MyStudents() {
         return (
             <div className='flex w-full flex-col gap-8'>
                 <div className='text-center text-2xl font-semibold text-cs-text-dark'>
-                    Ви ще не розпочали свою роботу
+                    {t('workNotStarted.title')}
                 </div>
                 <div className='mx-auto max-w-md text-center text-xl text-cs-text-dark'>
-                    <Link to={`/${routes.studentList}`}>Запросіть</Link>{' '}
-                    студента або{' '}
-                    <Link to={`/${routes.invitations}`}>прийміть</Link>{' '}
-                    запрошення від студента щоб розпочати перевіряти
-                    кваліфікаційні роботи
+                    <Link to={`/${routes.studentList}`}>
+                        {t('workNotStarted.invite')}
+                    </Link>{' '}
+                    {t('workNotStarted.studentOr')}
+                    <Link to={`/${routes.invitations}`}>
+                        {' '}
+                        {t('workNotStarted.accept')}
+                    </Link>{' '}
+                    {t('workNotStarted.theRestForTeacher')}
                 </div>
             </div>
         )
 
+    const bachelorStudentCount = data.filter(
+        (s) => s.student.degree === 'bachelor'
+    ).length
+    const additionalBachelors = bachelorStudentsLimit
+        ? Math.max(0, bachelorStudentsLimit - bachelorStudentCount - 1)
+        : 0
+    const masterStudentCount = data.filter(
+        (s) => s.student.degree === 'master'
+    ).length
+    const additionalMasters = masterStudentsLimit
+        ? Math.max(0, masterStudentsLimit - masterStudentCount - 1)
+        : 0
+
     return (
         <div className='flex w-full flex-col gap-12'>
             <h2 className='text-center text-2xl font-semibold'>
-                Ваші студенти
+                {t('yourStudents')}
             </h2>
             <div className='flex flex-col place-items-center gap-8'>
                 {data.map((myStudent) => (
@@ -43,11 +63,28 @@ export function MyStudents() {
                     />
                 ))}
             </div>
+            {additionalBachelors > 0 && (
+                <div className='text-center font-mono'>
+                    {t('youCanTeachAdditionally')} {additionalBachelors}{' '}
+                    {additionalBachelors > 1
+                        ? t('multipleStudentBachelor')
+                        : t('singularStudentBachelor')}
+                </div>
+            )}
+            {additionalMasters > 0 && (
+                <div className='text-center font-mono'>
+                    {t('youCanTeachAdditionally')} {additionalMasters}{' '}
+                    {additionalMasters > 1
+                        ? t('multipleStudentMaster')
+                        : t('singularStudentMaster')}
+                </div>
+            )}
         </div>
     )
 }
 
 function MyStudentInfoRow({ myStudent }: { myStudent: IMyStudent }) {
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const { student } = myStudent
     return (
@@ -62,16 +99,18 @@ function MyStudentInfoRow({ myStudent }: { myStudent: IMyStudent }) {
                 <div className='col-span-2 place-self-end font-mono text-cs-text-neutral'>
                     {student.faculty}
                 </div>
-                <div className='col-span-3'>{student.degree}</div>
+                <div className='col-span-3'>
+                    {t(`degrees.${student.degree}`)}
+                </div>
                 <div className='col-span-2 place-self-end font-mono text-cs-text-neutral'>
                     {student.cluster}
                 </div>
                 <div className='col-span-5 text-xl'>
-                    <span className='font-mono'>Тема</span>:{' '}
+                    <span className='font-mono'>{t('theme')}</span>:{' '}
                     <span className='font-semibold'>«{myStudent.theme}»</span>
                 </div>
                 <div className='text-md col-span-3'>
-                    <span className='font-mono'>Мова</span>:{' '}
+                    <span className='font-mono'>{t('language')}</span>:{' '}
                     <span className='font-semibold'>{myStudent.language}</span>
                 </div>
             </div>

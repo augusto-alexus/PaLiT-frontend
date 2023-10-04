@@ -50,8 +50,8 @@ function parseMyStudentDTO(dto: IMyStudentDTO): IMyStudent {
             ...dto.studentRequestDTO,
             degree:
                 dto.studentRequestDTO.degree === 'BACHELOR'
-                    ? 'Бакалавр'
-                    : 'Магістр',
+                    ? 'bachelor'
+                    : 'master',
         },
     }
 }

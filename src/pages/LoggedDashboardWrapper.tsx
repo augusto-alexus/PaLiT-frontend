@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { getCurrentUser, JWTExpiredError } from '~/backend'
 import { DisplayError, Loading, toast } from '~/components'
@@ -8,6 +9,7 @@ import { useAuthStore } from '~/store/authStore.ts'
 import { Header } from './page-components'
 
 export function LoggedDashboardWrapper() {
+    const { t } = useTranslation()
     const authStore = useAuthStore()
     const navigate = useNavigate()
     const { isLoading, error } = useQuery({
@@ -24,7 +26,7 @@ export function LoggedDashboardWrapper() {
                 return currentUser
             } catch (error) {
                 if (error instanceof JWTExpiredError) {
-                    toast('Час сесії вийшов. Авторизуйтеся знову!')
+                    toast(`${t('sessionExpiredAuthAgain')}!`)
                     navigate(routes.signIn)
                 }
                 return null
