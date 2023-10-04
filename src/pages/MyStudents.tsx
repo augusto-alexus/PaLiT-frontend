@@ -21,7 +21,7 @@ export function MyStudents() {
                     Ви ще не розпочали свою роботу
                 </div>
                 <div className='mx-auto max-w-md text-center text-xl text-cs-text-dark'>
-                    <Link to={`/${routes.teacherList}`}>Запросіть</Link>{' '}
+                    <Link to={`/${routes.studentList}`}>Запросіть</Link>{' '}
                     студента або{' '}
                     <Link to={`/${routes.invitations}`}>прийміть</Link>{' '}
                     запрошення від студента щоб розпочати перевіряти

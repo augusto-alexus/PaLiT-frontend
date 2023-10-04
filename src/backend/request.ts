@@ -89,10 +89,7 @@ export function useGetRequestsTeacher(accessToken: string) {
                     Authorization: `Bearer ${accessToken}`,
                 },
             })
-            .then(({ data }) => {
-                console.log(data)
-                return (data as IRequestStudent[]).map(parseRequest)
-            })
+            .then(({ data }) => (data as IRequestStudent[]).map(parseRequest))
 }
 
 export function useGetRequestsStudent(accessToken: string) {
