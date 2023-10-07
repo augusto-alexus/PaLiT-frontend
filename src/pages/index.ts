@@ -1,6 +1,6 @@
 export * from './routes'
 export * from './FilePreview'
-export * from './Files'
+export * from './StudentFeed.tsx'
 export * from './LoggedDashboardWrapper'
 export * from './PlaceholderLanding'
 export * from './SignIn'

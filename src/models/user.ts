@@ -1,12 +1,14 @@
 import { ICurrentUserDTO } from '~/backend/auth.types.ts'
 
+export type Role = 'student' | 'teacher'
+
 export interface ICurrentUser {
     id: number
     studentId?: number
     firstName: string
     lastName: string
     email: string
-    role: 'student' | 'teacher'
+    role: Role
     degree?: 'bachelor' | 'master'
     bachelorStudentsLimit?: number
     masterStudentsLimit?: number

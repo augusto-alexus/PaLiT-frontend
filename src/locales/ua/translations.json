@@ -59,10 +59,14 @@
     "students": "Студенти",
     "invites": "Запрошення"
   },
-  "documentName": "Назва документа",
-  "updating": "Оновлюємо",
-  "studentHaven'tUploadedAnyFile": "Наразі  студент не завантажив жодного файлу",
-  "youHaven'tUploadedAnyFile": "Наразі Ви не завантажили жодного файлу",
+  "feed": {
+    "workHasntStartedYet": "Робота ще не розпочалася",
+    "viewDocument": "Перегляд документа",
+    "approveDocument": "Одобрити документ",
+    "rejectDocument": "Відхилити документ",
+    "documentApproved": "Документ одобрено",
+    "documentRejected": "Документ відхилено"
+  },
   "documentPreview": "Перегляд документа",
   "previewNotSupported": "Здається Ваш веб-браузер не підтримує відображення PDF-файлів на сторінці",
   "youCanDownload...": "Ви можете завантажити файл",

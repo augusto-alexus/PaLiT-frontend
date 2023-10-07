@@ -59,10 +59,14 @@
     "students": "Students",
     "invites": "Invites"
   },
-  "documentName": "Document name",
-  "updating": "Updating",
-  "studentHaven'tUploadedAnyFile": "Student haven't uploaded any files yet",
-  "youHaven'tUploadedAnyFile": "You haven't uploaded any files yet",
+  "feed": {
+    "workHasntStartedYet": "Work hasn't started yet",
+    "viewDocument": "View document",
+    "approveDocument": "Approve document",
+    "rejectDocument": "Reject document",
+    "documentApproved": "Document approved",
+    "documentRejected": "Document rejected"
+  },
   "documentPreview": "Document preview",
   "previewNotSupported": "It appears your web browser doesn't support embedding PDFs",
   "youCanDownload...": "You can download the file",

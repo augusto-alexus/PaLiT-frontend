@@ -35,7 +35,6 @@ export function Invitations() {
             return approveRequest({ accessToken, requestId })
         },
         onSuccess: async () => {
-            console.log(data)
             await queryClient.invalidateQueries(['requests'])
             await queryClient.invalidateQueries(['myProject'])
             toast(`${t('request.approved')}!`)

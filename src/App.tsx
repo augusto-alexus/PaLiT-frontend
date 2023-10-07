@@ -5,7 +5,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import '~/App.css'
 import {
     FilePreview,
-    Files,
     Invitations,
     LoggedDashboardWrapper,
     MyProject,
@@ -15,6 +14,7 @@ import {
     routes,
     SignIn,
     SignUp,
+    StudentFeed,
     StudentList,
     TeacherList,
 } from '~/pages'
@@ -49,14 +49,14 @@ function App() {
                     />
                     <Route path={routes.myStudents} element={<MyStudents />} />
                     <Route path={routes.myStudent()} element={<MyStudent />}>
-                        <Route index element={<Files />} />
+                        <Route index element={<StudentFeed />} />
                         <Route
                             path={routes.filePreview()}
                             element={<FilePreview />}
                         />
                     </Route>
                     <Route path={routes.myProject} element={<MyProject />}>
-                        <Route index element={<Files />} />
+                        <Route index element={<StudentFeed />} />
                         <Route
                             path={routes.filePreview()}
                             element={<FilePreview />}

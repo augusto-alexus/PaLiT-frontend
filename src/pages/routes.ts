@@ -3,7 +3,7 @@ export const routes = Object.freeze({
     signUp: 'sign-up',
     dashboard: 'dashboard',
     files: 'files',
-    filePreview: (documentId?: string) =>
+    filePreview: (documentId?: number) =>
         `file-preview/${documentId ? documentId : ':documentId'}`,
     studentList: 'students',
     teacherList: 'teachers',

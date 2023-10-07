@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useUploadDocument } from '~/backend/file.ts'
+import { uploadDocument } from '~/backend/file.ts'
 import { toast } from '~/components/toast.ts'
 import { useAccessToken } from '~/hooks'
 import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
@@ -11,7 +11,6 @@ export function FileUpload() {
     const { t } = useTranslation()
     const accessToken = useAccessToken()
     const currentUser = useCurrentUser()
-    const uploadDocument = useUploadDocument(accessToken)
     const queryClient = useQueryClient()
     const mutation = useMutation({
         mutationFn: async ({
@@ -20,7 +19,7 @@ export function FileUpload() {
         }: {
             studentId: number
             file: File
-        }) => uploadDocument(studentId, file),
+        }) => uploadDocument(accessToken, studentId, file),
         onSuccess: async (data) => {
             if ('status' in data) {
                 if (data.status === 409)
