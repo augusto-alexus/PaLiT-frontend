@@ -22,6 +22,8 @@ export default Object.freeze({
     currentAdvisor: prefixEndpoints('student/current-adviser'),
     currentStudents: prefixEndpoints('teacher/current-student'),
     files: Object.freeze({
+        getDocument: (documentId: number) =>
+            prefixEndpoints(`file/${documentId}`),
         reviewDocument: (documentId: number) =>
             prefixEndpoints(`file/${documentId}`),
         moveToNextStage: (documentId: number, stageId: number) =>

@@ -1,6 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { getMyProject, IMyProject, IMyStudent } from '~/backend'
+import {
+    getAllStages,
+    getMyProject,
+    IMyProject,
+    IMyStudent,
+    IStageDTO,
+} from '~/backend'
 import { Loading } from '~/components'
 import { useAccessToken } from '~/hooks/useAccessToken.ts'
 import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
@@ -18,13 +24,26 @@ export function ProjectInfo({ myStudent }: { myStudent?: IMyStudent }) {
         queryFn: () => getMyProject(accessToken),
     })
 
-    if (myStudent) return <TeacherProjectInfo myStudent={myStudent} />
+    const { data: stages } = useQuery({
+        queryKey: ['stages'],
+        queryFn: () => getAllStages(accessToken),
+    })
+
+    if (myStudent)
+        return <TeacherProjectInfo myStudent={myStudent} stages={stages} />
     if (isFetching && isLoading) return <Loading />
-    if (myProject) return <StudentProjectInfo myProject={myProject} />
+    if (myProject)
+        return <StudentProjectInfo myProject={myProject} stages={stages} />
     return <></>
 }
 
-function TeacherProjectInfo({ myStudent }: { myStudent: IMyStudent }) {
+function TeacherProjectInfo({
+    myStudent,
+    stages,
+}: {
+    myStudent: IMyStudent
+    stages?: IStageDTO[]
+}) {
     const { t } = useTranslation()
     const { student } = myStudent
     return (
@@ -47,11 +66,21 @@ function TeacherProjectInfo({ myStudent }: { myStudent: IMyStudent }) {
                 value={myStudent.language}
             />
             <InfoRow infoKey={t('projectInfo.theme')} value={myStudent.theme} />
+            <InfoRow
+                infoKey={t('projectInfo.stage')}
+                value={stages && stages[0] ? stages[0].name : undefined}
+            />
         </div>
     )
 }
 
-function StudentProjectInfo({ myProject }: { myProject: IMyProject }) {
+function StudentProjectInfo({
+    myProject,
+    stages,
+}: {
+    myProject: IMyProject
+    stages?: IStageDTO[]
+}) {
     const { t } = useTranslation()
     const { advisor } = myProject
     return (
@@ -65,6 +94,10 @@ function StudentProjectInfo({ myProject }: { myProject: IMyProject }) {
                 value={myProject.language}
             />
             <InfoRow infoKey={t('projectInfo.theme')} value={myProject.theme} />
+            <InfoRow
+                infoKey={t('projectInfo.stage')}
+                value={stages && stages[0] ? stages[0].name : undefined}
+            />
         </div>
     )
 }

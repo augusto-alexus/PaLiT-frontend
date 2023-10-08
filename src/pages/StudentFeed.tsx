@@ -51,13 +51,13 @@ export function StudentFeed() {
     const {
         isLoading: isLoadingStages,
         error: errorStage,
-        data: stages,
+        // data: stages,
     } = useQuery({
         queryKey: ['stages'],
         queryFn: () => getAllStages(accessToken),
     })
 
-    const { mutate } = useMutation({
+    const { mutate: mutateReviewDocument } = useMutation({
         mutationFn: async ({
             documentId,
             verdict,
@@ -82,22 +82,49 @@ export function StudentFeed() {
         },
     })
 
+    // const { mutate: mutateMoveDocumentToNextStage } = useMutation({
+    //     mutationFn: async ({
+    //         documentId,
+    //         stageId,
+    //     }: {
+    //         documentId: number
+    //         stageId: number
+    //     }) => moveDocumentToStage(accessToken, documentId, stageId),
+    //     onSuccess: (data) => {
+    //         console.log(data)
+    //         toast(t('feed.documentMovedToNextStage'))
+    //     },
+    //     onError: (error: AxiosError | never) => {
+    //         if (error instanceof AxiosError) {
+    //             toast(`${t('error.unknownError')}! ${error.message}`)
+    //         } else {
+    //             toast(`${t('error.unknownError')}!`)
+    //         }
+    //     },
+    // })
+
     if (isLoadingDocuments || isLoadingStages) return <Loading />
     if (errorDocuments) return <DisplayError error={errorDocuments} />
     if (errorStage) return <DisplayError error={errorStage} />
-
-    console.log(documents)
 
     const feedElements: IFeedElement[] = []
     const onPreview = (documentId: number) =>
         navigate(routes.filePreview(documentId))
     const onApprove = (documentId: number) =>
-        mutate({ documentId, verdict: 'approved' })
+        mutateReviewDocument({ documentId, verdict: 'approved' })
     const onReject = (documentId: number) =>
-        mutate({ documentId, verdict: 'rejected' })
-    documents?.forEach((d) => {
+        mutateReviewDocument({ documentId, verdict: 'rejected' })
+    documents?.forEach((d, idx) => {
         feedElements.push(
-            documentFeedItem(d, role, onPreview, onApprove, onReject, t)
+            documentFeedItem(
+                d,
+                idx + 1 === documents.length,
+                role,
+                onPreview,
+                onApprove,
+                onReject,
+                t
+            )
         )
         if (d.approvedDate) feedElements.push(reviewFeedItem(d, t))
     })
@@ -125,6 +152,7 @@ export function StudentFeed() {
 
 function documentFeedItem(
     document: IDocumentDTO,
+    isLastDocument: boolean,
     role: Role,
     onPreview: (documentId: number) => void,
     onApprove: (documentId: number) => void,
@@ -132,6 +160,7 @@ function documentFeedItem(
     t: TFunction<never, never>
 ): IFeedElement {
     const wasReviewed = !!document.approved || !!document.approvedDate
+    const canBeMovedToNextStage = document.approved && isLastDocument
     return {
         date: new Date(document.createdDate),
         iconL: <i className='ri-file-line' />,
@@ -151,6 +180,14 @@ function documentFeedItem(
                         preset='icon'
                         title={t('feed.rejectDocument')}
                         icon={<i className='ri-close-line' />}
+                    />
+                )}
+                {role === 'teacher' && canBeMovedToNextStage && (
+                    <Button
+                        onClick={() => onReject(document.documentId)}
+                        preset='icon'
+                        title={t('feed.moveToNextStage')}
+                        icon={<i className='ri-arrow-up-circle-line' />}
                     />
                 )}
                 <Button

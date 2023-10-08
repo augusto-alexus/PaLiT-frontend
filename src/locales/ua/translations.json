@@ -65,12 +65,16 @@
     "approveDocument": "Одобрити документ",
     "rejectDocument": "Відхилити документ",
     "documentApproved": "Документ одобрено",
-    "documentRejected": "Документ відхилено"
+    "documentRejected": "Документ відхилено",
+    "moveToNextStage": "Направити до наступної стадії",
+    "documentMovedToNextStage": "Документ перейшов до наступної стадії"
   },
   "documentPreview": "Перегляд документа",
   "previewNotSupported": "Здається Ваш веб-браузер не підтримує відображення PDF-файлів на сторінці",
   "youCanDownload...": "Ви можете завантажити файл",
   "...here": "тут",
+  "unknownExtension": "Невідоме розширення",
+  "previewImpossibleWithExtension": "Файли з розширенням {{extension}} не можуть бути переглянуті",
   "uploadWork": "Завантажити роботу",
   "confirmUploadWork": "Підтвердити завантаження",
   "fileUploadedSuccessfully": "Файл завантажено успішно",
@@ -82,7 +86,8 @@
     "faculty": "Факультет",
     "group": "Група",
     "language": "Мова",
-    "theme": "Тема"
+    "theme": "Тема",
+    "stage": "Стадія"
   },
   "request": {
     "approved": "Запрошення прийнято",

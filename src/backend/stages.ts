@@ -1,7 +1,7 @@
 import axios from 'axios'
 import endpoints from '~/backend/endpoints.ts'
 
-interface IStageDTO {
+export interface IStageDTO {
     stageId: number
     name: string
     serialOrder: number

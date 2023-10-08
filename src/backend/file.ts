@@ -52,7 +52,25 @@ export async function reviewDocument(
         }
     )
 
+    return response.data as { approved: string }
+}
+
+export async function moveDocumentToStage(
+    accessToken: string,
+    documentId: number,
+    stageId: number
+) {
+    const response = await axios.put(
+        endpoints.files.moveToNextStage(documentId, stageId),
+        undefined,
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }
+    )
+
     console.log(response)
 
-    return response.data as { approved: string }
+    return response.data as object
 }

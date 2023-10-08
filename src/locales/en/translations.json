@@ -4,7 +4,6 @@
   "signInSubmit": "Authorize",
   "signUp": "Sign Up",
   "signUpTitle": "Registration",
-  "signUpSubmit": "Register",
   "lastName": "Last name",
   "enterYourLastName": "Enter your last name",
   "firstName": "First name",
@@ -15,8 +14,6 @@
   "enterYourPassword": "Enter your password",
   "passwordConfirm": "Password confirmation",
   "confirmYourPassword": "Confirm your password",
-  "registerAsStudent": "Register as student",
-  "faculty": "Faculty",
   "nameOfFaculty": "Faculty name",
   "studentGroup": "Group",
   "studentGroupNumber": "Group number",
@@ -40,14 +37,12 @@
     "theRestForTeacher": "invitation from one to start evaluating theses",
     "theRestForStudent": "invitation from one to start working on your thesis"
   },
-  "yourStudents": "Your students",
   "youCanTeachAdditionally": "You can teach additionally",
   "singularStudentBachelor": "more bachelor student",
   "singularStudentMaster": "more master student",
   "multipleStudentBachelor": "more bachelor students",
   "multipleStudentMaster": "more master students",
   "theme": "Theme",
-  "language": "Language",
   "degrees": {
     "bachelor": "Bachelor",
     "master": "Master"
@@ -65,15 +60,18 @@
     "approveDocument": "Approve document",
     "rejectDocument": "Reject document",
     "documentApproved": "Document approved",
-    "documentRejected": "Document rejected"
+    "documentRejected": "Document rejected",
+    "moveToNextStage": "Move to the next stage",
+    "documentMovedToNextStage": "Document moved to the next stage"
   },
   "documentPreview": "Document preview",
   "previewNotSupported": "It appears your web browser doesn't support embedding PDFs",
   "youCanDownload...": "You can download the file",
   "...here": "here",
+  "unknownExtension": "Unknown extension",
+  "previewImpossibleWithExtension": "Files with extension {{extension}} can't be previewed",
   "uploadWork": "Upload your work",
   "confirmUploadWork": "Confirm upload",
-  "fileUploadedSuccessfully": "File uploaded successfully",
   "logout": "Log out",
   "projectInfo": {
     "student": "Student",
@@ -82,22 +80,13 @@
     "faculty": "Faculty",
     "group": "Group",
     "language": "Language",
-    "theme": "Theme"
+    "theme": "Theme",
+    "stage": "Stage"
   },
   "request": {
     "approved": "Invite accepted",
     "empty": "No invites",
     "forMe": "Invites for me",
     "my": "My invites"
-  },
-  "error": {
-    "sessionExpiredAuthAgain": "Session expired. Authorize again",
-    "wrongCredentials": "Wrong email or password",
-    "userWithEmailExists": "User with the same email already exists",
-    "passwordsNotMatching": "Passwords do not match",
-    "previousFileNotReviewed": "Previous file wasn't reviewed yet",
-    "inviteLimitTeacher": "Teacher can't accept more students",
-    "inviteLimitYou": "You can't accept more students",
-    "unknownError": "Unknown error occurred"
   }
 }
