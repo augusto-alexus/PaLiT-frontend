@@ -10,18 +10,27 @@ export interface IFeedElement {
 export function Feed({ data = feedSample }: { data?: IFeedElement[] }) {
     return (
         <div className='border-l border-cs-additional-gray'>
-            <div className='scrollbar -m-1 flex flex-col gap-4 overflow-y-scroll'>
+            <div className='-m-1 flex flex-col gap-4'>
                 {data.map((f, idx) => (
                     <div
                         key={`feed-${idx}`}
-                        className='flex flex-row place-items-center gap-6 py-2'
+                        className='flex flex-row gap-6 py-2'
                     >
-                        <div className='bg-cs-bg-white py-4'>
-                            {f.iconL || (
+                        {f.iconL ? (
+                            <div className='relative h-fit bg-cs-bg-white py-4'>
+                                <div className='h-2 w-2 rounded-full border border-transparent bg-transparent' />
+                                <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
+                                    {f.iconL}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className='h-fit bg-cs-bg-white py-4'>
                                 <div className='h-2 w-2 rounded-full border border-cs-secondary bg-cs-primary' />
-                            )}
+                            </div>
+                        )}
+                        <div className='grow place-self-center'>
+                            {f.content}
                         </div>
-                        <div className='grow'>{f.content}</div>
                         <div className='text-xs text-cs-text-neutral'>
                             {getHumanReadableDuration(f.date)}
                         </div>

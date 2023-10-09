@@ -62,13 +62,18 @@
   "feed": {
     "workHasntStartedYet": "Робота ще не розпочалася",
     "viewDocument": "Перегляд документа",
+    "commentDocument": "Коментувати документ",
     "approveDocument": "Одобрити документ",
     "rejectDocument": "Відхилити документ",
     "documentApproved": "Документ одобрено",
     "documentRejected": "Документ відхилено",
     "moveToNextStage": "Направити до наступної стадії",
-    "documentMovedToNextStage": "Документ перейшов до наступної стадії"
+    "documentMovedToNextStage": "Документ перейшов до наступної стадії",
+    "studentUploadedFile": "Студент завантажив файл",
+    "commentSaved": "Коментар збережено"
   },
+  "yourComment": "Ваш коментар",
+  "send": "Відправити",
   "documentPreview": "Перегляд документа",
   "previewNotSupported": "Здається Ваш веб-браузер не підтримує відображення PDF-файлів на сторінці",
   "youCanDownload...": "Ви можете завантажити файл",

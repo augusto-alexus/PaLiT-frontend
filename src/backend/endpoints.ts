@@ -37,4 +37,13 @@ export default Object.freeze({
         getAll: prefixEndpoints('stage/all'),
         deleteById: (stageId: number) => prefixEndpoints(`stage/${stageId}`),
     }),
+    comments: Object.freeze({
+        postComment: (
+            documentId: number,
+            studentId: number,
+            teacherId: number
+        ) => prefixEndpoints(`comment/${documentId}/${studentId}/${teacherId}`),
+        getComments: (documentId: number) =>
+            prefixEndpoints(`comment/${documentId}`),
+    }),
 })

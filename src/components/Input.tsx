@@ -1,9 +1,18 @@
-import { InputHTMLAttributes, useState } from 'react'
+import { InputHTMLAttributes, TextareaHTMLAttributes, useState } from 'react'
 
 export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
     return (
         <input
             className='w-full rounded-md border border-cs-additional-gray bg-inherit px-4 py-2 text-cs-text-dark shadow hover:border-cs-secondary focus:border-cs-secondary focus:outline-none'
+            {...props}
+        />
+    )
+}
+
+export function TextArea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+    return (
+        <textarea
+            className='scrollbar w-full rounded-md border border-cs-additional-gray bg-inherit px-4 py-2 text-cs-text-dark shadow hover:border-cs-secondary focus:border-cs-secondary focus:outline-none'
             {...props}
         />
     )

@@ -5,6 +5,7 @@ export type Role = 'student' | 'teacher'
 export interface ICurrentUser {
     id: number
     studentId?: number
+    teacherId?: number
     firstName: string
     lastName: string
     email: string
@@ -24,6 +25,7 @@ export function getCurrentUserFromDTO(dto: ICurrentUserDTO): ICurrentUser {
     return {
         id: dto.userId,
         studentId: dto.studentDTO?.studentId,
+        teacherId: dto.teacherDTO?.teacherId,
         firstName: dto.firstName,
         lastName: dto.lastName,
         email: dto.email,

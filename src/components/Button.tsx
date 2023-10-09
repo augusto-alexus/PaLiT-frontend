@@ -46,3 +46,24 @@ export function Button({
         </button>
     )
 }
+
+interface IIconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    isActive?: boolean
+}
+
+export function IconButton({
+    className,
+    isActive,
+    ...props
+}: IIconButtonProps) {
+    return (
+        <button
+            className={`${
+                isActive ? 'text-cs-secondary' : 'text-cs-text-dark'
+            } rounded-full border-none bg-transparent bg-opacity-50 px-2 py-1 outline-none hover:bg-cs-bg-neutral hover:text-cs-secondary focus:bg-cs-bg-neutral focus:text-cs-secondary ${
+                className ?? ''
+            }`}
+            {...props}
+        />
+    )
+}
