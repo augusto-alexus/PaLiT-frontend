@@ -7,12 +7,16 @@ export interface IDocumentDTO {
     approved: string
     approvedDate: string
     originalName: string
+    stageDTO?: any
 }
 
 export async function getStudentDocuments(studentId: number) {
     const response = await axios.get(
         endpoints.files.getStudentDocuments(studentId)
     )
+
+    console.log(response)
+
     return response.data as IDocumentDTO[]
 }
 
@@ -31,6 +35,9 @@ export async function uploadDocument(
             Authorization: `Bearer ${accessToken}`,
         },
     })
+
+    console.log(response)
+
     return (await response.json()) as object
 }
 

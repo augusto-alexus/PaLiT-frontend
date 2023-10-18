@@ -29,6 +29,7 @@ export function useGetAllStudents(): () => Promise<IStudentRequestDTO[]> {
 interface IMyProjectDTO {
     language: 'UA' | 'ENG'
     theme: string
+    stageDTO?: object
     teacherRequestDTO: {
         teacherId: number
         firstName: string
@@ -39,6 +40,7 @@ interface IMyProjectDTO {
 export interface IMyProject {
     language?: 'Українська' | 'English'
     theme: string
+    stage?: object
     advisor: {
         id: number
         firstName: string
@@ -54,6 +56,7 @@ function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {
                 : 'English'
             : undefined,
         theme: dto.theme,
+        stage: dto.stageDTO,
         advisor: {
             id: dto?.teacherRequestDTO?.teacherId,
             firstName: dto?.teacherRequestDTO?.firstName,
@@ -63,11 +66,13 @@ function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {
 }
 
 export async function getMyProject(accessToken: string) {
-    return axios
-        .get(endpoints.currentAdvisor, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-        .then(({ data }) => parseMyProjectDTO(data as IMyProjectDTO))
+    const response = await axios.get(endpoints.currentAdvisor, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+
+    console.log(response)
+
+    return parseMyProjectDTO(response.data as IMyProjectDTO)
 }

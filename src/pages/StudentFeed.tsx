@@ -7,6 +7,7 @@ import {
     getStudentDocuments,
     IDocumentDTO,
     IMyStudent,
+    IStageDTO,
 } from '~/backend'
 import {
     DisplayError,
@@ -46,7 +47,7 @@ export function StudentFeed() {
     const {
         isLoading: isLoadingStages,
         error: errorStage,
-        // data: stages,
+        data: stages,
     } = useQuery({
         queryKey: ['stages'],
         queryFn: () => getAllStages(accessToken),
@@ -55,10 +56,18 @@ export function StudentFeed() {
     if (isLoadingDocuments || isLoadingStages) return <Loading />
     if (errorDocuments) return <DisplayError error={errorDocuments} />
     if (errorStage) return <DisplayError error={errorStage} />
+    if (!stages)
+        return (
+            <DisplayError
+                error={new Error('No stages returned from the server')}
+            />
+        )
 
     const feedElements: IFeedElement[] = []
     documents?.forEach((d, idx) => {
-        feedElements.push(getDocumentFeedItem(d, idx + 1 === documents.length))
+        feedElements.push(
+            getDocumentFeedItem(d, stages, idx + 1 === documents.length)
+        )
         if (d.approvedDate) feedElements.push(reviewFeedItem(d, t))
     })
     const sortedFeedElements = feedElements.sort(
@@ -89,6 +98,7 @@ export function StudentFeed() {
 
 function getDocumentFeedItem(
     document: IDocumentDTO,
+    stages: IStageDTO[],
     isLastDocument: boolean
 ): IFeedElement {
     return {
@@ -97,6 +107,7 @@ function getDocumentFeedItem(
         content: (
             <DocumentFeedItem
                 document={document}
+                stages={stages}
                 isLastDocument={isLastDocument}
             />
         ),

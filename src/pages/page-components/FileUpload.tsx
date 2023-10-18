@@ -31,6 +31,7 @@ export function FileUpload() {
                 'studentDocuments',
                 currentUser.id,
             ])
+            setFile(null)
             toast(`${t('fileUploadedSuccessfully')}!`)
         },
     })

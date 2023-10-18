@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { getComments, IDocumentDTO } from '~/backend'
+import { getComments, IDocumentDTO, IStageDTO } from '~/backend'
 import { Avatar, Feed, IconButton, IFeedElement, Loading } from '~/components'
 import {
     useAccessToken,
@@ -16,9 +16,11 @@ import { useFeedStore } from '~/store/feedStore.ts'
 
 export function DocumentFeedItem({
     document,
+    stages,
     isLastDocument,
 }: {
     document: IDocumentDTO
+    stages: IStageDTO[]
     isLastDocument: boolean
 }) {
     const { showCommentsForDocumentId, setShowCommentsForDocumentId } =
@@ -33,6 +35,9 @@ export function DocumentFeedItem({
     const canBeMovedToNextStage = document.approved && isLastDocument
     const { mutate: reviewDocument } = useDocumentReview()
     const { mutate: moveDocumentToNextStage } = useDocumentNextStage()
+    const curStageOrder = (document?.stageDTO?.serialOrder as number) ?? 0
+    const nextStage = stages.find((s) => s.serialOrder === curStageOrder + 1)
+    console.log('nextStage', nextStage)
     return (
         <div
             className={`${
@@ -78,11 +83,15 @@ export function DocumentFeedItem({
                         <i className='ri-close-line' />
                     </IconButton>
                 )}
-                {role === 'teacher' && canBeMovedToNextStage && (
+                {role === 'teacher' && canBeMovedToNextStage && nextStage && (
                     <IconButton
-                        onClick={() =>
-                            moveDocumentToNextStage({ documentId, stageId: 1 })
-                        }
+                        onClick={() => {
+                            if (nextStage)
+                                moveDocumentToNextStage({
+                                    documentId,
+                                    stageId: nextStage.stageId,
+                                })
+                        }}
                         title={t('feed.moveToNextStage')}
                     >
                         <i className='ri-arrow-up-circle-line' />

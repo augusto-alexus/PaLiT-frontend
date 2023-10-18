@@ -45,7 +45,8 @@ function TeacherProjectInfo({
     stages?: IStageDTO[]
 }) {
     const { t } = useTranslation()
-    const { student } = myStudent
+    const { student, stage } = myStudent
+    const currentStage = stage ?? stages?.[0]
     return (
         <div className='flex flex-col gap-2 border-l-2 px-6'>
             <InfoRow
@@ -68,7 +69,7 @@ function TeacherProjectInfo({
             <InfoRow infoKey={t('projectInfo.theme')} value={myStudent.theme} />
             <InfoRow
                 infoKey={t('projectInfo.stage')}
-                value={stages && stages[0] ? stages[0].name : undefined}
+                value={currentStage?.['name'] ?? undefined}
             />
         </div>
     )
@@ -82,7 +83,8 @@ function StudentProjectInfo({
     stages?: IStageDTO[]
 }) {
     const { t } = useTranslation()
-    const { advisor } = myProject
+    const { advisor, stage } = myProject
+    const currentStage = stage ?? stages?.[0]
     return (
         <div className='flex flex-col gap-2 border-l-2 px-6'>
             <InfoRow
@@ -96,7 +98,7 @@ function StudentProjectInfo({
             <InfoRow infoKey={t('projectInfo.theme')} value={myProject.theme} />
             <InfoRow
                 infoKey={t('projectInfo.stage')}
-                value={stages && stages[0] ? stages[0].name : undefined}
+                value={currentStage?.['name'] ?? undefined}
             />
         </div>
     )

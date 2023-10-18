@@ -17,6 +17,7 @@ export function useGetAllTeachers() {
 interface IMyStudentDTO {
     language: 'UA' | 'ENG'
     theme: string
+    stageDTO?: any
     studentRequestDTO: {
         studentId: number
         cluster: string
@@ -31,6 +32,7 @@ interface IMyStudentDTO {
 export interface IMyStudent {
     language: 'Українська' | 'English'
     theme: string
+    stage?: any
     student: {
         studentId: number
         cluster: string
@@ -46,6 +48,7 @@ function parseMyStudentDTO(dto: IMyStudentDTO): IMyStudent {
     return {
         language: dto.language === 'UA' ? 'Українська' : 'English',
         theme: dto.theme,
+        stage: dto.stageDTO,
         student: {
             ...dto.studentRequestDTO,
             degree:
@@ -57,11 +60,13 @@ function parseMyStudentDTO(dto: IMyStudentDTO): IMyStudent {
 }
 
 export async function getMyStudents(accessToken: string) {
-    return axios
-        .get(endpoints.currentStudents, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-        .then(({ data }) => (data as IMyStudentDTO[])?.map(parseMyStudentDTO))
+    const response = await axios.get(endpoints.currentStudents, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+
+    console.log(response)
+
+    return (response.data as IMyStudentDTO[])?.map(parseMyStudentDTO)
 }
