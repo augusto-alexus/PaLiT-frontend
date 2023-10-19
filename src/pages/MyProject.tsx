@@ -26,7 +26,7 @@ export function MyProject() {
                     {t('workNotStarted.title')}
                 </div>
                 <div className='mx-auto max-w-md text-center text-xl text-cs-text-dark'>
-                    <Link to={`/${routes.studentList}`}>
+                    <Link to={`/${routes.teacherList}`}>
                         {t('workNotStarted.invite')}
                     </Link>{' '}
                     {t('workNotStarted.teacherOr')}
