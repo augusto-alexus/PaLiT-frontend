@@ -94,7 +94,7 @@ export function Invitations() {
                 {!!othersRequests.length && (
                     <div className='max-w-lg'>
                         <div className='mb-8 text-center text-2xl font-semibold'>
-                            ${t('request.forMe')}
+                            {t('request.forMe')}
                         </div>
                         {othersRequests.map((request) => (
                             <Request
@@ -113,7 +113,7 @@ export function Invitations() {
                 {!!myRequests.length && (
                     <div className='max-w-lg'>
                         <div className='mb-8 text-center text-2xl font-semibold'>
-                            ${t('request.my')}
+                            {t('request.my')}
                         </div>
                         {myRequests.map((request) => (
                             <Request

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { IStageDTO } from '~/backend/stages.ts'
 import endpoints from './endpoints'
 
 export interface IStudentRequestDTO {
@@ -29,7 +30,7 @@ export function useGetAllStudents(): () => Promise<IStudentRequestDTO[]> {
 interface IMyProjectDTO {
     language: 'UA' | 'ENG'
     theme: string
-    stageDTO?: object
+    stageDTO?: IStageDTO
     teacherRequestDTO: {
         teacherId: number
         firstName: string
@@ -40,7 +41,7 @@ interface IMyProjectDTO {
 export interface IMyProject {
     language?: 'Українська' | 'English'
     theme: string
-    stage?: object
+    stage?: IStageDTO
     advisor: {
         id: number
         firstName: string
@@ -71,8 +72,6 @@ export async function getMyProject(accessToken: string) {
             Authorization: `Bearer ${accessToken}`,
         },
     })
-
-    console.log(response)
 
     return parseMyProjectDTO(response.data as IMyProjectDTO)
 }

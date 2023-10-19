@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { IStageDTO } from '~/backend/stages.ts'
 import endpoints from './endpoints'
 
 export interface ITeacherRequestDTO {
@@ -17,7 +18,7 @@ export function useGetAllTeachers() {
 interface IMyStudentDTO {
     language: 'UA' | 'ENG'
     theme: string
-    stageDTO?: any
+    stageDTO?: IStageDTO
     studentRequestDTO: {
         studentId: number
         cluster: string
@@ -32,7 +33,7 @@ interface IMyStudentDTO {
 export interface IMyStudent {
     language: 'Українська' | 'English'
     theme: string
-    stage?: any
+    stage?: IStageDTO
     student: {
         studentId: number
         cluster: string
@@ -65,8 +66,6 @@ export async function getMyStudents(accessToken: string) {
             Authorization: `Bearer ${accessToken}`,
         },
     })
-
-    console.log(response)
 
     return (response.data as IMyStudentDTO[])?.map(parseMyStudentDTO)
 }

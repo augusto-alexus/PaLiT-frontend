@@ -16,8 +16,7 @@ export function useDocumentNextStage() {
             documentId: number
             stageId: number
         }) => moveDocumentToStage(accessToken, documentId, stageId),
-        onSuccess: (data) => {
-            console.log(data)
+        onSuccess: () => {
             toast(t('feed.documentMovedToNextStage'))
         },
         onError: (error: AxiosError | never) => {

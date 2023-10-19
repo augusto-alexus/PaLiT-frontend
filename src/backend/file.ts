@@ -1,5 +1,6 @@
 import axios from 'axios'
 import endpoints from '~/backend/endpoints.ts'
+import { IStageDTO } from '~/backend/stages.ts'
 
 export interface IDocumentDTO {
     documentId: number
@@ -7,15 +8,13 @@ export interface IDocumentDTO {
     approved: string
     approvedDate: string
     originalName: string
-    stageDTO?: any
+    stageDTO?: IStageDTO
 }
 
 export async function getStudentDocuments(studentId: number) {
     const response = await axios.get(
         endpoints.files.getStudentDocuments(studentId)
     )
-
-    console.log(response)
 
     return response.data as IDocumentDTO[]
 }
@@ -35,8 +34,6 @@ export async function uploadDocument(
             Authorization: `Bearer ${accessToken}`,
         },
     })
-
-    console.log(response)
 
     return (await response.json()) as object
 }
@@ -76,8 +73,6 @@ export async function moveDocumentToStage(
             },
         }
     )
-
-    console.log(response)
 
     return response.data as object
 }

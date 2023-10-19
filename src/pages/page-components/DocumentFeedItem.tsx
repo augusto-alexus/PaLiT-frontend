@@ -37,7 +37,6 @@ export function DocumentFeedItem({
     const { mutate: moveDocumentToNextStage } = useDocumentNextStage()
     const curStageOrder = (document?.stageDTO?.serialOrder as number) ?? 0
     const nextStage = stages.find((s) => s.serialOrder === curStageOrder + 1)
-    console.log('nextStage', nextStage)
     return (
         <div
             className={`${
