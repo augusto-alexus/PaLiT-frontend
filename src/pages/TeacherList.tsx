@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    getMyProject,
     ITeacherRequestDTO,
     useGetAllTeachers,
     useGetRequestsStudent,
@@ -38,6 +39,14 @@ export function TeacherList() {
         queryFn: getAllTeachers,
     })
 
+    const { data: myProject } = useQuery({
+        enabled: currentUser.role === 'student',
+        queryKey: ['myProject'],
+        queryFn: () => getMyProject(accessToken),
+    })
+
+    const myProjectStarted = !!myProject?.theme
+
     if (isLoading) return <Loading />
     if (error) return <DisplayError error={error} />
     if (!allTeachers?.length)
@@ -62,6 +71,7 @@ export function TeacherList() {
                 <Fragment key={teacher.teacherId}>
                     <TeacherInfoRow
                         teacher={teacher}
+                        canMakeRequest={!myProjectStarted}
                         showRequestForm={
                             showRequestFormFor === teacher.teacherId
                         }
@@ -80,10 +90,12 @@ export function TeacherList() {
 
 function TeacherInfoRow({
     teacher,
+    canMakeRequest,
     showRequestForm,
     setShowRequestFormFor,
 }: {
     teacher: ITeacherRequestDTO
+    canMakeRequest: boolean
     showRequestForm: boolean
     setShowRequestFormFor: (setFor: number) => void
 }) {
@@ -95,6 +107,7 @@ function TeacherInfoRow({
                 </div>
                 <Button
                     preset='icon'
+                    hidden={!canMakeRequest}
                     className={`m-0 mt-0.5 h-4 w-4 rounded-none p-0 outline-none focus:outline-none ${
                         showRequestForm
                             ? 'text-cs-secondary'

@@ -108,6 +108,7 @@
     "previousFileNotReviewed": "Previous file is not reviewed yet",
     "inviteLimitTeacher": "Teacher can't join any more students",
     "inviteLimitYou": "You can't join any more students",
+    "studentAlreadyHasTeacher": "Student already has a teacher",
     "unknownError": "Unknown error occurred"
   }
 }

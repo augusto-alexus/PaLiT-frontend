@@ -108,6 +108,7 @@
     "previousFileNotReviewed": "Попередній файл ще не оцінено",
     "inviteLimitTeacher": "Куратор не може прийняти більше студентів",
     "inviteLimitYou": "Ви не можете прийняти більше студентів",
+    "studentAlreadyHasTeacher": "Студент вже має куратора",
     "unknownError": "Сталася невідома помилка"
   }
 }

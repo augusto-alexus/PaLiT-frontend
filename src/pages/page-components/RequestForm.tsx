@@ -1,4 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
 import {
     IRequestDTO,
     makeStudent2TeacherRequest,
@@ -15,6 +17,7 @@ interface IRequestForm {
 }
 
 export function RequestForm({ userId }: { userId: number }) {
+    const { t } = useTranslation()
     const accessToken = useAccessToken()
     const currentUser = useCurrentUser()
     const queryClient = useQueryClient()
@@ -27,6 +30,18 @@ export function RequestForm({ userId }: { userId: number }) {
         onSuccess: async () => {
             await queryClient.invalidateQueries(['requests'])
             toast('Запрошення відправлено!')
+        },
+        onError: (error) => {
+            if (error instanceof AxiosError) {
+                if (error.response?.status === 403) {
+                    if (currentUser.role === 'teacher')
+                        toast(`${t('error.studentAlreadyHasTeacher')}!`)
+                } else {
+                    toast(`${t('unknownError')}! ${error.message}`)
+                }
+            } else {
+                toast(`${t('unknownError')}!`)
+            }
         },
     })
     const { form, onFieldChange, onSubmit } = useForm<IRequestForm>(
