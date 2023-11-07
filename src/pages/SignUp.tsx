@@ -22,26 +22,13 @@ export function SignUp() {
     const navigate = useNavigate()
     const signUpTeacher = useSignUpTeacher()
     const signUpStudent = useSignUpStudent()
-    const mutationTeacher = useMutation({
-        mutationFn: async (signUpDTO: ITeacherSignUpDTO) =>
-            signUpTeacher(signUpDTO),
-        onSuccess: () => navigate(routes.signIn),
-        onError: (error) => {
-            if (error instanceof AxiosError) {
-                if (error.response?.status === 409) {
-                    toast(`${t('error.userWithEmailExists')}!`)
-                } else {
-                    toast(`${t('error.unknownError')}! ${error.message}`)
-                }
-            } else {
-                toast(`${t('error.unknownError')}!`)
-            }
+    const { mutate } = useMutation({
+        mutationFn: async (signUpForm: ISignUpForm) => {
+            if (form.isStudent)
+                return await signUpStudent(getStudentSignUpDTO(signUpForm))
+            return await signUpTeacher(getTeacherSignUpDTO(signUpForm))
         },
-    })
-    const mutationStudent = useMutation({
-        mutationFn: async (signUpDTO: IStudentSignUpDTO) =>
-            signUpStudent(signUpDTO),
-        onSuccess: () => navigate(routes.signIn),
+        onSuccess: () => navigate(`/${routes.signIn}`),
         onError: (error) => {
             if (error instanceof AxiosError) {
                 if (error.response?.status === 409) {
@@ -73,9 +60,7 @@ export function SignUp() {
                     toast(`${t('passwordsNotMatching')}!`)
                     return
                 }
-                if (form.isStudent)
-                    mutationStudent.mutate(getStudentSignUpDTO(form))
-                else mutationTeacher.mutate(getTeacherSignUpDTO(form))
+                mutate(form)
             }
         )
 

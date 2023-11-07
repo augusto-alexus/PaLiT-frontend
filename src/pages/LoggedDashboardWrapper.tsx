@@ -26,7 +26,7 @@ export function LoggedDashboardWrapper() {
                 return currentUser
             } catch (error) {
                 if (error instanceof JWTExpiredError) {
-                    toast(`${t('sessionExpiredAuthAgain')}!`)
+                    toast(`${t('error.sessionExpiredAuthAgain')}!`)
                     navigate(routes.signIn)
                 }
                 return null
