@@ -84,6 +84,8 @@
   "confirmUploadWork": "Підтвердити завантаження",
   "fileUploadedSuccessfully": "Файл завантажено успішно",
   "logout": "Вийти з системи",
+  "changeLanguage": "Змінити мову",
+  "hodRequestNotApproved": "Голова кафедри наразі не одобрив цю роботу",
   "projectInfo": {
     "student": "Студент",
     "teacher": "Куратор",

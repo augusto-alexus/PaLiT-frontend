@@ -1,25 +1,16 @@
-import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Link, Navigate, Outlet } from 'react-router-dom'
-import { getMyProject } from '~/backend'
-import { useAccessToken } from '~/hooks/useAccessToken'
 import { useCurrentUser } from '~/hooks/useCurrentUser'
+import { useMyProject } from '~/hooks/useMyProject.ts'
 import { routes } from '~/pages'
 import { SidebarContainer } from '~/pages/page-components'
 
 export function MyProject() {
     const { t } = useTranslation()
-    const currentUser = useCurrentUser()
-    const accessToken = useAccessToken()
-    const { data } = useQuery({
-        enabled: currentUser.role === 'student',
-        queryKey: ['myProject'],
-        queryFn: () => getMyProject(accessToken),
-    })
-    if (currentUser.role !== 'student')
-        return <Navigate to={`/${routes.authRedirect}`} />
-    const projectExists = !!data && !!data?.advisor?.id
-    if (!projectExists)
+    const { role } = useCurrentUser()
+    const { myProjectStarted } = useMyProject()
+    if (role !== 'student') return <Navigate to={`/${routes.authRedirect}`} />
+    if (!myProjectStarted)
         return (
             <div className='flex w-full flex-col gap-8'>
                 <div className='text-center text-2xl font-semibold text-cs-text-dark'>

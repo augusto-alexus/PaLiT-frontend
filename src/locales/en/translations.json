@@ -84,6 +84,8 @@
   "confirmUploadWork": "Confirm upload",
   "fileUploadedSuccessfully": "File uploaded successfully",
   "logout": "Log out",
+  "changeLanguage": "Change language",
+  "hodRequestNotApproved": "Head of Department didn't approve this work yet",
   "projectInfo": {
     "student": "Student",
     "teacher": "Teacher",

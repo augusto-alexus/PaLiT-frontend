@@ -17,6 +17,7 @@ import {
     Loading,
 } from '~/components'
 import { useAccessToken, useCurrentUser } from '~/hooks'
+import { useMyProject } from '~/hooks/useMyProject.ts'
 import { DocumentFeedItem } from '~/pages/page-components'
 
 export function StudentFeed() {
@@ -24,6 +25,8 @@ export function StudentFeed() {
     const accessToken = useAccessToken()
     const { role, id, studentId } = useCurrentUser()
     const outletContext = useOutletContext<{ myStudent?: IMyStudent }>()
+
+    const { myProject } = useMyProject()
 
     const {
         isLoading: isLoadingDocuments,
@@ -74,6 +77,12 @@ export function StudentFeed() {
         (a, b) => a.date.getTime() - b.date.getTime()
     )
 
+    const projectApproved: boolean =
+        (role === 'teacher' &&
+            !!outletContext?.myStudent &&
+            outletContext.myStudent.headApproved) ||
+        (role === 'student' && !!myProject?.headApproved)
+
     return (
         <div className='mx-auto my-4 flex w-10/12 flex-col gap-4'>
             {!feedElements.length ? (
@@ -87,7 +96,12 @@ export function StudentFeed() {
                     </div>
                 </div>
             )}
-            {role === 'student' && (
+            {!projectApproved && (
+                <div className='text-md col-span-5 mt-2 text-center text-cs-warning'>
+                    {t('hodRequestNotApproved')}
+                </div>
+            )}
+            {role === 'student' && projectApproved && (
                 <div className='mt-16'>
                     <FileUpload />
                 </div>

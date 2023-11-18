@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 import { Avatar, Button, ProjectLogo } from '~/components'
 import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { useMyProject } from '~/hooks/useMyProject.ts'
 import { routes } from '~/pages'
 import { useAuthStore } from '~/store/authStore.ts'
 
@@ -18,6 +19,9 @@ export function Header() {
 function HeaderNav() {
     const { t } = useTranslation()
     const { role } = useCurrentUser()
+    const { myProjectStarted } = useMyProject()
+    const showInvitations =
+        role === 'teacher' || (role === 'student' && !myProjectStarted)
     return (
         <nav className='flex flex-row place-items-center justify-center gap-8'>
             {role === 'student' && (
@@ -68,27 +72,39 @@ function HeaderNav() {
                     {t('navigation.students')}
                 </NavLink>
             )}
-            <NavLink
-                className={({ isActive }) =>
-                    'relative' +
-                    (isActive
-                        ? 'cursor-default select-none border-0 text-cs-secondary underline underline-offset-8 outline-none hover:text-cs-secondary'
-                        : '')
-                }
-                to={routes.invitations}
-            >
-                {t('navigation.invites')}
-            </NavLink>
+            {showInvitations && (
+                <NavLink
+                    className={({ isActive }) =>
+                        'relative' +
+                        (isActive
+                            ? 'cursor-default select-none border-0 text-cs-secondary underline underline-offset-8 outline-none hover:text-cs-secondary'
+                            : '')
+                    }
+                    to={routes.invitations}
+                >
+                    {t('navigation.invites')}
+                </NavLink>
+            )}
         </nav>
     )
 }
 
 function HeaderTools() {
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
     const authStore = useAuthStore()
     return (
         <div className='flex flex-row place-items-center gap-4'>
             <Avatar />
+            <Button
+                preset='icon'
+                title={t('changeLanguage')}
+                onClick={() => {
+                    if (i18n.language === 'en') void i18n.changeLanguage('ua')
+                    else void i18n.changeLanguage('en')
+                }}
+                className='-mr-8 text-cs-text-dark focus:text-cs-primary focus:outline-none'
+                icon={<i className='ri-global-line hover:text-cs-primary'></i>}
+            />
             <Button
                 preset='icon'
                 title={t('logout')}

@@ -1,5 +1,6 @@
 function prefixEndpoints(endpoint: string): string {
-    return `http://18.153.15.248/api/${endpoint}`
+    // return `http://18.153.15.248/api/${endpoint}`
+    return `http://localhost:8080/api/${endpoint}`
 }
 
 export default Object.freeze({
@@ -35,7 +36,6 @@ export default Object.freeze({
     }),
     stages: Object.freeze({
         getAll: prefixEndpoints('stage/all'),
-        deleteById: (stageId: number) => prefixEndpoints(`stage/${stageId}`),
     }),
     comments: Object.freeze({
         postComment: (

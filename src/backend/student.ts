@@ -2,13 +2,18 @@ import axios from 'axios'
 import { IStageDTO } from '~/backend/stages.ts'
 import endpoints from './endpoints'
 
-export interface IStudentRequestDTO {
-    studentId: number
-    firstName: string
-    lastName: string
-    degree: string
-    faculty: string
-    cluster: string
+export async function getAllStudents() {
+    const response = await axios.get(endpoints.getAllStudents)
+    return parseStudentRequest(response.data as IStudentRequestDTO[])
+}
+
+export async function getMyProject(accessToken: string) {
+    const response = await axios.get(endpoints.currentAdvisor, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+    return parseMyProjectDTO(response.data as IMyProjectDTO)
 }
 
 function parseStudentRequest(data: IStudentRequestDTO[]) {
@@ -16,37 +21,6 @@ function parseStudentRequest(data: IStudentRequestDTO[]) {
         ...s,
         degree: s.degree === 'BACHELOR' ? 'bachelor' : 'master',
     }))
-}
-
-export function useGetAllStudents(): () => Promise<IStudentRequestDTO[]> {
-    return () =>
-        axios
-            .get(endpoints.getAllStudents)
-            .then(({ data }) =>
-                parseStudentRequest(data as IStudentRequestDTO[])
-            )
-}
-
-interface IMyProjectDTO {
-    language: 'UA' | 'ENG'
-    theme: string
-    stageDTO?: IStageDTO
-    teacherRequestDTO: {
-        teacherId: number
-        firstName: string
-        lastName: string
-    }
-}
-
-export interface IMyProject {
-    language?: 'Українська' | 'English'
-    theme: string
-    stage?: IStageDTO
-    advisor: {
-        id: number
-        firstName: string
-        lastName: string
-    }
 }
 
 function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {
@@ -58,6 +32,7 @@ function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {
             : undefined,
         theme: dto.theme,
         stage: dto.stageDTO,
+        headApproved: !!dto.headApprove,
         advisor: {
             id: dto?.teacherRequestDTO?.teacherId,
             firstName: dto?.teacherRequestDTO?.firstName,
@@ -66,12 +41,35 @@ function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {
     }
 }
 
-export async function getMyProject(accessToken: string) {
-    const response = await axios.get(endpoints.currentAdvisor, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
+export interface IStudentRequestDTO {
+    studentId: number
+    firstName: string
+    lastName: string
+    degree: string
+    faculty: string
+    cluster: string
+}
 
-    return parseMyProjectDTO(response.data as IMyProjectDTO)
+interface IMyProjectDTO {
+    language: 'UA' | 'ENG'
+    theme: string
+    stageDTO?: IStageDTO
+    headApprove: boolean | null
+    teacherRequestDTO: {
+        teacherId: number
+        firstName: string
+        lastName: string
+    }
+}
+
+export interface IMyProject {
+    language?: 'Українська' | 'English'
+    theme: string
+    stage?: IStageDTO
+    headApproved: boolean
+    advisor: {
+        id: number
+        firstName: string
+        lastName: string
+    }
 }

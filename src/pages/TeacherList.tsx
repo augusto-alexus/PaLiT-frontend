@@ -1,16 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    getMyProject,
-    ITeacherRequestDTO,
-    useGetAllTeachers,
-    useGetRequestsStudent,
-    useGetRequestsTeacher,
-} from '~/backend'
+import { getAllTeachers, getRequests, ITeacherRequestDTO } from '~/backend'
 import { Button, DisplayError, Loading } from '~/components'
 import { useAccessToken } from '~/hooks/useAccessToken.ts'
 import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { useMyProject } from '~/hooks/useMyProject.ts'
 import { RequestForm } from './page-components'
 
 export function TeacherList() {
@@ -21,14 +16,10 @@ export function TeacherList() {
 
     const currentUser = useCurrentUser()
     const accessToken = useAccessToken()
-    const getRequestsStudent = useGetRequestsStudent(accessToken)
-    const getRequestsTeacher = useGetRequestsTeacher(accessToken)
-    const { data: requests } = useQuery(['requests'], () => {
-        if (currentUser.role === 'teacher') return getRequestsTeacher()
-        else return getRequestsStudent()
-    })
+    const { data: requests } = useQuery(['requests'], () =>
+        getRequests(accessToken, currentUser.role)
+    )
 
-    const getAllTeachers = useGetAllTeachers()
     const {
         isLoading,
         error,
@@ -39,19 +30,13 @@ export function TeacherList() {
         queryFn: getAllTeachers,
     })
 
-    const { data: myProject } = useQuery({
-        enabled: currentUser.role === 'student',
-        queryKey: ['myProject'],
-        queryFn: () => getMyProject(accessToken),
-    })
-
-    const myProjectStarted = !!myProject?.theme
+    const { myProjectStarted } = useMyProject()
 
     if (isLoading) return <Loading />
     if (error) return <DisplayError error={error} />
     if (!allTeachers?.length)
         return (
-            <h2 className='text-center text-2xl'>
+            <h2 className='text-center text-2xl font-semibold'>
                 {t('noTeachersInTheSystem')}
             </h2>
         )
@@ -60,7 +45,7 @@ export function TeacherList() {
     )
     if (!data?.length)
         return (
-            <h2 className='text-center text-2xl'>
+            <h2 className='text-center text-2xl font-semibold'>
                 {t('everyTeacherReceivedInvitation')}
             </h2>
         )

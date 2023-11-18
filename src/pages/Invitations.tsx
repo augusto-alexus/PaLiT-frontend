@@ -2,12 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import {
-    approveRequest,
-    rejectRequest,
-    useGetRequestsStudent,
-    useGetRequestsTeacher,
-} from '~/backend'
+import { approveRequest, getRequests, rejectRequest } from '~/backend'
 import { toast } from '~/components'
 import { useAccessToken, useCurrentUser } from '~/hooks'
 import { routes } from '~/pages/routes.ts'
@@ -18,8 +13,6 @@ export function Invitations() {
     const navigate = useNavigate()
     const currentUser = useCurrentUser()
     const accessToken = useAccessToken()
-    const getRequestsStudent = useGetRequestsStudent(accessToken)
-    const getRequestsTeacher = useGetRequestsTeacher(accessToken)
     const queryClient = useQueryClient()
     const { mutate: mutateReject } = useMutation({
         mutationFn: async ({ requestId }: { requestId: number }) => {
@@ -54,10 +47,9 @@ export function Invitations() {
             }
         },
     })
-    const { data } = useQuery(['requests'], () => {
-        if (currentUser.role === 'teacher') return getRequestsTeacher()
-        else return getRequestsStudent()
-    })
+    const { data } = useQuery(['requests'], () =>
+        getRequests(accessToken, currentUser.role)
+    )
 
     if (!data?.filter((r) => !r.approved)?.length)
         return (

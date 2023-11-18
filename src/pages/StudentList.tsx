@@ -1,12 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    IStudentRequestDTO,
-    useGetAllStudents,
-    useGetRequestsStudent,
-    useGetRequestsTeacher,
-} from '~/backend'
+import { getAllStudents, getRequests, IStudentRequestDTO } from '~/backend'
 import { Button, DisplayError, Loading } from '~/components'
 import { useAccessToken } from '~/hooks/useAccessToken.ts'
 import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
@@ -20,14 +15,10 @@ export function StudentList() {
 
     const currentUser = useCurrentUser()
     const accessToken = useAccessToken()
-    const getRequestsStudent = useGetRequestsStudent(accessToken)
-    const getRequestsTeacher = useGetRequestsTeacher(accessToken)
-    const { data: requests } = useQuery(['requests'], () => {
-        if (currentUser.role === 'teacher') return getRequestsTeacher()
-        else return getRequestsStudent()
-    })
+    const { data: requests } = useQuery(['requests'], () =>
+        getRequests(accessToken, currentUser.role)
+    )
 
-    const getAllStudents = useGetAllStudents()
     const {
         isLoading,
         error,
@@ -41,7 +32,7 @@ export function StudentList() {
     if (error) return <DisplayError error={error} />
     if (!allStudents?.length)
         return (
-            <h2 className='text-center text-2xl'>
+            <h2 className='text-center text-2xl font-semibold'>
                 {t('noStudentsInTheSystem')}
             </h2>
         )
@@ -50,7 +41,7 @@ export function StudentList() {
     )
     if (!data?.length)
         return (
-            <h2 className='text-center text-2xl'>
+            <h2 className='text-center text-2xl font-semibold'>
                 {t('everyStudentReceivedInvitation')}
             </h2>
         )

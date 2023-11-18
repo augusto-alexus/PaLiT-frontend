@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { IRequest } from '~/backend'
 import { Button } from '~/components'
 import { useCurrentUser } from '~/hooks'
@@ -12,6 +13,7 @@ export function Request({
     onReject: (requestId: number) => void
     onApprove: (requestId: number) => void
 }) {
+    const { t } = useTranslation()
     const currentUser = useCurrentUser()
     const canAccept =
         (request.direction == 'STUDENT' && currentUser.role == 'student') ||
@@ -30,7 +32,7 @@ export function Request({
             </div>
             {request.user.degree && (
                 <div className='col-span-2 font-semibold'>
-                    {request.user.degree}
+                    {t(`degrees.${request.user.degree}`)}
                 </div>
             )}
             {request.user.faculty && (
