@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { getMyStudents, IMyStudent } from '~/backend'
+import { getMyStudents } from '~/backend'
 import { useAccessToken, useCurrentUser } from '~/hooks'
-import { routes } from '~/pages/routes.ts'
+import { IMyStudent } from '~/models'
+import { routes } from '~/pages'
 
 export function MyStudents() {
     const { t } = useTranslation()

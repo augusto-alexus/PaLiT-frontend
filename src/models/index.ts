@@ -1,1 +1,6 @@
 export * from './user'
+export * from './request'
+export * from './hodRequest'
+export * from './student'
+export * from './teacher'
+export * from './common'

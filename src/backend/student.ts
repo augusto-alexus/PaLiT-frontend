@@ -1,10 +1,12 @@
 import axios from 'axios'
 import { IStageDTO } from '~/backend/stages.ts'
+import { Language } from '~/models/request.ts'
+import { parseStudentDTO } from '~/models/student.ts'
 import endpoints from './endpoints'
 
 export async function getAllStudents() {
     const response = await axios.get(endpoints.getAllStudents)
-    return parseStudentRequest(response.data as IStudentRequestDTO[])
+    return (response.data as IStudentDTO[]).map(parseStudentDTO)
 }
 
 export async function getMyProject(accessToken: string) {
@@ -14,13 +16,6 @@ export async function getMyProject(accessToken: string) {
         },
     })
     return parseMyProjectDTO(response.data as IMyProjectDTO)
-}
-
-function parseStudentRequest(data: IStudentRequestDTO[]) {
-    return data.map((s) => ({
-        ...s,
-        degree: s.degree === 'BACHELOR' ? 'bachelor' : 'master',
-    }))
 }
 
 function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {
@@ -41,17 +36,17 @@ function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {
     }
 }
 
-export interface IStudentRequestDTO {
+export interface IStudentDTO {
     studentId: number
     firstName: string
     lastName: string
-    degree: string
+    degree: 'BACHELOR' | 'MASTER' | string
     faculty: string
     cluster: string
 }
 
 interface IMyProjectDTO {
-    language: 'UA' | 'ENG'
+    language: Language
     theme: string
     stageDTO?: IStageDTO
     headApprove: boolean | null

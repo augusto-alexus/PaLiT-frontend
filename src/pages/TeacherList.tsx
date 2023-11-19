@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getAllTeachers, getRequests, ITeacherRequestDTO } from '~/backend'
+import { getRequests } from '~/backend'
 import { Button, DisplayError, Loading } from '~/components'
 import { useAccessToken } from '~/hooks/useAccessToken.ts'
+import { useAllTeachers } from '~/hooks/useAllTeachers.ts'
 import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
 import { useMyProject } from '~/hooks/useMyProject.ts'
+import { ITeacher } from '~/models'
 import { RequestForm } from './page-components'
 
 export function TeacherList() {
@@ -20,15 +22,7 @@ export function TeacherList() {
         getRequests(accessToken, currentUser.role)
     )
 
-    const {
-        isLoading,
-        error,
-        data: allTeachers,
-    } = useQuery({
-        enabled: !!requests,
-        queryKey: ['teachers'],
-        queryFn: getAllTeachers,
-    })
+    const { isLoading, error, data: allTeachers } = useAllTeachers()
 
     const { myProjectStarted } = useMyProject()
 
@@ -79,7 +73,7 @@ function TeacherInfoRow({
     showRequestForm,
     setShowRequestFormFor,
 }: {
-    teacher: ITeacherRequestDTO
+    teacher: ITeacher
     canMakeRequest: boolean
     showRequestForm: boolean
     setShowRequestFormFor: (setFor: number) => void

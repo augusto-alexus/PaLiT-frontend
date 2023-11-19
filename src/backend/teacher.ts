@@ -1,10 +1,12 @@
 import axios from 'axios'
-import { IStageDTO } from '~/backend/stages.ts'
+import { ITeacher, Language, parseMyStudentDTO } from '~/models'
 import endpoints from './endpoints'
+import { IStageDTO } from './stages'
+import { IStudentDTO } from './student.ts'
 
 export async function getAllTeachers() {
     const response = await axios.get(endpoints.getAllTeachers)
-    return response.data as ITeacherRequestDTO[]
+    return response.data as ITeacher[]
 }
 
 export async function getMyStudents(accessToken: string) {
@@ -16,56 +18,10 @@ export async function getMyStudents(accessToken: string) {
     return (response.data as IMyStudentDTO[])?.map(parseMyStudentDTO)
 }
 
-function parseMyStudentDTO(dto: IMyStudentDTO): IMyStudent {
-    return {
-        language: dto.language === 'UA' ? 'Українська' : 'English',
-        theme: dto.theme,
-        stage: dto.stageDTO,
-        headApproved: !!dto.headApprove,
-        student: {
-            ...dto.studentRequestDTO,
-            degree:
-                dto.studentRequestDTO.degree === 'BACHELOR'
-                    ? 'bachelor'
-                    : 'master',
-        },
-    }
-}
-
-export interface ITeacherRequestDTO {
-    teacherId: number
-    firstName: string
-    lastName: string
-}
-
-interface IMyStudentDTO {
-    language: 'UA' | 'ENG'
+export interface IMyStudentDTO {
+    language: Language
     theme: string
     stageDTO?: IStageDTO
     headApprove: boolean | null
-    studentRequestDTO: {
-        studentId: number
-        cluster: string
-        degree: string
-        faculty: string
-        firstName: string
-        lastName: string
-        graduateDate: string
-    }
-}
-
-export interface IMyStudent {
-    language: 'Українська' | 'English'
-    theme: string
-    stage?: IStageDTO
-    headApproved: boolean
-    student: {
-        studentId: number
-        cluster: string
-        degree: string
-        faculty: string
-        firstName: string
-        lastName: string
-        graduateDate: string
-    }
+    studentRequestDTO: IStudentDTO
 }

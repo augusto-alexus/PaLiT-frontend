@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import '~/App.css'
 import {
+    AuthRedirect,
     FilePreview,
     Invitations,
     LoggedDashboardWrapper,
@@ -18,7 +19,7 @@ import {
     StudentList,
     TeacherList,
 } from '~/pages'
-import { AuthRedirect } from '~/pages/AuthRedirect.tsx'
+import { Dashboard } from '~/pages/Dashboard.tsx'
 import './i18.ts'
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
                         path={routes.authRedirect}
                         element={<AuthRedirect />}
                     />
+                    <Route path={routes.dashboard} element={<Dashboard />} />
                     <Route
                         path={routes.studentList}
                         element={<StudentList />}

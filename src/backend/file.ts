@@ -2,15 +2,6 @@ import axios from 'axios'
 import endpoints from '~/backend/endpoints.ts'
 import { IStageDTO } from '~/backend/stages.ts'
 
-export interface IDocumentDTO {
-    documentId: number
-    createdDate: string
-    approved: string
-    approvedDate: string
-    originalName: string
-    stageDTO?: IStageDTO
-}
-
 export async function getStudentDocuments(studentId: number) {
     const response = await axios.get(
         endpoints.files.getStudentDocuments(studentId)
@@ -75,4 +66,13 @@ export async function moveDocumentToStage(
     )
 
     return response.data as object
+}
+
+export interface IDocumentDTO {
+    documentId: number
+    createdDate: string
+    approved: string
+    approvedDate: string
+    originalName: string
+    stageDTO?: IStageDTO
 }

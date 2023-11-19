@@ -52,12 +52,27 @@
     "bachelor": "Bachelor",
     "master": "Master"
   },
+  "languages": {
+    "UA": "Ukrainian",
+    "ENG": "English"
+  },
   "navigation": {
+    "dashboard": "Dashboard",
     "myProject": "My project",
     "myStudents": "My students",
     "teachers": "Teachers",
     "students": "Students",
     "invites": "Invites"
+  },
+  "dashboard": {
+    "noRequests": "There are no requests yet",
+    "requests": "Requests",
+    "requestNotEnoughInfo": "Request doesn't contain enough info",
+    "contactSupport": "Contact support",
+    "student": "Student",
+    "supervisor": "Supervisor",
+    "theme": "Theme",
+    "language": "Language"
   },
   "feed": {
     "workHasntStartedYet": "Work hasn't started yet",

@@ -5,5 +5,7 @@ import { routes } from '~/pages'
 export function AuthRedirect() {
     const { role } = useCurrentUser()
     if (role === 'student') return <Navigate to={`/${routes.myProject}`} />
-    return <Navigate to={`/${routes.myStudents}`} />
+    else if (role === 'teacher')
+        return <Navigate to={`/${routes.myStudents}`} />
+    return <Navigate to={`/${routes.dashboard}`} />
 }

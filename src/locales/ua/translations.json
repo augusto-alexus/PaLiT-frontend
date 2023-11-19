@@ -52,12 +52,27 @@
     "bachelor": "Бакалавр",
     "master": "Магістр"
   },
+  "languages": {
+    "UA": "Українська",
+    "ENG": "Англійська"
+  },
   "navigation": {
+    "dashboard": "Панель керування",
     "myProject": "Моя робота",
     "myStudents": "Мої студенти",
     "teachers": "Куратори",
     "students": "Студенти",
     "invites": "Запрошення"
+  },
+  "dashboard": {
+    "noRequests": "Запитів ще немає",
+    "requests": "Запрошення",
+    "requestNotEnoughInfo": "Запрошення не містить деяких даних",
+    "contactSupport": "Зверніться до системного адміністратора",
+    "student": "Студент",
+    "supervisor": "Науковий керівник",
+    "theme": "Тема",
+    "language": "Мова"
   },
   "feed": {
     "workHasntStartedYet": "Робота ще не розпочалася",

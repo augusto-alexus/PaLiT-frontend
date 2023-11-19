@@ -1,6 +1,8 @@
+import { Role } from '~/models'
+
 interface IRoleDTO {
     id: string
-    name: string
+    name: Role
 }
 
 interface IStudentDTO {

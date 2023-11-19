@@ -1,19 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
-import {
-    IRequestDTO,
-    makeStudent2TeacherRequest,
-    makeTeacher2StudentRequest,
-} from '~/backend'
+import { makeRequest } from '~/backend'
+import { IRequestDTO } from '~/backend/request.types.ts'
 import { Button, Input, Select, toast } from '~/components'
 import { useForm } from '~/hooks'
 import { useAccessToken } from '~/hooks/useAccessToken.ts'
 import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { Language } from '~/models'
 
 interface IRequestForm {
     theme: string
-    language: 'UA' | 'ENG' | ''
+    language: Language | ''
 }
 
 export function RequestForm({ userId }: { userId: number }) {
@@ -22,11 +20,8 @@ export function RequestForm({ userId }: { userId: number }) {
     const currentUser = useCurrentUser()
     const queryClient = useQueryClient()
     const { mutate } = useMutation({
-        mutationFn: async (requestDTO: IRequestDTO) => {
-            if (currentUser.role === 'student')
-                return makeStudent2TeacherRequest(requestDTO)
-            return makeTeacher2StudentRequest(requestDTO)
-        },
+        mutationFn: async (requestDTO: IRequestDTO) =>
+            makeRequest(currentUser.role, requestDTO),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['requests'])
             toast('Запрошення відправлено!')

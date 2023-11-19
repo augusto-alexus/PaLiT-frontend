@@ -1,5 +1,12 @@
 import axios from 'axios'
 import endpoints from '~/backend/endpoints.ts'
+import {
+    IRequest,
+    IRequestDTO,
+    IRequestStudent,
+    IRequestTeacher,
+    IRequestUser,
+} from '~/backend/request.types.ts'
 import { Role } from '~/models'
 
 export function getRequests(accessToken: string, role: Role) {
@@ -25,18 +32,14 @@ async function getRequestsStudent(accessToken: string) {
     return (response.data as IRequestTeacher[]).map(parseRequest)
 }
 
-export async function makeStudent2TeacherRequest(request: IRequestDTO) {
-    return makeRequest(endpoints.student2TeacherRequest, request)
-}
-
-export async function makeTeacher2StudentRequest(request: IRequestDTO) {
-    return makeRequest(endpoints.teacher2StudentRequest, request)
-}
-
-async function makeRequest(
-    endpoint: (id: number) => string,
+export async function makeRequest(
+    role: Role,
     { accessToken, userId, requestBody }: IRequestDTO
 ) {
+    const endpoint =
+        role === 'teacher'
+            ? endpoints.teacher2StudentRequest
+            : endpoints.student2TeacherRequest
     const response = await axios.post(endpoint(userId), requestBody, {
         headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -81,49 +84,6 @@ export async function approveRequest({
     return response.data as object
 }
 
-interface IRequestBase {
-    requestId: number
-    createdDate: string
-    theme: string
-    language: 'UA' | 'ENG'
-    approved: boolean
-    direction: 'STUDENT' | 'TEACHER'
-}
-
-interface IRequestStudent extends IRequestBase {
-    studentRequestDTO: {
-        studentId: number
-        degree: 'BACHELOR' | 'MASTER'
-        faculty: string
-        firstName: string
-        lastName: string
-        cluster: string
-        graduateDate: string
-    }
-}
-
-interface IRequestTeacher extends IRequestBase {
-    teacherRequestDTO: {
-        teacherId: number
-        firstName: string
-        lastName: string
-    }
-}
-
-interface IRequestUser {
-    id: number
-    firstName: string
-    lastName: string
-    degree?: 'bachelor' | 'master'
-    faculty?: string
-    cluster?: string
-    graduateDate?: string
-}
-
-export interface IRequest extends IRequestBase {
-    user: IRequestUser
-}
-
 function parseRequest(data: IRequestStudent | IRequestTeacher): IRequest {
     let user: IRequestUser | undefined = undefined
     if ('studentRequestDTO' in data) {
@@ -159,15 +119,4 @@ function parseRequest(data: IRequestStudent | IRequestTeacher): IRequest {
         direction: data.direction,
         user,
     }
-}
-
-interface IRequestBody {
-    theme: string
-    language: 'UA' | 'ENG'
-}
-
-export interface IRequestDTO {
-    accessToken: string
-    userId: number
-    requestBody: IRequestBody
 }

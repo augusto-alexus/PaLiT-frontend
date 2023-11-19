@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getAllStudents, getRequests, IStudentRequestDTO } from '~/backend'
+import { getRequests, IStudentDTO } from '~/backend'
 import { Button, DisplayError, Loading } from '~/components'
+import { useAllStudents } from '~/hooks'
 import { useAccessToken } from '~/hooks/useAccessToken.ts'
 import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
 import { RequestForm } from '~/pages/page-components'
@@ -19,14 +20,7 @@ export function StudentList() {
         getRequests(accessToken, currentUser.role)
     )
 
-    const {
-        isLoading,
-        error,
-        data: allStudents,
-    } = useQuery({
-        queryKey: ['students'],
-        queryFn: getAllStudents,
-    })
+    const { isLoading, error, data: allStudents } = useAllStudents()
 
     if (isLoading) return <Loading />
     if (error) return <DisplayError error={error} />
@@ -70,7 +64,7 @@ function StudentInfoRow({
     showRequestForm,
     setShowRequestFormFor,
 }: {
-    student: IStudentRequestDTO
+    student: IStudentDTO
     showRequestForm: boolean
     setShowRequestFormFor: (setFor: number) => void
 }) {

@@ -24,6 +24,18 @@ function HeaderNav() {
         role === 'teacher' || (role === 'student' && !myProjectStarted)
     return (
         <nav className='flex flex-row place-items-center justify-center gap-8'>
+            {role === 'HoD' && (
+                <NavLink
+                    className={({ isActive }) =>
+                        isActive
+                            ? 'cursor-default select-none border-0 text-cs-secondary underline underline-offset-8 outline-none hover:text-cs-secondary'
+                            : ''
+                    }
+                    to={routes.dashboard}
+                >
+                    {t('navigation.dashboard')}
+                </NavLink>
+            )}
             {role === 'student' && (
                 <NavLink
                     className={({ isActive }) =>

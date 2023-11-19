@@ -26,26 +26,6 @@ export async function postComment(
     return documentId
 }
 
-interface ICommentDTO {
-    text: string
-    fromType: 'STUDENT' | 'TEACHER'
-    createdDate: string
-}
-
-export interface IComment {
-    text: string
-    from: Role
-    createdAt: string
-}
-
-function getCommentFromDTO(dto: ICommentDTO): IComment {
-    return {
-        text: dto.text,
-        from: dto.fromType.toLowerCase() as Role,
-        createdAt: dto.createdDate,
-    }
-}
-
 export async function getComments(accessToken: string, documentId: number) {
     const response = await axios.get(
         endpoints.comments.getComments(documentId),
@@ -56,4 +36,24 @@ export async function getComments(accessToken: string, documentId: number) {
         }
     )
     return (response.data as ICommentDTO[]).map(getCommentFromDTO)
+}
+
+function getCommentFromDTO(dto: ICommentDTO): IComment {
+    return {
+        text: dto.text,
+        from: dto.fromType.toLowerCase() as Role,
+        createdAt: dto.createdDate,
+    }
+}
+
+interface ICommentDTO {
+    text: string
+    fromType: 'STUDENT' | 'TEACHER'
+    createdDate: string
+}
+
+export interface IComment {
+    text: string
+    from: Role
+    createdAt: string
 }

@@ -1,6 +1,6 @@
 import { ICurrentUserDTO } from '~/backend/auth.types.ts'
 
-export type Role = 'student' | 'teacher'
+export type Role = 'student' | 'teacher' | 'HoD'
 
 export interface ICurrentUser {
     id: number
@@ -17,7 +17,7 @@ export interface ICurrentUser {
 
 export function getCurrentUserFromDTO(dto: ICurrentUserDTO): ICurrentUser {
     const role = dto.roleDTO.name
-    if (role !== 'teacher' && role !== 'student')
+    if (role !== 'teacher' && role !== 'student' && role !== 'HoD')
         throw new Error('Unrecognized role for current user')
     const degree = dto.studentDTO?.degree.toLowerCase()
     if (degree !== undefined && degree !== 'bachelor' && degree !== 'master')

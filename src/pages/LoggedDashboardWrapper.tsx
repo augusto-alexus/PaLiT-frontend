@@ -28,6 +28,10 @@ export function LoggedDashboardWrapper() {
                 if (error instanceof JWTExpiredError) {
                     toast(`${t('error.sessionExpiredAuthAgain')}!`)
                     navigate(routes.signIn)
+                } else if (error instanceof Error) {
+                    toast(`${t('error.unknownError')}. Msg: ${error.message}`)
+                } else {
+                    toast(`${t('error.unknownError')}.`)
                 }
                 return null
             }

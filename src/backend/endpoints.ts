@@ -46,4 +46,8 @@ export default Object.freeze({
         getComments: (documentId: number) =>
             prefixEndpoints(`comment/${documentId}`),
     }),
+    hod: Object.freeze({
+        getAllRequests: prefixEndpoints('request/head-department/all'),
+        updateRequest: prefixEndpoints('request/head-department'),
+    }),
 })
