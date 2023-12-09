@@ -1,6 +1,6 @@
 import { Transition } from '@headlessui/react'
 import { Fragment, PropsWithChildren, useState } from 'react'
-import { IMyStudent } from '~/backend'
+import { IMyStudent } from '~/models'
 import { ProjectInfo } from './ProjectInfo.tsx'
 
 export function SidebarContainer(

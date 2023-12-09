@@ -11,7 +11,8 @@ export function parseHoDRequestDTO(dto: IHoDRequestDTO): IHoDRequest {
         language: dto.language,
         createdAt: dto.createdDate,
         direction: dto.direction,
-        headApproved: !!dto.headApprove,
+        teamApproved: dto.approved,
+        headApproved: dto.headApprove,
     }
 }
 
@@ -23,5 +24,6 @@ export interface IHoDRequest {
     language: Language
     createdAt: string
     direction: RequestDirection
-    headApproved: boolean | null
+    teamApproved: boolean
+    headApproved: boolean
 }

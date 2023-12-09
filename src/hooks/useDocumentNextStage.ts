@@ -3,7 +3,7 @@ import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { moveDocumentToStage } from '~/backend'
 import { toast } from '~/components'
-import { useAccessToken } from '~/hooks/useAccessToken.ts'
+import { useAccessToken } from './useAccessToken'
 
 export function useDocumentNextStage() {
     const { t } = useTranslation()

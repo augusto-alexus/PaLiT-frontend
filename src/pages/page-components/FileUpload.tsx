@@ -3,8 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { uploadDocument } from '~/backend/file.ts'
 import { toast } from '~/components/toast.ts'
-import { useAccessToken } from '~/hooks'
-import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { useAccessToken, useCurrentUser } from '~/hooks'
 import { getReadableFileSize } from '~/lib/files.ts'
 
 export function FileUpload() {

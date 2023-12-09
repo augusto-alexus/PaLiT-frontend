@@ -36,6 +36,10 @@ export default Object.freeze({
     }),
     stages: Object.freeze({
         getAll: prefixEndpoints('stage/all'),
+        getTeachersStages: (teacherId: number) =>
+            prefixEndpoints(`teacher-stage-approve/teacher/${teacherId}`),
+        approveStageForAll: (stageId: number) =>
+            prefixEndpoints(`teacher-stage-approve/${stageId}`),
     }),
     comments: Object.freeze({
         postComment: (
@@ -48,6 +52,7 @@ export default Object.freeze({
     }),
     hod: Object.freeze({
         getAllRequests: prefixEndpoints('request/head-department/all'),
-        updateRequest: prefixEndpoints('request/head-department'),
+        updateRequest: (requestId: number) =>
+            prefixEndpoints(`request/${requestId}/head-department`),
     }),
 })

@@ -13,3 +13,18 @@ export async function getAllRequests(
     )
     return (response.data as IHoDRequestDTO[]).map(parseHoDRequestDTO)
 }
+
+export async function updateRequest(
+    accessToken: string,
+    requestId: number,
+    approved: boolean
+): Promise<[boolean, boolean]> {
+    const formData = new FormData()
+    formData.append('approved', String(approved))
+    const response = await axios.put(
+        endpoints.hod.updateRequest(requestId),
+        formData,
+        getAuthConfig(accessToken)
+    )
+    return [response.status === 200, approved]
+}

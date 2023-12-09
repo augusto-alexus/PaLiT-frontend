@@ -6,7 +6,6 @@ import {
     getAllStages,
     getStudentDocuments,
     IDocumentDTO,
-    IMyStudent,
     IStageDTO,
 } from '~/backend'
 import {
@@ -16,8 +15,8 @@ import {
     IFeedElement,
     Loading,
 } from '~/components'
-import { useAccessToken, useCurrentUser } from '~/hooks'
-import { useMyProject } from '~/hooks/useMyProject.ts'
+import { useAccessToken, useCurrentUser, useMyProject } from '~/hooks'
+import { IMyStudent } from '~/models'
 import { DocumentFeedItem } from '~/pages/page-components'
 
 export function StudentFeed() {

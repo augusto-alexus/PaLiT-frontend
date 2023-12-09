@@ -4,9 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { makeRequest } from '~/backend'
 import { IRequestDTO } from '~/backend/request.types.ts'
 import { Button, Input, Select, toast } from '~/components'
-import { useForm } from '~/hooks'
-import { useAccessToken } from '~/hooks/useAccessToken.ts'
-import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { useAccessToken, useCurrentUser, useForm } from '~/hooks'
 import { Language } from '~/models'
 
 interface IRequestForm {

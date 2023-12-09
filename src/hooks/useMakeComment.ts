@@ -3,8 +3,8 @@ import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { postComment } from '~/backend'
 import { toast } from '~/components'
-import { useAccessToken } from '~/hooks/useAccessToken.ts'
-import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { useAccessToken } from './useAccessToken'
+import { useCurrentUser } from './useCurrentUser'
 
 export function useMakeComment() {
     const { t } = useTranslation()

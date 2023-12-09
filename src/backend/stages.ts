@@ -7,12 +7,35 @@ export interface IStageDTO {
     serialOrder: number
 }
 
-export function getAllStages(accessToken: string) {
-    return axios
-        .get(endpoints.stages.getAll, {
+export async function getAllStages(accessToken: string) {
+    const response = await axios.get(endpoints.stages.getAll, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+    return response.data as IStageDTO[]
+}
+
+export async function getTeachersStages(
+    accessToken: string,
+    teacherId: number
+) {
+    const response = await axios.get(
+        endpoints.stages.getTeachersStages(teacherId),
+        {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
-        })
-        .then(({ data }) => data as IStageDTO[])
+        }
+    )
+    return response.data as number[]
+}
+
+export async function approveStageForAll(accessToken: string, stageId: number) {
+    await axios.post(endpoints.stages.approveStageForAll(stageId), null, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+    return null
 }

@@ -1,4 +1,4 @@
-import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { useCurrentUser } from '~/hooks'
 import { Role } from '~/models'
 
 export function Avatar({

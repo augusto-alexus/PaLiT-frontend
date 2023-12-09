@@ -3,9 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getRequests, IStudentDTO } from '~/backend'
 import { Button, DisplayError, Loading } from '~/components'
-import { useAllStudents } from '~/hooks'
-import { useAccessToken } from '~/hooks/useAccessToken.ts'
-import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { useAccessToken, useAllStudents, useCurrentUser } from '~/hooks'
 import { RequestForm } from '~/pages/page-components'
 
 export function StudentList() {

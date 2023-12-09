@@ -2,10 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { useOutletContext } from 'react-router-dom'
-import { IMyStudent, reviewDocument } from '~/backend'
+import { reviewDocument } from '~/backend'
 import { toast } from '~/components'
-import { useAccessToken } from '~/hooks/useAccessToken.ts'
-import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { IMyStudent } from '~/models'
+import { useAccessToken } from './useAccessToken'
+import { useCurrentUser } from './useCurrentUser'
 
 export function useDocumentReview() {
     const accessToken = useAccessToken()
@@ -24,7 +25,7 @@ export function useDocumentReview() {
         onSuccess: async ({ approved }) => {
             await queryClient.invalidateQueries([
                 'studentDocuments',
-                outletContext?.myStudent?.student.studentId || id,
+                outletContext?.myStudent?.student?.studentId || id,
             ])
             if (approved === 'true') toast(t('feed.documentApproved'))
             else toast(t('feed.documentRejected'))

@@ -1,50 +1,18 @@
-import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import {
-    getAllStages,
-    getMyProject,
-    IMyProject,
-    IMyStudent,
-    IStageDTO,
-} from '~/backend'
-import { Loading } from '~/components'
-import { useAccessToken } from '~/hooks/useAccessToken.ts'
-import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { IMyProject } from '~/backend'
+import { useAllStages, useMyProject } from '~/hooks'
+import { IMyStudent } from '~/models'
 
 export function ProjectInfo({ myStudent }: { myStudent?: IMyStudent }) {
-    const { role } = useCurrentUser()
-    const accessToken = useAccessToken()
-    const {
-        data: myProject,
-        isLoading,
-        isFetching,
-    } = useQuery({
-        enabled: role === 'student' && !myStudent,
-        queryKey: ['myProject'],
-        queryFn: () => getMyProject(accessToken),
-    })
-
-    const { data: stages } = useQuery({
-        queryKey: ['stages'],
-        queryFn: () => getAllStages(accessToken),
-    })
-
-    if (myStudent)
-        return <TeacherProjectInfo myStudent={myStudent} stages={stages} />
-    if (isFetching && isLoading) return <Loading />
-    if (myProject)
-        return <StudentProjectInfo myProject={myProject} stages={stages} />
+    const { myProject } = useMyProject()
+    if (myStudent) return <TeacherProjectInfo myStudent={myStudent} />
+    if (myProject) return <StudentProjectInfo myProject={myProject} />
     return <></>
 }
 
-function TeacherProjectInfo({
-    myStudent,
-    stages,
-}: {
-    myStudent: IMyStudent
-    stages?: IStageDTO[]
-}) {
+function TeacherProjectInfo({ myStudent }: { myStudent: IMyStudent }) {
     const { t } = useTranslation()
+    const { data: stages } = useAllStages()
     const { student, stage } = myStudent
     const currentStage = stage ?? stages?.[0]
     return (
@@ -75,14 +43,9 @@ function TeacherProjectInfo({
     )
 }
 
-function StudentProjectInfo({
-    myProject,
-    stages,
-}: {
-    myProject: IMyProject
-    stages?: IStageDTO[]
-}) {
+function StudentProjectInfo({ myProject }: { myProject: IMyProject }) {
     const { t } = useTranslation()
+    const { data: stages } = useAllStages()
     const { advisor, stage } = myProject
     const currentStage = stage ?? stages?.[0]
     return (

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getAllRequests } from '~/backend/hod.ts'
-import { useAccessToken } from '~/hooks/useAccessToken.ts'
-import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { useAccessToken } from './useAccessToken'
+import { useCurrentUser } from './useCurrentUser'
 
 export function useAllHoDRequests() {
     const accessToken = useAccessToken()

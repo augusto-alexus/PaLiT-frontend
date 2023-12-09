@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
-import { IMyStudent } from '~/backend'
 import endpoints from '~/backend/endpoints.ts'
 import { getStudentDocuments } from '~/backend/file.ts'
 import { Button, DisplayError, Loading } from '~/components'
 import { useCurrentUser } from '~/hooks'
+import { IMyStudent } from '~/models'
 
 export function FilePreview() {
     const { t } = useTranslation()

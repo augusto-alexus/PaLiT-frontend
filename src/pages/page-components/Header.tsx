@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 import { Avatar, Button, ProjectLogo } from '~/components'
-import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
-import { useMyProject } from '~/hooks/useMyProject.ts'
+import { useCurrentUser, useMyProject } from '~/hooks'
 import { routes } from '~/pages'
 import { useAuthStore } from '~/store/authStore.ts'
 

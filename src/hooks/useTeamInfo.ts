@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { useOutletContext } from 'react-router-dom'
-import { getMyProject, IMyStudent } from '~/backend'
-import { useAccessToken } from '~/hooks/useAccessToken.ts'
-import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
+import { getMyProject } from '~/backend'
+import { IMyStudent } from '~/models'
+import { useAccessToken } from './useAccessToken'
+import { useCurrentUser } from './useCurrentUser'
 
 export function useTeamInfo() {
     const currentUser = useCurrentUser()

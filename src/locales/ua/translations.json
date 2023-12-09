@@ -72,7 +72,16 @@
     "student": "Студент",
     "supervisor": "Науковий керівник",
     "theme": "Тема",
-    "language": "Мова"
+    "language": "Мова",
+    "rejectRequest": "Відхилити",
+    "requestRejected": "Запит відхилено",
+    "approveRequest": "Прийняти",
+    "requestApproved": "Запит прийнято",
+    "requestError": "Помилка під час обробки запиту",
+    "stage2TeacherMapping": "Стадії призначені для керівників",
+    "allowForAllTeachers": "Дозволити усім",
+    "stageApprovedForAll": "Стадія дозволена усім",
+    "teacher": "Куратор"
   },
   "feed": {
     "workHasntStartedYet": "Робота ще не розпочалася",

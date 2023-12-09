@@ -9,5 +9,5 @@ export interface IHoDRequestDTO {
     approved: boolean
     createdDate: string
     direction: RequestDirection
-    headApprove: boolean | null
+    headApprove: boolean
 }

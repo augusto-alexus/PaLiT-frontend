@@ -3,10 +3,12 @@ import { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getRequests } from '~/backend'
 import { Button, DisplayError, Loading } from '~/components'
-import { useAccessToken } from '~/hooks/useAccessToken.ts'
-import { useAllTeachers } from '~/hooks/useAllTeachers.ts'
-import { useCurrentUser } from '~/hooks/useCurrentUser.ts'
-import { useMyProject } from '~/hooks/useMyProject.ts'
+import {
+    useAccessToken,
+    useAllTeachers,
+    useCurrentUser,
+    useMyProject,
+} from '~/hooks'
 import { ITeacher } from '~/models'
 import { RequestForm } from './page-components'
 

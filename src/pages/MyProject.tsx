@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { Link, Navigate, Outlet } from 'react-router-dom'
-import { useCurrentUser } from '~/hooks/useCurrentUser'
-import { useMyProject } from '~/hooks/useMyProject.ts'
+import { useCurrentUser, useMyProject } from '~/hooks'
 import { routes } from '~/pages'
-import { SidebarContainer } from '~/pages/page-components'
+import { SidebarContainer } from './page-components'
 
 export function MyProject() {
     const { t } = useTranslation()

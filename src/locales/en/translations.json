@@ -72,7 +72,16 @@
     "student": "Student",
     "supervisor": "Supervisor",
     "theme": "Theme",
-    "language": "Language"
+    "language": "Language",
+    "rejectRequest": "Reject",
+    "requestRejected": "Request rejected",
+    "approveRequest": "Approve",
+    "requestApproved": "Request approved",
+    "requestError": "Request processing error",
+    "stage2TeacherMapping": "Stages assigned to teachers",
+    "allowForAllTeachers": "Allow for all",
+    "stageApprovedForAll": "Stage approved for all",
+    "teacher": "Teacher"
   },
   "feed": {
     "workHasntStartedYet": "Work hasn't started yet",
