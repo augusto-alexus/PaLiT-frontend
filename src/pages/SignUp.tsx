@@ -2,8 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
-import { useSignUpStudent, useSignUpTeacher } from '~/backend'
-import { IStudentSignUpDTO, ITeacherSignUpDTO } from '~/backend/auth.types.ts'
+import { signUpStudent, signUpTeacher } from '~/backend'
 import {
     Button,
     Input,
@@ -15,20 +14,22 @@ import {
     WithNulpBg,
 } from '~/components'
 import { useForm } from '~/hooks'
+import { getStudentSignUpDTO, getTeacherSignUpDTO, ISignUpForm } from '~/models'
 import { routes } from '~/pages'
 
 export function SignUp() {
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const signUpTeacher = useSignUpTeacher()
-    const signUpStudent = useSignUpStudent()
     const { mutate } = useMutation({
         mutationFn: async (signUpForm: ISignUpForm) => {
             if (form.isStudent)
                 return await signUpStudent(getStudentSignUpDTO(signUpForm))
             return await signUpTeacher(getTeacherSignUpDTO(signUpForm))
         },
-        onSuccess: () => navigate(`/${routes.signIn}`),
+        onSuccess: () => {
+            toast(`${t('signUpSuccessful')}!`)
+            navigate(`/${routes.signIn}`)
+        },
         onError: (error) => {
             if (error instanceof AxiosError) {
                 if (error.response?.status === 409) {
@@ -218,39 +219,4 @@ export function SignUp() {
             </main>
         </div>
     )
-}
-
-interface ISignUpForm {
-    lastName: string
-    firstName: string
-    email: string
-    password: string
-    confirmPassword: string
-    isStudent: boolean
-    gradDate: string
-    gradLevel: string
-    group: string
-    faculty: string
-}
-
-function getTeacherSignUpDTO(form: ISignUpForm): ITeacherSignUpDTO {
-    return {
-        firstName: form.firstName,
-        lastName: form.lastName,
-        email: form.email,
-        password: form.password,
-    }
-}
-
-function getStudentSignUpDTO(form: ISignUpForm): IStudentSignUpDTO {
-    return {
-        firstName: form.firstName,
-        lastName: form.lastName,
-        email: form.email,
-        password: form.password,
-        cluster: form.group,
-        faculty: form.faculty,
-        graduateDate: form.gradDate,
-        degree: form.gradLevel,
-    }
 }

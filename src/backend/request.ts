@@ -1,13 +1,7 @@
 import axios from 'axios'
-import endpoints from '~/backend/endpoints.ts'
-import {
-    IRequest,
-    IRequestDTO,
-    IRequestStudent,
-    IRequestTeacher,
-    IRequestUser,
-} from '~/backend/request.types.ts'
-import { Role } from '~/models'
+import { Language, RequestDirection, Role } from '~/models'
+import { getAuthConfig } from './base'
+import endpoints from './endpoints'
 
 export function getRequests(accessToken: string, role: Role) {
     if (role == 'student') return getRequestsStudent(accessToken)
@@ -15,20 +9,18 @@ export function getRequests(accessToken: string, role: Role) {
 }
 
 async function getRequestsTeacher(accessToken: string) {
-    const response = await axios.get(endpoints.getAllRequestsTeacher, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
+    const response = await axios.get(
+        endpoints.getAllRequestsTeacher,
+        getAuthConfig(accessToken)
+    )
     return (response.data as IRequestStudent[]).map(parseRequest)
 }
 
 async function getRequestsStudent(accessToken: string) {
-    const response = await axios.get(endpoints.getAllRequestsStudent, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
+    const response = await axios.get(
+        endpoints.getAllRequestsStudent,
+        getAuthConfig(accessToken)
+    )
     return (response.data as IRequestTeacher[]).map(parseRequest)
 }
 
@@ -40,11 +32,11 @@ export async function makeRequest(
         role === 'teacher'
             ? endpoints.teacher2StudentRequest
             : endpoints.student2TeacherRequest
-    const response = await axios.post(endpoint(userId), requestBody, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
+    const response = await axios.post(
+        endpoint(userId),
+        requestBody,
+        getAuthConfig(accessToken)
+    )
     return response.data as object
 }
 
@@ -55,11 +47,10 @@ export async function rejectRequest({
     accessToken: string
     requestId: number
 }) {
-    const response = await axios.delete(endpoints.rejectRequest(requestId), {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
+    const response = await axios.delete(
+        endpoints.rejectRequest(requestId),
+        getAuthConfig(accessToken)
+    )
     return response.data as object
 }
 
@@ -75,11 +66,7 @@ export async function approveRequest({
     const response = await axios.put(
         endpoints.approveRequest(requestId),
         formData,
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        }
+        getAuthConfig(accessToken)
     )
     return response.data as object
 }
@@ -119,4 +106,58 @@ function parseRequest(data: IRequestStudent | IRequestTeacher): IRequest {
         direction: data.direction,
         user,
     }
+}
+
+interface IRequestBase {
+    requestId: number
+    createdDate: string
+    theme: string
+    language: Language
+    approved: boolean
+    direction: RequestDirection
+}
+
+interface IRequestStudent extends IRequestBase {
+    studentRequestDTO: {
+        studentId: number
+        degree: 'BACHELOR' | 'MASTER'
+        faculty: string
+        firstName: string
+        lastName: string
+        cluster: string
+        graduateDate: string
+    }
+}
+
+interface IRequestTeacher extends IRequestBase {
+    teacherRequestDTO: {
+        teacherId: number
+        firstName: string
+        lastName: string
+    }
+}
+
+interface IRequestUser {
+    id: number
+    firstName: string
+    lastName: string
+    degree?: 'bachelor' | 'master'
+    faculty?: string
+    cluster?: string
+    graduateDate?: string
+}
+
+export interface IRequest extends IRequestBase {
+    user: IRequestUser
+}
+
+interface IRequestBody {
+    theme: string
+    language: Language
+}
+
+export interface IRequestDTO {
+    accessToken: string
+    userId: number
+    requestBody: IRequestBody
 }

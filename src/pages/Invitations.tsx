@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { approveRequest, getRequests, rejectRequest } from '~/backend'
 import { toast } from '~/components'
 import { useAccessToken, useCurrentUser } from '~/hooks'
-import { routes } from '~/pages/routes.ts'
-import { Request } from './page-components'
+import { routes } from '~/pages'
+import { Request } from '~/pages/components'
 
 export function Invitations() {
     const { t } = useTranslation()

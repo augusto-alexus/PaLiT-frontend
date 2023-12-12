@@ -1,6 +1,7 @@
 import axios from 'axios'
-import endpoints from '~/backend/endpoints.ts'
-import { IStageDTO } from '~/backend/stages.ts'
+import { getAuthConfig } from './base'
+import endpoints from './endpoints'
+import { IStageDTO } from './stages'
 
 export async function getStudentDocuments(studentId: number) {
     const response = await axios.get(
@@ -40,11 +41,7 @@ export async function reviewDocument(
     const response = await axios.put(
         endpoints.files.reviewDocument(documentId),
         formData,
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        }
+        getAuthConfig(accessToken)
     )
 
     return response.data as { approved: string }
@@ -58,11 +55,7 @@ export async function moveDocumentToStage(
     const response = await axios.put(
         endpoints.files.moveToNextStage(documentId, stageId),
         undefined,
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        }
+        getAuthConfig(accessToken)
     )
 
     return response.data as object

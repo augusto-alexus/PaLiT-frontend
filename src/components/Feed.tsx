@@ -7,7 +7,8 @@ export interface IFeedElement {
     date: Date
 }
 
-export function Feed({ data = feedSample }: { data?: IFeedElement[] }) {
+export function Feed({ data }: { data?: IFeedElement[] }) {
+    if (!data) return <></>
     return (
         <div className='border-l border-cs-additional-gray'>
             <div className='-m-1 flex flex-col gap-4'>
@@ -40,54 +41,3 @@ export function Feed({ data = feedSample }: { data?: IFeedElement[] }) {
         </div>
     )
 }
-
-const feedSample: IFeedElement[] = [
-    {
-        content: 'Test feed #1',
-        date: new Date('8/15/2023'),
-    },
-    {
-        content: 'Test feed #2',
-        date: new Date('9/10/2023'),
-    },
-    {
-        content: (
-            <div>
-                <b>Augusto-alexus</b> approved this document.
-            </div>
-        ),
-        date: new Date('9/13/2023'),
-    },
-    {
-        content: 'Test feed #5',
-        date: new Date('9/17/2023'),
-    },
-    {
-        content: 'Test feed #6',
-        date: new Date('9/18/2023'),
-    },
-    {
-        content: 'Test feed #6',
-        date: new Date('9/18/2023'),
-    },
-    {
-        content: 'Test feed #6',
-        date: new Date('9/18/2023'),
-    },
-    {
-        content: 'Test feed #6',
-        date: new Date('9/18/2023'),
-    },
-    {
-        content: 'Test feed #6',
-        date: new Date('9/18/2023'),
-    },
-    {
-        content: 'Test feed #6',
-        date: new Date('9/18/2023'),
-    },
-    {
-        content: 'Test feed #6',
-        date: new Date('9/18/2023'),
-    },
-]

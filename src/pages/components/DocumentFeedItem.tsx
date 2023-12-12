@@ -1,18 +1,28 @@
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { getComments, IDocumentDTO, IStageDTO } from '~/backend'
-import { Avatar, Feed, IconButton, IFeedElement, Loading } from '~/components'
+import {
+    Avatar,
+    Button,
+    DisplayError,
+    Feed,
+    IconButton,
+    IFeedElement,
+    Loading,
+    TextArea,
+} from '~/components'
 import {
     useAccessToken,
     useCurrentUser,
     useDocumentNextStage,
     useDocumentReview,
+    useMakeComment,
     useTeamInfo,
 } from '~/hooks'
 import { routes } from '~/pages'
-import { CommentInput } from '~/pages/page-components/CommentInput.tsx'
-import { useFeedStore } from '~/store/feedStore.ts'
+import { useFeedStore } from '~/store'
 
 export function DocumentFeedItem({
     document,
@@ -142,4 +152,43 @@ function DocumentCommentsFeed({ documentId }: { documentId: number }) {
         } as IFeedElement
     })
     return <Feed data={feedElements} />
+}
+
+function CommentInput({ documentId }: { documentId: number }) {
+    const { t } = useTranslation()
+    const [comment, setComment] = useState<string>('')
+    const { mutate: makeComment } = useMakeComment()
+    const { isLoading, teacher, student } = useTeamInfo()
+    if (isLoading) return <Loading />
+    const studentId = student.studentId
+    const teacherId = teacher.teacherId
+    if (!studentId || !teacherId)
+        return (
+            <DisplayError
+                error={new Error('studentId or teacherId is undefined')}
+            />
+        )
+
+    return (
+        <form
+            onSubmit={(e) => {
+                e.preventDefault()
+                makeComment({ documentId, studentId, teacherId, comment })
+                setComment('')
+            }}
+            className='flex flex-row place-items-start gap-4'
+        >
+            <Avatar />
+            <TextArea
+                required
+                name='comment'
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder={t('yourComment') + '...'}
+            />
+            <Button preset='filled' type='submit'>
+                {t('send')}
+            </Button>
+        </form>
+    )
 }

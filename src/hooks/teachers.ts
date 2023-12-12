@@ -1,7 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
-import { getMyStudents } from '~/backend'
-import { useAccessToken } from './useAccessToken'
-import { useCurrentUser } from './useCurrentUser'
+import { getAllTeachers, getMyStudents } from '~/backend'
+import { useAccessToken, useCurrentUser } from '~/hooks'
+
+export function useAllTeachers() {
+    return useQuery({
+        queryKey: ['teachers'],
+        queryFn: getAllTeachers,
+    })
+}
 
 export function useMyStudent(studentId: string | number | undefined) {
     const accessToken = useAccessToken()

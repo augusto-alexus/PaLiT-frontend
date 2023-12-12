@@ -10,7 +10,7 @@ import {
     useMyProject,
 } from '~/hooks'
 import { ITeacher } from '~/models'
-import { RequestForm } from './page-components'
+import { RequestForm } from './components'
 
 export function TeacherList() {
     const { t } = useTranslation()

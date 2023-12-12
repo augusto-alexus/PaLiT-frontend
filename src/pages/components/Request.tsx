@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { IRequest } from '~/backend/request.types.ts'
+import { IRequest } from '~/backend'
 import { Button } from '~/components'
 import { useCurrentUser } from '~/hooks'
 import { getHumanReadableDuration } from '~/lib'

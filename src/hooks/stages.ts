@@ -1,9 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
-import { approveStageForAll, getAllStages, getTeachersStages } from '~/backend'
+import {
+    approveStageForAll,
+    getAllStages,
+    getTeachersStages,
+    moveDocumentToStage,
+} from '~/backend'
 import { toast } from '~/components'
+import { useAccessToken } from '~/hooks'
 import { ITeacher } from '~/models'
-import { useAccessToken } from './useAccessToken'
 
 export function useAllStages() {
     const accessToken = useAccessToken()
@@ -35,6 +41,30 @@ export function useApproveStageForAll() {
         },
         onError: () => {
             toast(`${t('error.unknownError')}!`)
+        },
+    })
+}
+
+export function useDocumentNextStage() {
+    const { t } = useTranslation()
+    const accessToken = useAccessToken()
+    return useMutation({
+        mutationFn: async ({
+            documentId,
+            stageId,
+        }: {
+            documentId: number
+            stageId: number
+        }) => moveDocumentToStage(accessToken, documentId, stageId),
+        onSuccess: () => {
+            toast(t('feed.documentMovedToNextStage'))
+        },
+        onError: (error: AxiosError | never) => {
+            if (error instanceof AxiosError) {
+                toast(`${t('error.unknownError')}! ${error.message}`)
+            } else {
+                toast(`${t('error.unknownError')}!`)
+            }
         },
     })
 }

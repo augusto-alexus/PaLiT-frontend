@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { getRequests, IStudentDTO } from '~/backend'
 import { Button, DisplayError, Loading } from '~/components'
 import { useAccessToken, useAllStudents, useCurrentUser } from '~/hooks'
-import { RequestForm } from '~/pages/page-components'
+import { RequestForm } from '~/pages/components'
 
 export function StudentList() {
     const { t } = useTranslation()

@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { Avatar, Button, ProjectLogo } from '~/components'
 import { useCurrentUser, useMyProject } from '~/hooks'
 import { routes } from '~/pages'
-import { useAuthStore } from '~/store/authStore.ts'
+import { useAuthStore } from '~/store'
 
 export function Header() {
     return (

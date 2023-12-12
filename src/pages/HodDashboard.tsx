@@ -1,10 +1,9 @@
+import { HodRequests, HodStages } from 'pages/components'
 import { Navigate } from 'react-router-dom'
 import { useCurrentUser } from '~/hooks'
-import { HodRequests } from '~/pages/page-components'
-import { HodStages } from '~/pages/page-components/HodStages.tsx'
-import { routes } from '~/pages/routes.ts'
+import { routes } from '~/pages'
 
-export function Dashboard() {
+export function HodDashboard() {
     const { role } = useCurrentUser()
 
     if (role !== 'HoD') return <Navigate to={`/${routes.authRedirect}`} />

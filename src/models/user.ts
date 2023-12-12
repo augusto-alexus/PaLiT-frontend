@@ -1,4 +1,4 @@
-import { ICurrentUserDTO } from '~/backend/auth.types.ts'
+import { ICurrentUserDTO } from '~/backend'
 
 export type Role = 'student' | 'teacher' | 'HoD'
 

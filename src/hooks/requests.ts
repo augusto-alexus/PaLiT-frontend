@@ -1,9 +1,19 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
-import { updateRequest } from '~/backend/hod.ts'
+import { getAllRequests, updateRequest } from '~/backend'
 import { toast } from '~/components'
-import { useAccessToken } from './useAccessToken'
+import { useAccessToken, useCurrentUser } from '~/hooks'
+
+export function useAllHoDRequests() {
+    const accessToken = useAccessToken()
+    const { role } = useCurrentUser()
+    return useQuery({
+        enabled: role === 'HoD',
+        queryKey: ['allHoDRequests'],
+        queryFn: () => getAllRequests(accessToken),
+    })
+}
 
 export function useUpdateHodRequest() {
     const accessToken = useAccessToken()

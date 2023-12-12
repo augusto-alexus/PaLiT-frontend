@@ -14,7 +14,7 @@ import {
 } from '~/components'
 import { useForm } from '~/hooks'
 import { routes } from '~/pages'
-import { useAuthStore } from '~/store/authStore.ts'
+import { useAuthStore } from '~/store'
 
 export function SignIn() {
     const { t } = useTranslation()

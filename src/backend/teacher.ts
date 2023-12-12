@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ITeacher, Language, parseMyStudentDTO } from '~/models'
+import { getAuthConfig } from './base'
 import endpoints from './endpoints'
 import { IStageDTO } from './stages'
 import { IStudentDTO } from './student.ts'
@@ -10,11 +11,10 @@ export async function getAllTeachers() {
 }
 
 export async function getMyStudents(accessToken: string) {
-    const response = await axios.get(endpoints.currentStudents, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
+    const response = await axios.get(
+        endpoints.currentStudents,
+        getAuthConfig(accessToken)
+    )
     return (response.data as IMyStudentDTO[])?.map(parseMyStudentDTO)
 }
 

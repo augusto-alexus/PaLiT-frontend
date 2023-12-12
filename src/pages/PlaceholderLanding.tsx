@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { routes } from './routes.ts'
+import { routes } from '~/pages/routes.ts'
 
 export function PlaceholderLanding() {
     const { t } = useTranslation()

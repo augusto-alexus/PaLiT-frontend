@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { IStageDTO } from '~/backend/stages.ts'
-import { Language } from '~/models/request.ts'
-import { parseStudentDTO } from '~/models/student.ts'
+import { Language, parseStudentDTO } from '~/models'
+import { getAuthConfig } from './base'
 import endpoints from './endpoints'
+import { IStageDTO } from './stages'
 
 export async function getAllStudents() {
     const response = await axios.get(endpoints.getAllStudents)
@@ -10,11 +10,10 @@ export async function getAllStudents() {
 }
 
 export async function getMyProject(accessToken: string) {
-    const response = await axios.get(endpoints.currentAdvisor, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
+    const response = await axios.get(
+        endpoints.currentAdvisor,
+        getAuthConfig(accessToken)
+    )
     return parseMyProjectDTO(response.data as IMyProjectDTO)
 }
 

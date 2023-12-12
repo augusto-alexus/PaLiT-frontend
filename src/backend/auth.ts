@@ -1,25 +1,20 @@
 import axios, { AxiosError } from 'axios'
-import { toast } from '~/components'
-import {
-    ICurrentUserDTO,
-    ISignInDTO,
-    IStudentSignUpDTO,
-    ITeacherSignUpDTO,
-} from './auth.types.ts'
+import { Role } from '~/models'
+import { getAuthConfig } from './base'
 import endpoints from './endpoints'
 
 export class JWTExpiredError extends Error {}
 
 export async function getCurrentUser(accessToken: string) {
     return axios
-        .get(endpoints.currentUser, {
-            data: {
-                user: accessToken,
-            },
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
+        .get(
+            endpoints.currentUser,
+            getAuthConfig(accessToken, {
+                data: {
+                    user: accessToken,
+                },
+            })
+        )
         .then(({ data }) => data as ICurrentUserDTO)
         .catch((error: AxiosError) => {
             if (error.response?.status === 401) throw new JWTExpiredError()
@@ -32,18 +27,55 @@ export async function signIn(form: ISignInDTO) {
     return response.data as { accessToken: string }
 }
 
-export function useSignUpStudent(onSuccess?: () => void) {
-    return (dto: IStudentSignUpDTO) =>
-        axios.post(endpoints.signUpStudent, dto).then(() => {
-            toast('Реєстрація успішна!')
-            onSuccess?.()
-        })
+export function signUpStudent(dto: IStudentSignUpDTO) {
+    return axios.post(endpoints.signUpStudent, dto)
 }
 
-export function useSignUpTeacher(onSuccess?: () => void) {
-    return (dto: ITeacherSignUpDTO) =>
-        axios.post(endpoints.signUpTeacher, dto).then(() => {
-            toast('Реєстрація успішна!')
-            onSuccess?.()
-        })
+export function signUpTeacher(dto: ITeacherSignUpDTO) {
+    return axios.post(endpoints.signUpTeacher, dto)
+}
+
+interface IRoleDTO {
+    id: string
+    name: Role
+}
+
+interface IStudentDTO {
+    studentId: number
+    degree: string
+}
+
+interface ITeacherDTO {
+    teacherId: number
+    generalBachelor: number
+    generalMaster: number
+}
+
+export interface ICurrentUserDTO {
+    firstName: string
+    lastName: string
+    email: string
+    userId: number
+    roleDTO: IRoleDTO
+    studentDTO?: IStudentDTO
+    teacherDTO?: ITeacherDTO
+}
+
+interface ISignInDTO {
+    email: string
+    password: string
+}
+
+export interface IStudentSignUpDTO extends ITeacherSignUpDTO {
+    cluster: string
+    faculty: string
+    graduateDate: string
+    degree: string
+}
+
+export interface ITeacherSignUpDTO {
+    firstName: string
+    lastName: string
+    email: string
+    password: string
 }

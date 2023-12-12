@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { uploadDocument } from '~/backend/file.ts'
-import { toast } from '~/components/toast.ts'
+import { uploadDocument } from '~/backend'
+import { toast } from '~/components/index.ts'
 import { useAccessToken, useCurrentUser } from '~/hooks'
-import { getReadableFileSize } from '~/lib/files.ts'
+import { getReadableFileSize } from '~/lib'
 
 export function FileUpload() {
     const { t } = useTranslation()

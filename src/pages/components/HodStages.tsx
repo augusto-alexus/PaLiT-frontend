@@ -1,7 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from '~/components'
-import { useAllStages, useAllTeachers, useApproveStageForAll } from '~/hooks'
-import { useGetTeacherStages } from '~/hooks/stages.ts'
+import {
+    useAllStages,
+    useAllTeachers,
+    useApproveStageForAll,
+    useGetTeacherStages,
+} from '~/hooks'
 import { ITeacher } from '~/models'
 
 export function HodStages() {

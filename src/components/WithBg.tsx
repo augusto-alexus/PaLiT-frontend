@@ -1,4 +1,4 @@
-import nulpBgSrc from '../assets/lpnu-bg.jpg'
+import nulpBgSrc from '~/assets/lpnu-bg.jpg'
 
 export function WithBg({ bgSrc }: { bgSrc: string }) {
     return (

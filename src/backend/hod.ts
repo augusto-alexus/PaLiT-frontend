@@ -1,6 +1,10 @@
 import axios from 'axios'
-import { IHoDRequestDTO } from '~/backend/hod.types.ts'
-import { IHoDRequest, parseHoDRequestDTO } from '~/models'
+import {
+    IHoDRequest,
+    Language,
+    parseHoDRequestDTO,
+    RequestDirection,
+} from '~/models'
 import { getAuthConfig } from './base.ts'
 import endpoints from './endpoints.ts'
 
@@ -27,4 +31,16 @@ export async function updateRequest(
         getAuthConfig(accessToken)
     )
     return [response.status === 200, approved]
+}
+
+export interface IHoDRequestDTO {
+    requestId: number
+    teacherId: number
+    studentId: number
+    theme: string
+    language: Language
+    approved: boolean
+    createdDate: string
+    direction: RequestDirection
+    headApprove: boolean
 }

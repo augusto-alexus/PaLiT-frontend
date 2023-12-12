@@ -1,5 +1,6 @@
 import axios from 'axios'
-import endpoints from '~/backend/endpoints.ts'
+import { getAuthConfig } from './base'
+import endpoints from './endpoints'
 
 export interface IStageDTO {
     stageId: number
@@ -8,11 +9,10 @@ export interface IStageDTO {
 }
 
 export async function getAllStages(accessToken: string) {
-    const response = await axios.get(endpoints.stages.getAll, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
+    const response = await axios.get(
+        endpoints.stages.getAll,
+        getAuthConfig(accessToken)
+    )
     return response.data as IStageDTO[]
 }
 
@@ -22,20 +22,16 @@ export async function getTeachersStages(
 ) {
     const response = await axios.get(
         endpoints.stages.getTeachersStages(teacherId),
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        }
+        getAuthConfig(accessToken)
     )
     return response.data as number[]
 }
 
 export async function approveStageForAll(accessToken: string, stageId: number) {
-    await axios.post(endpoints.stages.approveStageForAll(stageId), null, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    })
+    await axios.post(
+        endpoints.stages.approveStageForAll(stageId),
+        null,
+        getAuthConfig(accessToken)
+    )
     return null
 }

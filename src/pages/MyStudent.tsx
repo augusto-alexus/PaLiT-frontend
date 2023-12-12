@@ -4,7 +4,7 @@ import { getMyStudents } from '~/backend'
 import { Loading } from '~/components'
 import { useAccessToken, useCurrentUser } from '~/hooks'
 import { routes } from '~/pages'
-import { SidebarContainer } from './page-components'
+import { SidebarContainer } from '~/pages/components'
 
 export function MyStudent() {
     const { studentId } = useParams()

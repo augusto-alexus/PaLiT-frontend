@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Role } from '~/models'
+import { getAuthConfig } from './base'
 import endpoints from './endpoints'
 
 export async function postComment(
@@ -16,11 +17,7 @@ export async function postComment(
             text: comment,
             fromType: authorRole.toUpperCase(),
         },
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        }
+        getAuthConfig(accessToken)
     )
 
     return documentId
@@ -29,11 +26,7 @@ export async function postComment(
 export async function getComments(accessToken: string, documentId: number) {
     const response = await axios.get(
         endpoints.comments.getComments(documentId),
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        }
+        getAuthConfig(accessToken)
     )
     return (response.data as ICommentDTO[]).map(getCommentFromDTO)
 }

@@ -4,10 +4,10 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import '~/App.css'
 import {
+    AuthPagesWrapper,
     AuthRedirect,
     FilePreview,
     Invitations,
-    LoggedDashboardWrapper,
     MyProject,
     MyStudent,
     MyStudents,
@@ -19,7 +19,7 @@ import {
     StudentList,
     TeacherList,
 } from '~/pages'
-import { Dashboard } from '~/pages/Dashboard.tsx'
+import { HodDashboard } from '~/pages/HodDashboard.tsx'
 import './i18.ts'
 
 function App() {
@@ -29,13 +29,13 @@ function App() {
                 <Route index path='/' element={<PlaceholderLanding />} />
                 <Route path={routes.signIn} element={<SignIn />} />
                 <Route path={routes.signUp} element={<SignUp />} />
-                <Route path='*' element={<LoggedDashboardWrapper />}>
+                <Route path='*' element={<AuthPagesWrapper />}>
                     <Route
                         index
                         path={routes.authRedirect}
                         element={<AuthRedirect />}
                     />
-                    <Route path={routes.dashboard} element={<Dashboard />} />
+                    <Route path={routes.dashboard} element={<HodDashboard />} />
                     <Route
                         path={routes.studentList}
                         element={<StudentList />}

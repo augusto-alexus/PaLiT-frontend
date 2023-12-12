@@ -17,7 +17,7 @@ import {
 } from '~/components'
 import { useAccessToken, useCurrentUser, useMyProject } from '~/hooks'
 import { IMyStudent } from '~/models'
-import { DocumentFeedItem } from '~/pages/page-components'
+import { DocumentFeedItem } from '~/pages/components'
 
 export function StudentFeed() {
     const { t } = useTranslation()
