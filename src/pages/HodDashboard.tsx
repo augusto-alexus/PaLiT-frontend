@@ -1,7 +1,7 @@
-import { HodRequests, HodStages } from 'pages/components'
 import { Navigate } from 'react-router-dom'
 import { useCurrentUser } from '~/hooks'
 import { routes } from '~/pages'
+import { HodRequests, HodStages } from '~/pages/components'
 
 export function HodDashboard() {
     const { role } = useCurrentUser()

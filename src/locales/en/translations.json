@@ -80,8 +80,14 @@
     "requestApproved": "Request approved",
     "requestError": "Request processing error",
     "stage2TeacherMapping": "Stages assigned to teachers",
+    "allowForTeacher": "Allow",
     "allowForAllTeachers": "Allow for all",
+    "restrictForTeacher": "Restrict",
+    "restrictForAllTeachers": "Restrict for all",
     "stageApprovedForAll": "Stage approved for all",
+    "stageApprovedForTeacher": "Stage approved for teacher",
+    "stageRestrictedForAll": "Stage restricted for all",
+    "stageRestrictedForTeacher": "Stage restricted for teacher",
     "teacher": "Teacher"
   },
   "feed": {

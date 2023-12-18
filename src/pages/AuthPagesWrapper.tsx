@@ -15,7 +15,7 @@ export function AuthPagesWrapper() {
         enabled: !!authStore.accessToken,
         queryKey: ['currentUser'],
         queryFn: async () => {
-            if (!authStore.accessToken) return
+            if (!authStore.accessToken) return null
             await getCurrentUser(authStore.accessToken)
                 .then((u) => authStore.setCurrentUser(getCurrentUserFromDTO(u)))
                 .catch((err) => {
@@ -28,6 +28,7 @@ export function AuthPagesWrapper() {
                         toast(`${t('error.unknownError')}.`)
                     }
                 })
+            return null
         },
     })
 

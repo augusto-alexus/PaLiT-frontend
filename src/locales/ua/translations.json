@@ -80,8 +80,14 @@
     "requestApproved": "Запит прийнято",
     "requestError": "Помилка під час обробки запиту",
     "stage2TeacherMapping": "Стадії призначені для керівників",
+    "allowForTeacher": "Дозволити",
     "allowForAllTeachers": "Дозволити усім",
+    "restrictForTeacher": "Заборонити",
+    "restrictForAllTeachers": "Заборонити усім",
     "stageApprovedForAll": "Стадія дозволена усім",
+    "stageApprovedForTeacher": "Стадія дозволена вчителю",
+    "stageRestrictedForAll": "Стадія заборонена усім",
+    "stageRestrictedForTeacher": "Стадія заборонена вчителю",
     "teacher": "Куратор"
   },
   "feed": {

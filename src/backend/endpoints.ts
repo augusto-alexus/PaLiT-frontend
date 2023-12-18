@@ -40,6 +40,7 @@ export default Object.freeze({
             prefixEndpoints(`teacher-stage-approve/teacher/${teacherId}`),
         approveStageForAll: (stageId: number) =>
             prefixEndpoints(`teacher-stage-approve/${stageId}`),
+        teacherStageApprove: prefixEndpoints('teacher-stage-approve'),
     }),
     comments: Object.freeze({
         postComment: (
