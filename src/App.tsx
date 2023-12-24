@@ -7,6 +7,9 @@ import {
     AuthPagesWrapper,
     AuthRedirect,
     FilePreview,
+    HodInvitations,
+    HodStageApproval,
+    HodTeams,
     Invitations,
     MyProject,
     MyStudent,
@@ -19,7 +22,6 @@ import {
     StudentList,
     TeacherList,
 } from '~/pages'
-import { HodDashboard } from '~/pages/HodDashboard.tsx'
 import './i18.ts'
 
 function App() {
@@ -35,7 +37,15 @@ function App() {
                         path={routes.authRedirect}
                         element={<AuthRedirect />}
                     />
-                    <Route path={routes.dashboard} element={<HodDashboard />} />
+                    <Route
+                        path={routes.hod.stageApproval}
+                        element={<HodStageApproval />}
+                    />
+                    <Route
+                        path={routes.hod.invites}
+                        element={<HodInvitations />}
+                    />
+                    <Route path={routes.hod.teams} element={<HodTeams />} />
                     <Route
                         path={routes.studentList}
                         element={<StudentList />}

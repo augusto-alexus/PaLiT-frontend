@@ -63,11 +63,15 @@
     "myStudents": "Мої студенти",
     "teachers": "Куратори",
     "students": "Студенти",
-    "invites": "Запрошення"
+    "invites": "Запрошення",
+    "stageApproval": "Призначення стадій",
+    "teams": "Команди"
   },
   "dashboard": {
-    "noRequests": "Запитів ще немає",
+    "teams": "Команди",
     "requests": "Запрошення",
+    "noRequests": "Запитів ще немає",
+    "noTeams": "Команд ще немає",
     "requestNotEnoughInfo": "Запрошення не містить деяких даних",
     "contactSupport": "Зверніться до системного адміністратора",
     "student": "Студент",

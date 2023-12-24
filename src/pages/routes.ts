@@ -13,4 +13,9 @@ export const routes = Object.freeze({
         `my-student/${studentId ? studentId : ':studentId'}`,
     invitations: 'invitations',
     authRedirect: 'auth-redirect',
+    hod: Object.freeze({
+        stageApproval: 'hod/stage-approval',
+        invites: 'hod/invitations',
+        teams: 'hod/teams',
+    }),
 })

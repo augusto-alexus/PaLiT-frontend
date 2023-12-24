@@ -63,11 +63,15 @@
     "myStudents": "My students",
     "teachers": "Teachers",
     "students": "Students",
-    "invites": "Invites"
+    "invites": "Invites",
+    "stageApproval": "Stage approval",
+    "teams": "Teams"
   },
   "dashboard": {
-    "noRequests": "There are no requests yet",
+    "teams": "Teams",
     "requests": "Requests",
+    "noRequests": "There are no requests yet",
+    "noTeams": "There are no teams yet",
     "requestNotEnoughInfo": "Request doesn't contain enough info",
     "contactSupport": "Contact support",
     "student": "Student",
