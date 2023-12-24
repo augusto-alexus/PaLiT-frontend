@@ -2,27 +2,28 @@ import { useQuery } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { useOutletContext } from 'react-router-dom'
-import {
-    getAllStages,
-    getStudentDocuments,
-    IDocumentDTO,
-    IStageDTO,
-} from '~/backend'
+import { getStudentDocuments, IDocumentDTO, IStageDTO } from '~/backend'
 import {
     DisplayError,
     Feed,
+    FeedIconApprove,
+    FeedIconReject,
     FileUpload,
     IFeedElement,
+    ITab,
     Loading,
+    Tabs,
 } from '~/components'
-import { useAccessToken, useCurrentUser, useMyProject } from '~/hooks'
+import { useAllStages, useCurrentUser, useMyProject } from '~/hooks'
 import { IMyStudent } from '~/models'
 import { DocumentFeedItem } from '~/pages/components'
+import { useFeedStore } from '~/store'
 
 export function StudentFeed() {
     const { t } = useTranslation()
-    const accessToken = useAccessToken()
-    const { role, id, studentId } = useCurrentUser()
+    const { role, id, studentId, allowedStageIds } = useCurrentUser()
+    const { selectedStage: storedSelectedStage, setSelectedStage } =
+        useFeedStore()
     const outletContext = useOutletContext<{ myStudent?: IMyStudent }>()
 
     const { myProject } = useMyProject()
@@ -50,10 +51,7 @@ export function StudentFeed() {
         isLoading: isLoadingStages,
         error: errorStage,
         data: stages,
-    } = useQuery({
-        queryKey: ['stages'],
-        queryFn: () => getAllStages(accessToken),
-    })
+    } = useAllStages()
 
     if (isLoadingDocuments || isLoadingStages) return <Loading />
     if (errorDocuments) return <DisplayError error={errorDocuments} />
@@ -65,13 +63,42 @@ export function StudentFeed() {
             />
         )
 
+    const selectedStage =
+        storedSelectedStage ??
+        stages.reduce((prev, cur) =>
+            prev.serialOrder < cur.serialOrder ? prev : cur
+        ).stageId
+
+    const stageTabs = stages.map<ITab>((s) => ({
+        id: s.stageId,
+        label: s.name,
+        isActive: s.stageId === selectedStage,
+    }))
+
     const feedElements: IFeedElement[] = []
-    documents?.forEach((d, idx) => {
-        feedElements.push(
-            getDocumentFeedItem(d, stages, idx + 1 === documents.length)
+    documents
+        ?.filter(
+            (d, idx, arr) =>
+                d.stageDTO?.stageId === selectedStage ||
+                (idx > 0 &&
+                    (arr[idx - 1].stageDTO?.stageId ?? Infinity) <=
+                        selectedStage)
         )
-        if (d.approvedDate) feedElements.push(reviewFeedItem(d, t))
-    })
+        ?.forEach((d, idx, arr) => {
+            feedElements.push(
+                getDocumentFeedItem(
+                    d,
+                    stages,
+                    d.approved &&
+                        idx + 1 === arr.length &&
+                        d.stageDTO?.stageId === selectedStage
+                )
+            )
+            if (d.approvedDate) {
+                const movedToNextStage = d.stageDTO?.stageId !== selectedStage
+                feedElements.push(reviewFeedItem(d, t, movedToNextStage))
+            }
+        })
     const sortedFeedElements = feedElements.sort(
         (a, b) => a.date.getTime() - b.date.getTime()
     )
@@ -82,9 +109,18 @@ export function StudentFeed() {
             outletContext.myStudent.headApproved) ||
         (role === 'student' && !!myProject?.headApproved)
 
+    const teacherCanViewStage = allowedStageIds?.some(
+        (s) => s === selectedStage
+    )
+
     return (
         <div className='mx-auto my-4 flex w-10/12 flex-col gap-4'>
-            {!feedElements.length ? (
+            <Tabs items={stageTabs} setItem={(id) => setSelectedStage(id)} />
+            {role === 'teacher' && !teacherCanViewStage ? (
+                <div className='text-center text-2xl font-semibold text-cs-text-dark'>
+                    {t('feed.cantViewStage')}
+                </div>
+            ) : !feedElements.length ? (
                 <div className='text-center text-2xl font-semibold text-cs-text-dark'>
                     {t('feed.workHasntStartedYet')}
                 </div>
@@ -100,11 +136,13 @@ export function StudentFeed() {
                     {t('hodRequestNotApproved')}
                 </div>
             )}
-            {role === 'student' && projectApproved && (
-                <div className='mt-16'>
-                    <FileUpload />
-                </div>
-            )}
+            {role === 'student' &&
+                projectApproved &&
+                myProject?.stage?.stageId === selectedStage && (
+                    <div className='mt-16'>
+                        <FileUpload />
+                    </div>
+                )}
         </div>
     )
 }
@@ -112,7 +150,7 @@ export function StudentFeed() {
 function getDocumentFeedItem(
     document: IDocumentDTO,
     stages: IStageDTO[],
-    isLastDocument: boolean
+    canBeMovedToNextStage: boolean
 ): IFeedElement {
     return {
         date: new Date(document.createdDate),
@@ -121,7 +159,7 @@ function getDocumentFeedItem(
             <DocumentFeedItem
                 document={document}
                 stages={stages}
-                isLastDocument={isLastDocument}
+                canBeMovedToNextStage={canBeMovedToNextStage}
             />
         ),
     }
@@ -129,15 +167,25 @@ function getDocumentFeedItem(
 
 function reviewFeedItem(
     document: IDocumentDTO,
-    t: TFunction<never, never>
+    t: TFunction<never, never>,
+    movedToNextStage: boolean
 ): IFeedElement {
     return {
         date: new Date(document.approvedDate),
+        iconL: document.approved ? <FeedIconApprove /> : <FeedIconReject />,
         content: (
             <div>
                 {document.approved
                     ? t('feed.documentApproved')
                     : t('feed.documentRejected')}
+                {movedToNextStage && (
+                    <>
+                        <br />
+                        <span className='font-semibold text-cs-primary'>
+                            {t('feed.nextStage')}
+                        </span>
+                    </>
+                )}
             </div>
         ),
     }

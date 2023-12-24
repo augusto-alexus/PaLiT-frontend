@@ -64,7 +64,7 @@ export async function moveDocumentToStage(
 export interface IDocumentDTO {
     documentId: number
     createdDate: string
-    approved: string
+    approved: boolean
     approvedDate: string
     originalName: string
     stageDTO?: IStageDTO

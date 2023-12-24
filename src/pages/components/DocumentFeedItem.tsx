@@ -27,11 +27,11 @@ import { useFeedStore } from '~/store'
 export function DocumentFeedItem({
     document,
     stages,
-    isLastDocument,
+    canBeMovedToNextStage,
 }: {
     document: IDocumentDTO
     stages: IStageDTO[]
-    isLastDocument: boolean
+    canBeMovedToNextStage: boolean
 }) {
     const { showCommentsForDocumentId, setShowCommentsForDocumentId } =
         useFeedStore()
@@ -42,7 +42,6 @@ export function DocumentFeedItem({
     const { t } = useTranslation()
     const navigate = useNavigate()
     const wasReviewed = !!document.approved || !!document.approvedDate
-    const canBeMovedToNextStage = document.approved && isLastDocument
     const { mutate: reviewDocument } = useDocumentReview()
     const { mutate: moveDocumentToNextStage } = useDocumentNextStage()
     const curStageOrder = (document?.stageDTO?.serialOrder as number) ?? 0

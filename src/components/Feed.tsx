@@ -3,7 +3,7 @@ import { getHumanReadableDuration } from '~/lib/date.ts'
 
 export interface IFeedElement {
     content: string | ReactElement
-    iconL?: ReactElement
+    iconL: ReactElement
     date: Date
 }
 
@@ -17,18 +17,12 @@ export function Feed({ data }: { data?: IFeedElement[] }) {
                         key={`feed-${idx}`}
                         className='flex flex-row gap-6 py-2'
                     >
-                        {f.iconL ? (
-                            <div className='relative h-fit bg-cs-bg-white py-4'>
-                                <div className='h-2 w-2 rounded-full border border-transparent bg-transparent' />
-                                <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
-                                    {f.iconL}
-                                </div>
+                        <div className='relative h-fit bg-cs-bg-white py-4'>
+                            <div className='h-2 w-2 rounded-full border border-transparent bg-transparent' />
+                            <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
+                                {f.iconL}
                             </div>
-                        ) : (
-                            <div className='h-fit bg-cs-bg-white py-4'>
-                                <div className='h-2 w-2 rounded-full border border-cs-secondary bg-cs-primary' />
-                            </div>
-                        )}
+                        </div>
                         <div className='grow place-self-center'>
                             {f.content}
                         </div>
@@ -38,6 +32,22 @@ export function Feed({ data }: { data?: IFeedElement[] }) {
                     </div>
                 ))}
             </div>
+        </div>
+    )
+}
+
+export function FeedIconApprove() {
+    return (
+        <div className='h-fit bg-cs-bg-white py-4'>
+            <div className='h-3 w-3 rounded-full border border-cs-secondary bg-cs-primary' />
+        </div>
+    )
+}
+
+export function FeedIconReject() {
+    return (
+        <div className='h-fit bg-cs-bg-white py-4'>
+            <div className='h-3 w-3 rounded-full border border-cs-additional-gray bg-cs-warning' />
         </div>
     )
 }

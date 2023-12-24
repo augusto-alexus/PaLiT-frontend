@@ -96,6 +96,7 @@
   },
   "feed": {
     "workHasntStartedYet": "Work hasn't started yet",
+    "cantViewStage": "You can't view this stage",
     "viewDocument": "View document",
     "commentDocument": "Comment document",
     "approveDocument": "Approve document",
@@ -105,7 +106,8 @@
     "moveToNextStage": "Move to the next stage",
     "documentMovedToNextStage": "Document moved to the next stage",
     "studentUploadedFile": "Student uploaded the file",
-    "commentSaved": "Comment saved"
+    "commentSaved": "Comment saved",
+    "nextStage": "Project moved to the next stage"
   },
   "yourComment": "Your comment",
   "send": "Send",

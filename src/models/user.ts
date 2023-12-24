@@ -13,6 +13,7 @@ export interface ICurrentUser {
     degree?: 'bachelor' | 'master'
     bachelorStudentsLimit?: number
     masterStudentsLimit?: number
+    allowedStageIds?: number[]
 }
 
 export function getCurrentUserFromDTO(dto: ICurrentUserDTO): ICurrentUser {
@@ -33,5 +34,6 @@ export function getCurrentUserFromDTO(dto: ICurrentUserDTO): ICurrentUser {
         degree,
         bachelorStudentsLimit: dto.teacherDTO?.generalBachelor,
         masterStudentsLimit: dto.teacherDTO?.generalMaster,
+        allowedStageIds: dto.teacherDTO?.availableStageIdSet,
     }
 }

@@ -96,6 +96,7 @@
   },
   "feed": {
     "workHasntStartedYet": "Робота ще не розпочалася",
+    "cantViewStage": "Вам не дозволено переглядати цю стадію",
     "viewDocument": "Перегляд документа",
     "commentDocument": "Коментувати документ",
     "approveDocument": "Одобрити документ",
@@ -105,7 +106,8 @@
     "moveToNextStage": "Направити до наступної стадії",
     "documentMovedToNextStage": "Документ перейшов до наступної стадії",
     "studentUploadedFile": "Студент завантажив файл",
-    "commentSaved": "Коментар збережено"
+    "commentSaved": "Коментар збережено",
+    "nextStage": "Проект перейшов до наступної стадії"
   },
   "yourComment": "Ваш коментар",
   "send": "Відправити",

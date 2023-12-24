@@ -49,6 +49,7 @@ interface ITeacherDTO {
     teacherId: number
     generalBachelor: number
     generalMaster: number
+    availableStageIdSet: number[]
 }
 
 export interface ICurrentUserDTO {
