@@ -46,8 +46,12 @@ export default Object.freeze({
         postComment: (
             documentId: number,
             studentId: number,
-            teacherId: number
-        ) => prefixEndpoints(`comment/${documentId}/${studentId}/${teacherId}`),
+            teacherId: number,
+            stageId: number
+        ) =>
+            prefixEndpoints(
+                `comment/${documentId}/${studentId}/${teacherId}/${stageId}`
+            ),
         getComments: (documentId: number) =>
             prefixEndpoints(`comment/${documentId}`),
     }),

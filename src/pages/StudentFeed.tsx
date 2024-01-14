@@ -88,6 +88,7 @@ export function StudentFeed() {
             feedElements.push(
                 getDocumentFeedItem(
                     d,
+                    selectedStage,
                     stages,
                     d.approved &&
                         idx + 1 === arr.length &&
@@ -149,6 +150,7 @@ export function StudentFeed() {
 
 function getDocumentFeedItem(
     document: IDocumentDTO,
+    selectedStage: number,
     stages: IStageDTO[],
     canBeMovedToNextStage: boolean
 ): IFeedElement {
@@ -158,6 +160,7 @@ function getDocumentFeedItem(
         content: (
             <DocumentFeedItem
                 document={document}
+                selectedStage={selectedStage}
                 stages={stages}
                 canBeMovedToNextStage={canBeMovedToNextStage}
             />

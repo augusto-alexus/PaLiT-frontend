@@ -48,11 +48,13 @@ export function useMakeComment() {
     return useMutation({
         mutationFn: async ({
             documentId,
+            stageId,
             studentId,
             teacherId,
             comment,
         }: {
             documentId: number
+            stageId: number
             studentId: number
             teacherId: number
             comment: string
@@ -60,6 +62,7 @@ export function useMakeComment() {
             postComment(
                 accessToken,
                 documentId,
+                stageId,
                 studentId,
                 teacherId,
                 comment,

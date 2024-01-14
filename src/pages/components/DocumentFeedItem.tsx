@@ -26,10 +26,12 @@ import { useFeedStore } from '~/store'
 
 export function DocumentFeedItem({
     document,
+    selectedStage,
     stages,
     canBeMovedToNextStage,
 }: {
     document: IDocumentDTO
+    selectedStage: number
     stages: IStageDTO[]
     canBeMovedToNextStage: boolean
 }) {
@@ -41,7 +43,7 @@ export function DocumentFeedItem({
     const { role } = useCurrentUser()
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const wasReviewed = !!document.approved || !!document.approvedDate
+    const wasReviewed = document.approved || !!document.approvedDate
     const { mutate: reviewDocument } = useDocumentReview()
     const { mutate: moveDocumentToNextStage } = useDocumentNextStage()
     const curStageOrder = (document?.stageDTO?.serialOrder as number) ?? 0
@@ -106,17 +108,31 @@ export function DocumentFeedItem({
                     </IconButton>
                 )}
             </div>
-            {showComments && <DocumentCommentsFeed documentId={documentId} />}
+            {showComments && (
+                <DocumentCommentsFeed
+                    documentId={documentId}
+                    selectedStage={selectedStage}
+                />
+            )}
             {showComments && (
                 <div className='mb-8'>
-                    <CommentInput documentId={documentId} />
+                    <CommentInput
+                        documentId={documentId}
+                        selectedStage={selectedStage}
+                    />
                 </div>
             )}
         </div>
     )
 }
 
-function DocumentCommentsFeed({ documentId }: { documentId: number }) {
+function DocumentCommentsFeed({
+    documentId,
+    selectedStage,
+}: {
+    documentId: number
+    selectedStage: number
+}) {
     const accessToken = useAccessToken()
     const {
         data: comments,
@@ -128,32 +144,40 @@ function DocumentCommentsFeed({ documentId }: { documentId: number }) {
     })
     const { isLoading: isLoadingTeamInfo, teacher, student } = useTeamInfo()
     if ((isLoading && isFetching) || isLoadingTeamInfo) return <Loading />
-    const feedElements = comments?.map((c) => {
-        return {
-            iconL: (
-                <Avatar
-                    small
-                    user={{
-                        role: c.from,
-                        firstName:
-                            c.from === 'student'
-                                ? student.firstName
-                                : teacher.firstName,
-                        lastName:
-                            c.from === 'student'
-                                ? student.lastName
-                                : teacher.lastName,
-                    }}
-                />
-            ),
-            content: c.text,
-            date: new Date(c.createdAt),
-        } as IFeedElement
-    })
+    const feedElements = comments
+        ?.filter((c) => c.stageId === selectedStage)
+        ?.map((c) => {
+            return {
+                iconL: (
+                    <Avatar
+                        small
+                        user={{
+                            role: c.from,
+                            firstName:
+                                c.from === 'student'
+                                    ? student.firstName
+                                    : teacher.firstName,
+                            lastName:
+                                c.from === 'student'
+                                    ? student.lastName
+                                    : teacher.lastName,
+                        }}
+                    />
+                ),
+                content: c.text,
+                date: new Date(c.createdAt),
+            } as IFeedElement
+        })
     return <Feed data={feedElements} />
 }
 
-function CommentInput({ documentId }: { documentId: number }) {
+function CommentInput({
+    documentId,
+    selectedStage,
+}: {
+    documentId: number
+    selectedStage: number
+}) {
     const { t } = useTranslation()
     const [comment, setComment] = useState<string>('')
     const { mutate: makeComment } = useMakeComment()
@@ -172,7 +196,13 @@ function CommentInput({ documentId }: { documentId: number }) {
         <form
             onSubmit={(e) => {
                 e.preventDefault()
-                makeComment({ documentId, studentId, teacherId, comment })
+                makeComment({
+                    documentId,
+                    stageId: selectedStage,
+                    studentId,
+                    teacherId,
+                    comment,
+                })
                 setComment('')
             }}
             className='flex flex-row place-items-start gap-4'
