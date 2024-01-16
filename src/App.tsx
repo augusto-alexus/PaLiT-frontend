@@ -14,7 +14,6 @@ import {
     MyProject,
     MyStudent,
     MyStudents,
-    PlaceholderLanding,
     routes,
     SignIn,
     SignUp,
@@ -28,15 +27,10 @@ function App() {
     return (
         <>
             <Routes>
-                <Route index path='/' element={<PlaceholderLanding />} />
                 <Route path={routes.signIn} element={<SignIn />} />
                 <Route path={routes.signUp} element={<SignUp />} />
                 <Route path='*' element={<AuthPagesWrapper />}>
-                    <Route
-                        index
-                        path={routes.authRedirect}
-                        element={<AuthRedirect />}
-                    />
+                    <Route index path='*' element={<AuthRedirect />} />
                     <Route
                         path={routes.hod.stageApproval}
                         element={<HodStageApproval />}
