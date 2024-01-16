@@ -36,7 +36,7 @@ function getStudentHeaderNavs(myProjectStarted: boolean): INavItem[] {
         { to: routes.myProject, tLabel: 'navigation.myProject' },
         { to: routes.teacherList, tLabel: 'navigation.teachers' },
     ]
-    if (myProjectStarted) {
+    if (!myProjectStarted) {
         navs.push({ to: routes.invitations, tLabel: 'navigation.invites' })
     }
     return navs
