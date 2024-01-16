@@ -21,12 +21,12 @@ export function AuthPagesWrapper() {
                 .catch((err) => {
                     if (err instanceof JWTExpiredError) {
                         toast(`${t('error.sessionExpiredAuthAgain')}!`)
-                        navigate(routes.signIn)
                     } else if (err instanceof Error) {
                         toast(`${t('error.unknownError')}. Msg: ${err.message}`)
                     } else {
                         toast(`${t('error.unknownError')}.`)
                     }
+                    navigate(routes.signIn)
                 })
             return null
         },
