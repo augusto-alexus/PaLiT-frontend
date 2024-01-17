@@ -63,43 +63,38 @@ export function StudentFeed() {
             />
         )
 
-    const selectedStage =
-        storedSelectedStage ??
-        stages.reduce((prev, cur) =>
-            prev.serialOrder < cur.serialOrder ? prev : cur
-        ).stageId
+    const selectedStage = storedSelectedStage ?? stages[0].serialOrder
 
     const stageTabs = stages.map<ITab>((s) => ({
-        id: s.stageId,
+        id: s.serialOrder,
         label: s.name,
-        isActive: s.stageId === selectedStage,
+        isActive: s.serialOrder === selectedStage,
     }))
 
     const feedElements: IFeedElement[] = []
-    documents
-        ?.filter(
-            (d, idx, arr) =>
-                d.stageDTO?.stageId === selectedStage ||
-                (idx > 0 &&
-                    (arr[idx - 1].stageDTO?.stageId ?? Infinity) <=
-                        selectedStage)
-        )
-        ?.forEach((d, idx, arr) => {
-            feedElements.push(
-                getDocumentFeedItem(
-                    d,
-                    selectedStage,
-                    stages,
-                    d.approved &&
-                        idx + 1 === arr.length &&
-                        d.stageDTO?.stageId === selectedStage
-                )
+    const stageDocuments = documents?.filter(
+        (d) => d.stageDTO?.serialOrder === selectedStage
+    )
+    const firstDocNextStage = documents?.find(
+        (d) => (d?.stageDTO?.serialOrder ?? -Infinity) > selectedStage
+    )
+    if (firstDocNextStage) stageDocuments?.push(firstDocNextStage)
+    stageDocuments?.forEach((d, idx, arr) => {
+        feedElements.push(
+            getDocumentFeedItem(
+                d,
+                selectedStage,
+                stages,
+                d.approved &&
+                    idx + 1 === arr.length &&
+                    d.stageDTO?.stageId === selectedStage
             )
-            if (d.approvedDate) {
-                const movedToNextStage = d.stageDTO?.stageId !== selectedStage
-                feedElements.push(reviewFeedItem(d, t, movedToNextStage))
-            }
-        })
+        )
+        if (d.approvedDate) {
+            const movedToNextStage = d.stageDTO?.stageId !== selectedStage
+            feedElements.push(reviewFeedItem(d, t, movedToNextStage))
+        }
+    })
     const sortedFeedElements = feedElements.sort(
         (a, b) => a.date.getTime() - b.date.getTime()
     )

@@ -57,7 +57,7 @@ export async function moveDocumentToStage(
         undefined,
         getAuthConfig(accessToken)
     )
-
+    console.log(response.data)
     return response.data as object
 }
 

@@ -5,8 +5,10 @@ const millisecondsInDay = millisecondsInHour * 24
 const millisecondsInMonth = millisecondsInDay * 30
 const millisecondsInYear = millisecondsInDay * 365
 
+const awsTimeDeltaMs = 2 * 3600 * 1000
+
 export function getHumanReadableDuration(date: Date) {
-    const deltaMilliseconds = Date.now() - date.getTime()
+    const deltaMilliseconds = Date.now() - date.getTime() - awsTimeDeltaMs
     if (deltaMilliseconds < millisecondsInMinute) return 'Менше хвилини тому'
     if (deltaMilliseconds < millisecondsInHour) {
         const deltaMinutes = Math.floor(

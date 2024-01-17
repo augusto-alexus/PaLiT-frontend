@@ -36,19 +36,14 @@ export function HodStageApproval() {
                             <thead>
                                 <tr>
                                     <td></td>
-                                    {allStages
-                                        ?.sort(
-                                            (a, b) =>
-                                                a.serialOrder - b.serialOrder
-                                        )
-                                        .map((s) => (
-                                            <td
-                                                key={s.stageId}
-                                                className='text-center font-bold'
-                                            >
-                                                № {s.serialOrder}: {s.name}
-                                            </td>
-                                        ))}
+                                    {allStages?.map((s) => (
+                                        <td
+                                            key={s.stageId}
+                                            className='text-center font-bold'
+                                        >
+                                            № {s.serialOrder}: {s.name}
+                                        </td>
+                                    ))}
                                 </tr>
                                 <tr>
                                     <td className='text-center font-bold'>

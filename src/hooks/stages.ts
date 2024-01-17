@@ -114,6 +114,8 @@ export function useRestrictStageForAll() {
 export function useDocumentNextStage() {
     const { t } = useTranslation()
     const accessToken = useAccessToken()
+    const queryClient = useQueryClient()
+
     return useMutation({
         mutationFn: async ({
             documentId,
@@ -122,7 +124,8 @@ export function useDocumentNextStage() {
             documentId: number
             stageId: number
         }) => moveDocumentToStage(accessToken, documentId, stageId),
-        onSuccess: () => {
+        onSuccess: async () => {
+            await queryClient.invalidateQueries(['studentDocuments'])
             toast(t('feed.documentMovedToNextStage'))
         },
         onError: (error: AxiosError | never) => {

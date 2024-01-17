@@ -13,7 +13,9 @@ export async function getAllStages(accessToken: string) {
         endpoints.stages.getAll,
         getAuthConfig(accessToken)
     )
-    return response.data as IStageDTO[]
+    return (response.data as IStageDTO[])?.sort(
+        (a, b) => a.serialOrder - b.serialOrder
+    )
 }
 
 export async function getTeachersStages(
