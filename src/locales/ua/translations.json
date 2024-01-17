@@ -92,7 +92,8 @@
     "stageApprovedForTeacher": "Стадія дозволена вчителю",
     "stageRestrictedForAll": "Стадія заборонена усім",
     "stageRestrictedForTeacher": "Стадія заборонена вчителю",
-    "teacher": "Куратор"
+    "teacher": "Куратор",
+    "noTeachers": "Немає жодного керівника в системі"
   },
   "feed": {
     "workHasntStartedYet": "Робота ще не розпочалася",

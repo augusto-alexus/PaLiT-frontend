@@ -27,60 +27,80 @@ export function HodStageApproval() {
     return (
         <div className='mx-auto flex w-10/12 gap-24'>
             <div className='flex w-full flex-col gap-12'>
-                <h2 className='text-center text-2xl font-semibold'>
-                    {t('dashboard.stage2TeacherMapping')}
-                </h2>
-                <table className='mx-auto table-fixed border-separate xl:w-2/3'>
-                    <thead>
-                        <tr>
-                            <td></td>
-                            {allStages?.map((s) => (
-                                <td
-                                    key={s.stageId}
-                                    className='text-center font-bold'
-                                >
-                                    № {s.serialOrder}: {s.name}
-                                </td>
-                            ))}
-                        </tr>
-                        <tr>
-                            <td className='text-center font-bold'>
-                                {t('dashboard.teacher')}
-                            </td>
-                            {allStages?.map((s) => (
-                                <td key={s.stageId}>
-                                    <Button
-                                        preset='text'
-                                        className='w-full text-sm'
-                                        onClick={() =>
-                                            approveStageForAll({
-                                                stageId: s.stageId,
-                                            })
-                                        }
-                                    >
-                                        {t('dashboard.allowForAllTeachers')}
-                                    </Button>
-                                    <Button
-                                        preset='text'
-                                        className='w-full text-sm text-cs-warning'
-                                        onClick={() =>
-                                            restrictStageForAll({
-                                                stageId: s.stageId,
-                                            })
-                                        }
-                                    >
-                                        {t('dashboard.restrictForAllTeachers')}
-                                    </Button>
-                                </td>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {teachers?.map((t) => (
-                            <TeacherStages key={t.teacherId} teacher={t} />
-                        ))}
-                    </tbody>
-                </table>
+                {teachers?.length ? (
+                    <>
+                        <h2 className='text-center text-2xl font-semibold'>
+                            {t('dashboard.stage2TeacherMapping')}
+                        </h2>
+                        <table className='mx-auto table-fixed border-separate xl:w-2/3'>
+                            <thead>
+                                <tr>
+                                    <td></td>
+                                    {allStages
+                                        ?.sort(
+                                            (a, b) =>
+                                                a.serialOrder - b.serialOrder
+                                        )
+                                        .map((s) => (
+                                            <td
+                                                key={s.stageId}
+                                                className='text-center font-bold'
+                                            >
+                                                № {s.serialOrder}: {s.name}
+                                            </td>
+                                        ))}
+                                </tr>
+                                <tr>
+                                    <td className='text-center font-bold'>
+                                        {t('dashboard.teacher')}
+                                    </td>
+                                    {allStages?.map((s) => (
+                                        <td key={s.stageId}>
+                                            <Button
+                                                preset='text'
+                                                className='w-full text-sm'
+                                                onClick={() =>
+                                                    approveStageForAll({
+                                                        stageId: s.stageId,
+                                                    })
+                                                }
+                                            >
+                                                {t(
+                                                    'dashboard.allowForAllTeachers'
+                                                )}
+                                            </Button>
+                                            <Button
+                                                preset='text'
+                                                className='w-full text-sm text-cs-warning'
+                                                onClick={() =>
+                                                    restrictStageForAll({
+                                                        stageId: s.stageId,
+                                                    })
+                                                }
+                                            >
+                                                {t(
+                                                    'dashboard.restrictForAllTeachers'
+                                                )}
+                                            </Button>
+                                        </td>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {teachers?.map((t) => (
+                                    <TeacherStages
+                                        key={t.teacherId}
+                                        teacher={t}
+                                    />
+                                ))}
+                            </tbody>
+                        </table>
+                    </>
+                ) : (
+                    <h2 className='text-center text-2xl font-semibold'>
+                        {t('dashboard.noTeachers')}
+                    </h2>
+                )}
             </div>
         </div>
     )

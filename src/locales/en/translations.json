@@ -92,7 +92,8 @@
     "stageApprovedForTeacher": "Stage approved for teacher",
     "stageRestrictedForAll": "Stage restricted for all",
     "stageRestrictedForTeacher": "Stage restricted for teacher",
-    "teacher": "Teacher"
+    "teacher": "Teacher",
+    "noTeachers": "No teachers in the system"
   },
   "feed": {
     "workHasntStartedYet": "Work hasn't started yet",
