@@ -35,7 +35,9 @@ export function Invitations() {
         },
         onError: (error) => {
             if (error instanceof AxiosError) {
-                if (error.response?.status === 403) {
+                if (error.response?.status === 409) {
+                    toast(`${t('error.studentAlreadyHasTeacher')}!`)
+                } else if (error.response?.status === 403) {
                     if (currentUser.role === 'student')
                         toast(`${t('error.inviteLimitTeacher')}!`)
                     else toast(`${t('error.inviteLimitYou')}!`)
