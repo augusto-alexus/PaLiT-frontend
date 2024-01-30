@@ -57,7 +57,7 @@ export function FilePreview() {
             {docToPreview.originalName.endsWith('.pdf') ? (
                 <object
                     className='mx-auto'
-                    data={`http://localhost:8080/api/file/${documentId}`}
+                    data={endpoints.files.getDocument(documentId)}
                     type='application/pdf'
                     width='80%'
                     height='800px'
