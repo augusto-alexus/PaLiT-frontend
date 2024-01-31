@@ -1,5 +1,5 @@
 function prefixEndpoints(endpoint: string): string {
-    // return `http://18.153.15.248/api/${endpoint}`
+    // return `http://3.70.181.134/api/${endpoint}`
     return `http://localhost:8080/api/${endpoint}`
 }
 
@@ -23,7 +23,7 @@ export default Object.freeze({
     currentAdvisor: prefixEndpoints('student/current-adviser'),
     currentStudents: prefixEndpoints('teacher/current-student'),
     files: Object.freeze({
-        getDocument: (documentId: number) =>
+        getDocument: (documentId: number | string) =>
             prefixEndpoints(`file/${documentId}`),
         reviewDocument: (documentId: number) =>
             prefixEndpoints(`file/${documentId}`),

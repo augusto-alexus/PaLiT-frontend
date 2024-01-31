@@ -7,7 +7,6 @@ import {
     AuthPagesWrapper,
     AuthRedirect,
     FilePreview,
-    HodInvitations,
     HodStageApproval,
     HodTeams,
     Invitations,
@@ -34,10 +33,6 @@ function App() {
                     <Route
                         path={routes.hod.stageApproval}
                         element={<HodStageApproval />}
-                    />
-                    <Route
-                        path={routes.hod.invites}
-                        element={<HodInvitations />}
                     />
                     <Route path={routes.hod.teams} element={<HodTeams />} />
                     <Route

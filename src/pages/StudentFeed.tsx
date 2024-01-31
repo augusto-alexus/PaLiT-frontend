@@ -100,10 +100,7 @@ export function StudentFeed() {
     )
 
     const projectApproved: boolean =
-        (role === 'teacher' &&
-            !!outletContext?.myStudent &&
-            outletContext.myStudent.headApproved) ||
-        (role === 'student' && !!myProject?.headApproved)
+        (role === 'teacher' && !!outletContext?.myStudent) || role === 'student'
 
     const teacherCanViewStage = allowedStageIds?.some(
         (s) => s === selectedStage

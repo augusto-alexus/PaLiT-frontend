@@ -20,9 +20,7 @@ export function HodTeams() {
 
     if (role !== 'HoD') return <Navigate to={`/${routes.authRedirect}`} />
 
-    const suitableRequests = allRequests?.filter(
-        (r) => r.teamApproved && r.headApproved
-    )
+    const suitableRequests = allRequests?.filter((r) => r.teamApproved)
 
     if (!suitableRequests || suitableRequests?.length === 0)
         return (

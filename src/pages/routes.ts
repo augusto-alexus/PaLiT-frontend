@@ -15,7 +15,6 @@ export const routes = Object.freeze({
     authRedirect: 'auth-redirect',
     hod: Object.freeze({
         stageApproval: 'hod/stage-approval',
-        invites: 'hod/invitations',
         teams: 'hod/teams',
     }),
 })

@@ -26,7 +26,6 @@ function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {
             : undefined,
         theme: dto.theme,
         stage: dto.stageDTO,
-        headApproved: !!dto.headApprove,
         advisor: {
             id: dto?.teacherRequestDTO?.teacherId,
             firstName: dto?.teacherRequestDTO?.firstName,
@@ -48,7 +47,6 @@ interface IMyProjectDTO {
     language: Language
     theme: string
     stageDTO?: IStageDTO
-    headApprove: boolean | null
     teacherRequestDTO: {
         teacherId: number
         firstName: string
@@ -60,7 +58,6 @@ export interface IMyProject {
     language?: 'Українська' | 'English'
     theme: string
     stage?: IStageDTO
-    headApproved: boolean
     advisor: {
         id: number
         firstName: string

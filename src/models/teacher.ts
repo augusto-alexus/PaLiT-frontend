@@ -12,7 +12,6 @@ export interface IMyStudent {
     language: Language
     theme: string
     stage?: IStageDTO
-    headApproved: boolean
     student: IStudent
 }
 
@@ -21,7 +20,6 @@ export function parseMyStudentDTO(dto: IMyStudentDTO): IMyStudent {
         language: dto.language,
         theme: dto.theme,
         stage: dto.stageDTO,
-        headApproved: !!dto.headApprove,
         student: parseStudentDTO(dto.studentRequestDTO),
     }
 }

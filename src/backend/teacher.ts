@@ -22,6 +22,5 @@ export interface IMyStudentDTO {
     language: Language
     theme: string
     stageDTO?: IStageDTO
-    headApprove: boolean | null
     studentRequestDTO: IStudentDTO
 }

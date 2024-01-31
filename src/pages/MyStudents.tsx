@@ -114,11 +114,6 @@ function MyStudentInfoRow({ myStudent }: { myStudent: IMyStudent }) {
                     <span className='font-mono'>{t('language')}</span>:{' '}
                     <span className='font-semibold'>{myStudent.language}</span>
                 </div>
-                {!myStudent.headApproved && (
-                    <div className='text-md col-span-5 mt-2 text-center text-cs-warning'>
-                        {t('hodRequestNotApproved')}
-                    </div>
-                )}
             </div>
         </div>
     )
