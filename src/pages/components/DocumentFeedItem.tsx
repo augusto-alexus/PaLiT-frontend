@@ -16,7 +16,6 @@ import {
 import {
     useAccessToken,
     useCurrentUser,
-    useDocumentNextStage,
     useDocumentReview,
     useMakeComment,
     useTeamInfo,
@@ -28,12 +27,10 @@ export function DocumentFeedItem({
     document,
     selectedStage,
     stages,
-    canBeMovedToNextStage,
 }: {
     document: IDocumentDTO
     selectedStage: number
     stages: IStageDTO[]
-    canBeMovedToNextStage: boolean
 }) {
     const { showCommentsForDocumentId, setShowCommentsForDocumentId } =
         useFeedStore()
@@ -45,7 +42,6 @@ export function DocumentFeedItem({
     const navigate = useNavigate()
     const wasReviewed = document.approved || !!document.approvedDate
     const { mutate: reviewDocument } = useDocumentReview()
-    const { mutate: moveDocumentToNextStage } = useDocumentNextStage()
     const curStageOrder = (document?.stageDTO?.serialOrder as number) ?? 0
     const nextStage = stages.find((s) => s.serialOrder === curStageOrder + 1)
     return (
@@ -73,10 +69,14 @@ export function DocumentFeedItem({
                 <div className='place-self-center'>
                     {t('feed.studentUploadedFile')}: {document.originalName}
                 </div>
-                {role === 'teacher' && !wasReviewed && (
+                {role === 'teacher' && !wasReviewed && nextStage && (
                     <IconButton
                         onClick={() =>
-                            reviewDocument({ documentId, verdict: 'approved' })
+                            reviewDocument({
+                                documentId,
+                                verdict: 'approved',
+                                nextStageId: nextStage.stageId,
+                            })
                         }
                         title={t('feed.approveDocument')}
                     >
@@ -91,20 +91,6 @@ export function DocumentFeedItem({
                         title={t('feed.rejectDocument')}
                     >
                         <i className='ri-close-line' />
-                    </IconButton>
-                )}
-                {role === 'teacher' && canBeMovedToNextStage && nextStage && (
-                    <IconButton
-                        onClick={() => {
-                            if (nextStage)
-                                moveDocumentToNextStage({
-                                    documentId,
-                                    stageId: nextStage.stageId,
-                                })
-                        }}
-                        title={t('feed.moveToNextStage')}
-                    >
-                        <i className='ri-arrow-up-circle-line' />
                     </IconButton>
                 )}
             </div>

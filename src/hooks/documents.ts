@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useOutletContext } from 'react-router-dom'
 import { postComment, reviewDocument } from '~/backend'
 import { toast } from '~/components'
-import { useAccessToken, useCurrentUser } from '~/hooks'
+import { useAccessToken, useCurrentUser, useDocumentNextStage } from '~/hooks'
 import { IMyStudent } from '~/models'
 
 export function useDocumentReview() {
@@ -13,21 +13,25 @@ export function useDocumentReview() {
     const { t } = useTranslation()
     const queryClient = useQueryClient()
     const outletContext = useOutletContext<{ myStudent?: IMyStudent }>()
+    const { mutate: moveDocumentToNextStage } = useDocumentNextStage()
     return useMutation({
         mutationFn: async ({
             documentId,
             verdict,
+            nextStageId,
         }: {
             documentId: number
             verdict: 'approved' | 'rejected'
-        }) => reviewDocument(accessToken, documentId, verdict),
-        onSuccess: async ({ approved }) => {
+            nextStageId?: number
+        }) => reviewDocument(accessToken, documentId, verdict, nextStageId),
+        onSuccess: async ({ approved, documentId, nextStageId }) => {
             await queryClient.invalidateQueries([
                 'studentDocuments',
                 outletContext?.myStudent?.student?.studentId || id,
             ])
-            if (approved === 'true') toast(t('feed.documentApproved'))
-            else toast(t('feed.documentRejected'))
+            if (approved === 'true') {
+                moveDocumentToNextStage({ documentId, stageId: nextStageId })
+            } else toast(t('feed.documentRejected'))
         },
         onError: (error: AxiosError | never) => {
             if (error instanceof AxiosError) {

@@ -33,7 +33,8 @@ export async function uploadDocument(
 export async function reviewDocument(
     accessToken: string,
     documentId: number,
-    verdict: 'approved' | 'rejected'
+    verdict: 'approved' | 'rejected',
+    nextStageId?: number
 ) {
     const formData = new FormData()
     formData.append('isApproved', verdict === 'approved' ? 'true' : 'false')
@@ -44,7 +45,11 @@ export async function reviewDocument(
         getAuthConfig(accessToken)
     )
 
-    return response.data as { approved: string }
+    return { ...response.data, documentId, nextStageId } as {
+        approved: string
+        documentId: number
+        nextStageId: number
+    }
 }
 
 export async function moveDocumentToStage(

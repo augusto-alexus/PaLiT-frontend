@@ -79,18 +79,9 @@ export function StudentFeed() {
         (d) => (d?.stageDTO?.serialOrder ?? -Infinity) > selectedStage
     )
     if (firstDocNextStage) stageDocuments?.push(firstDocNextStage)
-    stageDocuments?.forEach((d, idx, arr) => {
-        feedElements.push(
-            getDocumentFeedItem(
-                d,
-                selectedStage,
-                stages,
-                d.approved &&
-                    idx + 1 === arr.length &&
-                    d.stageDTO?.stageId === selectedStage
-            )
-        )
-        if (d.approvedDate) {
+    stageDocuments?.forEach((d) => {
+        feedElements.push(getDocumentFeedItem(d, selectedStage, stages))
+        if (selectedStage < (d?.stageDTO?.serialOrder ?? -Infinity)) {
             const movedToNextStage = d.stageDTO?.stageId !== selectedStage
             feedElements.push(reviewFeedItem(d, t, movedToNextStage))
         }
@@ -143,8 +134,7 @@ export function StudentFeed() {
 function getDocumentFeedItem(
     document: IDocumentDTO,
     selectedStage: number,
-    stages: IStageDTO[],
-    canBeMovedToNextStage: boolean
+    stages: IStageDTO[]
 ): IFeedElement {
     return {
         date: new Date(document.createdDate),
@@ -154,7 +144,6 @@ function getDocumentFeedItem(
                 document={document}
                 selectedStage={selectedStage}
                 stages={stages}
-                canBeMovedToNextStage={canBeMovedToNextStage}
             />
         ),
     }
