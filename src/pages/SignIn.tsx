@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { signIn } from '~/backend'
 import {
     Button,
-    Checkbox,
     Input,
     Password,
     ProjectLogo,
@@ -23,9 +22,9 @@ export function SignIn() {
     const queryClient = useQueryClient()
     const mutation = useMutation({
         mutationFn: async ({
-            email,
-            password,
-        }: {
+                               email,
+                               password,
+                           }: {
             email: string
             password: string
         }) => signIn({ email, password }),
@@ -47,64 +46,56 @@ export function SignIn() {
             }
         },
     })
-    const { form, onFieldChange, onCheckboxFieldChange, onSubmit } =
+    const { form, onFieldChange, onSubmit } =
         useForm<ISignInForm>(
             {
                 email: '',
                 password: '',
-                rememberMe: false,
             },
             (form) =>
-                mutation.mutate({ email: form.email, password: form.password })
+                mutation.mutate({ email: form.email, password: form.password }),
         )
 
     return (
-        <div className='flex h-full place-content-center items-center'>
+        <div className="flex h-full place-content-center items-center">
             <WithNulpBg />
-            <main className='flex flex-col gap-4 rounded-2xl bg-white px-8 py-12 drop-shadow-2xl sm:px-20 sm:py-16 md:px-[25vw] md:py-24 lg:px-64'>
-                <div className='mb-8 place-self-center'>
+            <main
+                className="flex flex-col gap-4 rounded-2xl bg-white px-8 py-12 drop-shadow-2xl sm:px-20 sm:py-16 md:px-[25vw] md:py-24 lg:px-64">
+                <div className="mb-8 place-self-center">
                     <ProjectLogo />
                 </div>
-                <h1 className='mb-16 text-center font-[Montserrat] text-2xl font-bold text-cs-text-dark'>
+                <h1 className="mb-16 text-center font-[Montserrat] text-2xl font-bold text-cs-text-dark">
                     {t('signInTitle')}
                 </h1>
                 <form
                     onSubmit={onSubmit}
-                    className='flex w-[19.5rem] flex-col gap-4 sm:w-[24rem] lg:w-[32rem]'
+                    className="flex w-[19.5rem] flex-col gap-4 sm:w-[24rem] lg:w-[32rem]"
                 >
-                    <div className='flex flex-col'>
-                        <label className='text-left'>{t('email')}</label>
+                    <div className="flex flex-col">
+                        <label className="text-left">{t('email')}</label>
                         <Input
                             required
-                            name='email'
-                            type='email'
+                            name="email"
+                            type="email"
                             value={form.email}
                             onChange={onFieldChange}
                             placeholder={t('enterYourEmail')}
                         />
                     </div>
-                    <div className='flex flex-col'>
-                        <label className='text-left'>{t('password')}</label>
+                    <div className="flex flex-col">
+                        <label className="text-left">{t('password')}</label>
                         <Password
                             required
-                            name='password'
+                            name="password"
                             value={form.password}
                             onChange={onFieldChange}
                             placeholder={t('enterYourPassword')}
                         />
                     </div>
-                    <div className='flex-row-[24rem] flex'>
-                        <Checkbox
-                            label={t('rememberMe')}
-                            name='rememberMe'
-                            checked={form.rememberMe}
-                            onChange={onCheckboxFieldChange}
-                        />
-                    </div>
                     <Button>{t('signInSubmit')}</Button>
-                    <div className='self-start'>
+                    <div className="self-start">
                         {t('notRegisteredYet')}
-                        <Link to={`/${routes.signUp}`} className='ml-4'>
+                        <Link to={`/${routes.signUp}`} className="ml-4">
                             {t('signUp')}
                         </Link>
                     </div>
@@ -117,5 +108,4 @@ export function SignIn() {
 interface ISignInForm {
     email: string
     password: string
-    rememberMe: boolean
 }

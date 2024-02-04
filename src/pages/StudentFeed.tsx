@@ -43,7 +43,7 @@ export function StudentFeed() {
             const myId = studentId
             if (myStudentId) return getStudentDocuments(myStudentId)
             else if (myId) return getStudentDocuments(myId)
-            throw new Error("Can't load document list: no authorized user.")
+            throw new Error('Can\'t load document list: no authorized user.')
         },
     })
 
@@ -56,7 +56,7 @@ export function StudentFeed() {
     if (isLoadingDocuments || isLoadingStages) return <Loading />
     if (errorDocuments) return <DisplayError error={errorDocuments} />
     if (errorStage) return <DisplayError error={errorStage} />
-    if (!stages)
+    if (!stages || !stages?.length)
         return (
             <DisplayError
                 error={new Error('No stages returned from the server')}
@@ -73,57 +73,54 @@ export function StudentFeed() {
 
     const feedElements: IFeedElement[] = []
     const stageDocuments = documents?.filter(
-        (d) => d.stageDTO?.serialOrder === selectedStage
+        (d) => d.stageDTO?.serialOrder === selectedStage,
     )
-    const firstDocNextStage = documents?.find(
-        (d) => (d?.stageDTO?.serialOrder ?? -Infinity) > selectedStage
-    )
-    if (firstDocNextStage) stageDocuments?.push(firstDocNextStage)
-    stageDocuments?.forEach((d) => {
-        feedElements.push(getDocumentFeedItem(d, selectedStage, stages))
-        if (selectedStage < (d?.stageDTO?.serialOrder ?? -Infinity)) {
-            const movedToNextStage = d.stageDTO?.stageId !== selectedStage
-            feedElements.push(reviewFeedItem(d, t, movedToNextStage))
-        }
-    })
+    stageDocuments
+        ?.filter(d => d?.stageDTO?.serialOrder === selectedStage)
+        ?.forEach((d) => {
+            feedElements.push(getDocumentFeedItem(d, selectedStage, stages))
+            if (d.approvedDate) {
+                feedElements.push(reviewFeedItem(d, t, d.approved))
+            }
+        })
     const sortedFeedElements = feedElements.sort(
-        (a, b) => a.date.getTime() - b.date.getTime()
+        (a, b) => a.date.getTime() - b.date.getTime(),
     )
 
     const projectApproved: boolean =
         (role === 'teacher' && !!outletContext?.myStudent) || role === 'student'
 
     const teacherCanViewStage = allowedStageIds?.some(
-        (s) => s === selectedStage
+        (s) => s === selectedStage,
     )
 
     return (
-        <div className='mx-auto my-4 flex w-10/12 flex-col gap-4'>
+        <div className="mx-auto my-4 flex w-10/12 flex-col gap-4">
             <Tabs items={stageTabs} setItem={(id) => setSelectedStage(id)} />
             {role === 'teacher' && !teacherCanViewStage ? (
-                <div className='text-center text-2xl font-semibold text-cs-text-dark'>
+                <div className="text-center text-2xl font-semibold text-cs-text-dark">
                     {t('feed.cantViewStage')}
                 </div>
             ) : !feedElements.length ? (
-                <div className='text-center text-2xl font-semibold text-cs-text-dark'>
+                <div className="text-center text-2xl font-semibold text-cs-text-dark">
                     {t('feed.workHasntStartedYet')}
                 </div>
             ) : (
-                <div className='scrollbar max-h-[600px] overflow-y-auto py-2'>
-                    <div className='mx-auto w-[95%] overflow-x-visible'>
+                <div className="scrollbar max-h-[600px] overflow-y-auto py-2">
+                    <div className="mx-auto w-[95%] overflow-x-visible">
                         <Feed data={sortedFeedElements} />
                     </div>
                 </div>
             )}
             {!projectApproved && (
-                <div className='text-md col-span-5 mt-2 text-center text-cs-warning'>
+                <div className="text-md col-span-5 mt-2 text-center text-cs-warning">
                     {t('hodRequestNotApproved')}
                 </div>
             )}
             {role === 'student' &&
                 projectApproved &&
                 myProject?.stage?.stageId === selectedStage && (
-                    <div className='mt-16'>
+                    <div className="mt-16">
                         <FileUpload />
                     </div>
                 )}
@@ -134,11 +131,11 @@ export function StudentFeed() {
 function getDocumentFeedItem(
     document: IDocumentDTO,
     selectedStage: number,
-    stages: IStageDTO[]
+    stages: IStageDTO[],
 ): IFeedElement {
     return {
         date: new Date(document.createdDate),
-        iconL: <i className='ri-file-line' />,
+        iconL: <i className="ri-file-line" />,
         content: (
             <DocumentFeedItem
                 document={document}
@@ -152,7 +149,7 @@ function getDocumentFeedItem(
 function reviewFeedItem(
     document: IDocumentDTO,
     t: TFunction<never, never>,
-    movedToNextStage: boolean
+    movedToNextStage: boolean,
 ): IFeedElement {
     return {
         date: new Date(document.approvedDate),
@@ -165,7 +162,7 @@ function reviewFeedItem(
                 {movedToNextStage && (
                     <>
                         <br />
-                        <span className='font-semibold text-cs-primary'>
+                        <span className="font-semibold text-cs-primary">
                             {t('feed.nextStage')}
                         </span>
                     </>
