@@ -1,13 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
-import { Loading } from '~/components'
+import { ITableHeader, Loading, Table } from '~/components'
 import {
     useAllHoDRequests,
     useAllStudents,
     useAllTeachers,
     useCurrentUser,
 } from '~/hooks'
-import { IHoDRequest, IStudent, ITeacher } from '~/models'
 import { routes } from '~/pages'
 
 export function HodTeams() {
@@ -22,86 +21,74 @@ export function HodTeams() {
 
     const suitableRequests = allRequests?.filter((r) => r.teamApproved)
 
-    if (!suitableRequests || suitableRequests?.length === 0)
+    if (isLoadingRequests || isLoadingStudents || isLoadingTeachers)
+        return <Loading />
+
+    if (!suitableRequests || suitableRequests?.length === 0 ||
+        !allStudents || allStudents?.length === 0 ||
+        !allTeachers || allTeachers?.length === 0)
         return (
-            <h2 className='w-full text-center text-2xl font-semibold'>
+            <h2 className="w-full text-center text-2xl font-semibold">
                 {t('dashboard.noTeams')}
             </h2>
         )
 
-    if (isLoadingRequests || isLoadingStudents || isLoadingTeachers)
-        return <Loading />
+    const tableCols: ITableHeader[] = [
+        { key: 'teacherName', label: t('dashboard.teacher') },
+        { key: 'studentName', label: t('dashboard.student') },
+        { key: 'theme', label: t('dashboard.theme') },
+    ]
+
+    const tableRows = suitableRequests.reduce((res, r) => {
+        const teacher = allTeachers.find(t => t.teacherId === r.teacherId)
+        const student = allStudents.find(s => s.studentId === r.studentId)
+        if (teacher && student)
+            res.push({
+                teacherName: `${teacher.lastName}, ${teacher.firstName}`,
+                studentName: `${student.lastName}, ${student.firstName}`,
+                theme: r.theme,
+            })
+        return res
+    }, [] as ITeamTableRow[])
+
+    tableRows.push({ teacherName: 'Meaghan Marion', studentName: 'Zain Araujo', theme: 'RANDOM BULLSHIT GO!' })
+    tableRows.push({ teacherName: 'Kassie Burke', studentName: 'Aracely Guy', theme: 'RANDOM BULLSHIT GO!' })
+    tableRows.push({ teacherName: 'Johan Derrick', studentName: 'Kenia Chiu', theme: 'RANDOM BULLSHIT GO!' })
+    tableRows.push({
+        teacherName: 'Meaghan Marion',
+        studentName: 'Augustine Lara',
+        theme: 'RANDOM BULLSHIT GO! RANDOM BULLSHIT GO! RANDOM BULLSHIT GO! RANDOM BULLSHIT GO! RANDOM BULLSHIT GO!',
+    })
+    tableRows.push({ teacherName: 'Meaghan Marion', studentName: 'Anders Abrams', theme: 'RANDOM BULLSHIT GO!' })
+    tableRows.push({ teacherName: 'Kassie Burke', studentName: 'Dalia Ibarra', theme: 'RANDOM BULLSHIT GO!' })
+    tableRows.push({ teacherName: 'Juan McRae', studentName: 'Forrest Hope', theme: 'RANDOM BULLSHIT GO!' })
 
     return (
-        <div className='mx-auto flex w-10/12 gap-24'>
-            <div className='flex w-full flex-col gap-12'>
-                <h2 className='text-center text-2xl font-semibold'>
+        <div className="mx-auto flex w-10/12 gap-24">
+            <div className="flex w-full flex-col gap-12">
+                <h2 className="text-center text-2xl font-semibold">
                     {t('dashboard.teams')}
                 </h2>
-                <div className='mx-auto flex w-1/2 flex-col gap-4'>
-                    {suitableRequests.map((request) => (
-                        <ProjectRequest
-                            key={request.id}
-                            request={request}
-                            student={allStudents?.find(
-                                (s) => s.studentId === request.studentId
-                            )}
-                            teacher={allTeachers?.find(
-                                (s) => s.teacherId === request.teacherId
-                            )}
-                        />
-                    ))}
+                <div className="mx-auto flex w-11/12 flex-col gap-4">
+                    <Table<ITeamTableRow>
+                        cols={tableCols}
+                        rows={tableRows}
+                        options={{
+                            sortFn: (a, b) => {
+                                const t = a.teacherName.localeCompare(b.teacherName)
+                                if (t !== 0) return t
+                                return a.studentName.localeCompare(b.studentName)
+                            },
+                        }}
+                    />
                 </div>
             </div>
         </div>
     )
 }
 
-function ProjectRequest({
-    request,
-    student,
-    teacher,
-}: {
-    request: IHoDRequest
-    student?: IStudent
-    teacher?: ITeacher
-}) {
-    const { t } = useTranslation()
-    if (!student || !teacher)
-        return (
-            <div className='text-center font-semibold text-cs-warning'>
-                {t('dashboard.requestNotEnoughInfo')}.
-                <br />
-                {t('dashboard.contactSupport')}.
-                <br />
-                Request id: {request.id}
-            </div>
-        )
-    return (
-        <div className='mb-16 grid grid-cols-6 border-b-2 border-cs-additional-gray pb-6'>
-            <div className='col-span-3 text-lg font-semibold'>
-                {t('dashboard.student')}
-            </div>
-            <div className='col-span-3 text-right text-lg font-semibold'>
-                {t('dashboard.supervisor')}
-            </div>
-            <div className='col-span-3 text-lg'>
-                {student.lastName} {student.firstName}
-            </div>
-            <div className='col-span-3 text-right text-lg'>
-                {teacher.lastName} {teacher.firstName}
-            </div>
-            <div className='col-span-6 mt-4 text-lg'>
-                {t(`degrees.${student.degree}`)}
-            </div>
-            <div className='col-span-6 text-sm'>{student.faculty}</div>
-            <div className='col-span-6 text-sm'>{student.cluster}</div>
-            <div className='col-span-6 mt-6 text-xl font-semibold'>
-                {t('dashboard.theme')}: {request.theme}
-            </div>
-            <div className='text-md col-span-3'>
-                {t('dashboard.language')}: {t(`languages.${request.language}`)}
-            </div>
-        </div>
-    )
+interface ITeamTableRow {
+    teacherName: string
+    studentName: string
+    theme: string
 }
