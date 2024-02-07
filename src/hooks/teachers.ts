@@ -9,6 +9,16 @@ export function useAllTeachers() {
     })
 }
 
+export function useTeacher(teacherId: string) {
+    return useQuery({
+        queryKey: ['teacher', teacherId],
+        queryFn: async () => {
+            const allTeachers = await getAllTeachers()
+            return allTeachers.find((t) => t.teacherId.toString() === teacherId)
+        },
+    })
+}
+
 export function useMyStudent(studentId: string | number | undefined) {
     const accessToken = useAccessToken()
     const { role } = useCurrentUser()

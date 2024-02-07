@@ -1,19 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 import { ITableHeader, Loading, Table } from '~/components'
-import {
-    useAllHoDRequests,
-    useAllStudents,
-    useAllTeachers,
-    useCurrentUser,
-} from '~/hooks'
+import { useAllHoDRequests, useAllStudents, useAllTeachers, useCurrentUser } from '~/hooks'
 import { routes } from '~/pages'
 
 export function HodTeams() {
     const { role } = useCurrentUser()
     const { t } = useTranslation()
-    const { data: allRequests, isLoading: isLoadingRequests } =
-        useAllHoDRequests()
+    const { data: allRequests, isLoading: isLoadingRequests } = useAllHoDRequests()
     const { data: allStudents, isLoading: isLoadingStudents } = useAllStudents()
     const { data: allTeachers, isLoading: isLoadingTeachers } = useAllTeachers()
 
@@ -21,17 +15,17 @@ export function HodTeams() {
 
     const suitableRequests = allRequests?.filter((r) => r.teamApproved)
 
-    if (isLoadingRequests || isLoadingStudents || isLoadingTeachers)
-        return <Loading />
+    if (isLoadingRequests || isLoadingStudents || isLoadingTeachers) return <Loading />
 
-    if (!suitableRequests || suitableRequests?.length === 0 ||
-        !allStudents || allStudents?.length === 0 ||
-        !allTeachers || allTeachers?.length === 0)
-        return (
-            <h2 className="w-full text-center text-2xl font-semibold">
-                {t('dashboard.noTeams')}
-            </h2>
-        )
+    if (
+        !suitableRequests ||
+        suitableRequests?.length === 0 ||
+        !allStudents ||
+        allStudents?.length === 0 ||
+        !allTeachers ||
+        allTeachers?.length === 0
+    )
+        return <h2 className='w-full text-center text-2xl font-semibold'>{t('dashboard.noTeams')}</h2>
 
     const tableCols: ITableHeader[] = [
         { key: 'teacherName', label: t('dashboard.teacher') },
@@ -40,8 +34,8 @@ export function HodTeams() {
     ]
 
     const tableRows = suitableRequests.reduce((res, r) => {
-        const teacher = allTeachers.find(t => t.teacherId === r.teacherId)
-        const student = allStudents.find(s => s.studentId === r.studentId)
+        const teacher = allTeachers.find((t) => t.teacherId === r.teacherId)
+        const student = allStudents.find((s) => s.studentId === r.studentId)
         if (teacher && student)
             res.push({
                 teacherName: `${teacher.lastName}, ${teacher.firstName}`,
@@ -51,25 +45,11 @@ export function HodTeams() {
         return res
     }, [] as ITeamTableRow[])
 
-    tableRows.push({ teacherName: 'Meaghan Marion', studentName: 'Zain Araujo', theme: 'RANDOM BULLSHIT GO!' })
-    tableRows.push({ teacherName: 'Kassie Burke', studentName: 'Aracely Guy', theme: 'RANDOM BULLSHIT GO!' })
-    tableRows.push({ teacherName: 'Johan Derrick', studentName: 'Kenia Chiu', theme: 'RANDOM BULLSHIT GO!' })
-    tableRows.push({
-        teacherName: 'Meaghan Marion',
-        studentName: 'Augustine Lara',
-        theme: 'RANDOM BULLSHIT GO! RANDOM BULLSHIT GO! RANDOM BULLSHIT GO! RANDOM BULLSHIT GO! RANDOM BULLSHIT GO!',
-    })
-    tableRows.push({ teacherName: 'Meaghan Marion', studentName: 'Anders Abrams', theme: 'RANDOM BULLSHIT GO!' })
-    tableRows.push({ teacherName: 'Kassie Burke', studentName: 'Dalia Ibarra', theme: 'RANDOM BULLSHIT GO!' })
-    tableRows.push({ teacherName: 'Juan McRae', studentName: 'Forrest Hope', theme: 'RANDOM BULLSHIT GO!' })
-
     return (
-        <div className="mx-auto flex w-10/12 gap-24">
-            <div className="flex w-full flex-col gap-12">
-                <h2 className="text-center text-2xl font-semibold">
-                    {t('dashboard.teams')}
-                </h2>
-                <div className="mx-auto flex w-11/12 flex-col gap-4">
+        <div className='mx-auto flex w-10/12 gap-24'>
+            <div className='flex w-full flex-col gap-12'>
+                <h2 className='text-center text-2xl font-semibold'>{t('dashboard.teams')}</h2>
+                <div className='mx-auto flex w-11/12 flex-col gap-4'>
                     <Table<ITeamTableRow>
                         cols={tableCols}
                         rows={tableRows}

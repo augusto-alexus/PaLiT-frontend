@@ -3,19 +3,13 @@ import { getAuthConfig } from './base'
 import endpoints from './endpoints'
 import { IStageDTO } from './stages'
 
-export async function getStudentDocuments(studentId: number) {
-    const response = await axios.get(
-        endpoints.files.getStudentDocuments(studentId)
-    )
+export async function getStudentDocuments(studentId: string) {
+    const response = await axios.get(endpoints.files.getStudentDocuments(studentId))
 
     return response.data as IDocumentDTO[]
 }
 
-export async function uploadDocument(
-    accessToken: string,
-    studentId: number,
-    document: File
-) {
+export async function uploadDocument(accessToken: string, studentId: number, document: File) {
     const formData = new FormData()
     formData.append('document', document)
 
@@ -39,11 +33,7 @@ export async function reviewDocument(
     const formData = new FormData()
     formData.append('isApproved', verdict === 'approved' ? 'true' : 'false')
 
-    const response = await axios.put(
-        endpoints.files.reviewDocument(documentId),
-        formData,
-        getAuthConfig(accessToken)
-    )
+    const response = await axios.put(endpoints.files.reviewDocument(documentId), formData, getAuthConfig(accessToken))
 
     return { ...response.data, documentId, nextStageId } as {
         approved: string
@@ -52,11 +42,7 @@ export async function reviewDocument(
     }
 }
 
-export async function moveDocumentToStage(
-    accessToken: string,
-    documentId: number,
-    stageId: number
-) {
+export async function moveDocumentToStage(accessToken: string, documentId: number, stageId: number) {
     const response = await axios.put(
         endpoints.files.moveToNextStage(documentId, stageId),
         undefined,

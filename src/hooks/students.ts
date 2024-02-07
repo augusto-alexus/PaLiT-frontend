@@ -9,6 +9,16 @@ export function useAllStudents() {
     })
 }
 
+export function useStudent(studentId: string) {
+    return useQuery({
+        queryKey: ['student', studentId],
+        queryFn: async () => {
+            const allStudents = await getAllStudents()
+            return allStudents.find((s) => s.studentId.toString() === studentId)
+        },
+    })
+}
+
 export function useMyProject(): IUseMyProject {
     const accessToken = useAccessToken()
     const currentUser = useCurrentUser()
