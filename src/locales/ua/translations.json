@@ -12,6 +12,7 @@
   "enterYourFirstName": "Введіть Ваше ім'я",
   "email": "Пошта",
   "enterYourEmail": "Введіть вашу пошту",
+  "fullName": "Повне ім'я",
   "password": "Пароль",
   "enterYourPassword": "Введіть Ваш пароль",
   "passwordConfirm": "Підтвердження паролю",
@@ -65,10 +66,12 @@
     "students": "Студенти",
     "invites": "Запрошення",
     "stageApproval": "Призначення стадій",
-    "teams": "Команди"
+    "teams": "Команди",
+    "users": "Користувачі"
   },
   "dashboard": {
     "teams": "Команди",
+    "users": "Користувачі",
     "requests": "Запрошення",
     "noRequests": "Запитів ще немає",
     "noTeams": "Команд ще немає",
@@ -94,7 +97,8 @@
     "stageRestrictedForTeacher": "Стадія заборонена вчителю",
     "teacher": "Куратор",
     "noTeachers": "Немає жодного керівника в системі",
-    "noUsersWithRole": "Немає жодного користувача з роллю <{{roleName}}>"
+    "noUsersWithRole": "Немає жодного користувача з роллю <{{roleName}}>",
+    "noUsers": "Немає жодного користувача в системі"
   },
   "feed": {
     "workHasntStartedYet": "Робота ще не розпочалася",

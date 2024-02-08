@@ -12,6 +12,7 @@
   "enterYourFirstName": "Enter your first name",
   "email": "Email",
   "enterYourEmail": "Enter your email",
+  "fullName": "Full name",
   "password": "Password",
   "enterYourPassword": "Enter your password",
   "passwordConfirm": "Password confirmation",
@@ -65,10 +66,12 @@
     "students": "Students",
     "invites": "Invites",
     "stageApproval": "Stage approval",
-    "teams": "Teams"
+    "teams": "Teams",
+    "users": "Users"
   },
   "dashboard": {
     "teams": "Teams",
+    "users": "Users",
     "requests": "Requests",
     "noRequests": "There are no requests yet",
     "noTeams": "There are no teams yet",
@@ -94,7 +97,8 @@
     "stageRestrictedForTeacher": "Stage restricted for teacher",
     "teacher": "Teacher",
     "noTeachers": "No teachers in the system",
-    "noUsersWithRole": "No users with role <{{roleName}}>"
+    "noUsersWithRole": "No users with role <{{roleName}}>",
+    "noUsers": "No users in the system"
   },
   "feed": {
     "workHasntStartedYet": "Work hasn't started yet",

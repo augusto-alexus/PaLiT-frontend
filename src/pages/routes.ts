@@ -1,4 +1,4 @@
-export const routes = Object.freeze({
+export const routes = {
     signIn: 'sign-in',
     signUp: 'sign-up',
     dashboard: 'dashboard',
@@ -14,7 +14,15 @@ export const routes = Object.freeze({
     invitations: 'invitations',
     authRedirect: 'auth-redirect',
     hod: Object.freeze({
-        stageApproval: 'hod/stage-approval',
-        teams: 'hod/teams',
+        root: 'hod',
+        stageApproval: 'stage-approval',
+        aStageApproval: '/hod/stage-approval',
+        teams: 'teams',
+        aTeams: '/hod/teams',
+        users: Object.freeze({
+            root: 'users',
+            aRoot: '/hod/users',
+            user: (id?: string) => `${id ? id : ':id'}`,
+        }),
     }),
-})
+}

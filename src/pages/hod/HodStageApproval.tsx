@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next'
-import { Navigate } from 'react-router-dom'
 import { Button } from '~/components'
 import {
     useAllRoles,
@@ -7,22 +6,17 @@ import {
     useAllTeachers,
     useApproveStageForAll,
     useApproveStageForTeacher,
-    useCurrentUser,
     useGetTeacherStages,
     useRestrictStageForAll,
     useRestrictStageForTeacher,
 } from '~/hooks'
 import { ITeacher } from '~/models'
-import { routes } from '~/pages'
 import { IRoleDTO } from '~/backend'
 
 export function HodStageApproval() {
-    const { role } = useCurrentUser()
     const { t } = useTranslation()
     const { data: teachers } = useAllTeachers()
     const { data: roles } = useAllRoles()
-
-    if (role !== 'HoD') return <Navigate to={`/${routes.authRedirect}`} />
 
     const teacherRole = roles?.find((r) => r.name === 'teacher')
     const hodRole = roles?.find((r) => r.name === 'HoD')

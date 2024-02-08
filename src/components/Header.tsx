@@ -52,8 +52,9 @@ function getTeacherHeaderNavs(): INavItem[] {
 
 function getHodHeaderNavs(): INavItem[] {
     return [
-        { to: routes.hod.stageApproval, tLabel: 'navigation.stageApproval' },
-        { to: routes.hod.teams, tLabel: 'navigation.teams' },
+        { to: routes.hod.aStageApproval, tLabel: 'navigation.stageApproval' },
+        { to: routes.hod.aTeams, tLabel: 'navigation.teams' },
+        { to: routes.hod.users.aRoot, tLabel: 'navigation.users' },
     ]
 }
 

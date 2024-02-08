@@ -20,6 +20,9 @@ import {
     StudentFeed,
     StudentList,
     TeacherList,
+    HodUserTable,
+    HodRoot,
+    HodUser,
 } from '~/pages'
 import './i18.ts'
 
@@ -31,8 +34,14 @@ function App() {
                 <Route path={routes.signUp} element={<SignUp />} />
                 <Route path='*' element={<AuthPagesWrapper />}>
                     <Route index path='*' element={<AuthRedirect />} />
-                    <Route path={routes.hod.stageApproval} element={<HodStageApproval />} />
-                    <Route path={routes.hod.teams} element={<HodTeams />} />
+                    <Route path={routes.hod.root} element={<HodRoot />}>
+                        <Route path={routes.hod.stageApproval} element={<HodStageApproval />} />
+                        <Route path={routes.hod.teams} element={<HodTeams />} />
+                        <Route path={routes.hod.users.root}>
+                            <Route index element={<HodUserTable />} />
+                            <Route path={routes.hod.users.user()} element={<HodUser />} />
+                        </Route>
+                    </Route>
                     <Route path={routes.studentList} element={<StudentList />} />
                     <Route path={routes.teacherList} element={<TeacherList />} />
                     <Route path={routes.invitations} element={<Invitations />} />

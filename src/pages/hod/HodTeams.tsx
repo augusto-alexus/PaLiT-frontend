@@ -1,17 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import { Navigate } from 'react-router-dom'
 import { ITableHeader, Loading, Table } from '~/components'
-import { useAllHoDRequests, useAllStudents, useAllTeachers, useCurrentUser } from '~/hooks'
-import { routes } from '~/pages'
+import { useAllHoDRequests, useAllStudents, useAllTeachers } from '~/hooks'
 
 export function HodTeams() {
-    const { role } = useCurrentUser()
     const { t } = useTranslation()
     const { data: allRequests, isLoading: isLoadingRequests } = useAllHoDRequests()
     const { data: allStudents, isLoading: isLoadingStudents } = useAllStudents()
     const { data: allTeachers, isLoading: isLoadingTeachers } = useAllTeachers()
-
-    if (role !== 'HoD') return <Navigate to={`/${routes.authRedirect}`} />
 
     const suitableRequests = allRequests?.filter((r) => r.teamApproved)
 
