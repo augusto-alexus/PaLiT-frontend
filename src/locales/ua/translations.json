@@ -93,7 +93,8 @@
     "stageRestrictedForAll": "Стадія заборонена усім",
     "stageRestrictedForTeacher": "Стадія заборонена вчителю",
     "teacher": "Куратор",
-    "noTeachers": "Немає жодного керівника в системі"
+    "noTeachers": "Немає жодного керівника в системі",
+    "noUsersWithRole": "Немає жодного користувача з роллю <{{roleName}}>"
   },
   "feed": {
     "workHasntStartedYet": "Робота ще не розпочалася",
@@ -133,6 +134,11 @@
     "language": "Мова",
     "theme": "Тема",
     "stage": "Стадія"
+  },
+  "roles": {
+    "teacher": "Куратор",
+    "HoD": "Голова департаменту",
+    "PS": "Секретар"
   },
   "request": {
     "approved": "Запрошення прийнято",

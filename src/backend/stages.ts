@@ -9,44 +9,21 @@ export interface IStageDTO {
 }
 
 export async function getAllStages(accessToken: string) {
-    const response = await axios.get(
-        endpoints.stages.getAll,
-        getAuthConfig(accessToken)
-    )
-    return (response.data as IStageDTO[])?.sort(
-        (a, b) => a.serialOrder - b.serialOrder
-    )
+    const response = await axios.get(endpoints.stages.getAll, getAuthConfig(accessToken))
+    return (response.data as IStageDTO[])?.sort((a, b) => a.serialOrder - b.serialOrder)
 }
 
-export async function getTeachersStages(
-    accessToken: string,
-    teacherId: number
-) {
-    const response = await axios.get(
-        endpoints.stages.getTeachersStages(teacherId),
-        getAuthConfig(accessToken)
-    )
+export async function getTeachersStages(accessToken: string, teacherId: number) {
+    const response = await axios.get(endpoints.stages.getTeachersStages(teacherId), getAuthConfig(accessToken))
     return response.data as number[]
 }
 
-export async function approveStageForTeacher(
-    accessToken: string,
-    teacherId: number,
-    stageId: number
-) {
-    await axios.post(
-        endpoints.stages.teacherStageApprove,
-        { teacherId, stageId },
-        getAuthConfig(accessToken)
-    )
+export async function approveStageForTeacher(accessToken: string, teacherId: number, stageId: number) {
+    await axios.post(endpoints.stages.teacherStageApprove, { teacherId, stageId }, getAuthConfig(accessToken))
     return teacherId
 }
 
-export async function restrictStageForTeacher(
-    accessToken: string,
-    teacherId: number,
-    stageId: number
-) {
+export async function restrictStageForTeacher(accessToken: string, teacherId: number, stageId: number) {
     await axios.delete(endpoints.stages.teacherStageApprove, {
         ...getAuthConfig(accessToken),
         data: { teacherId, stageId },
@@ -54,22 +31,12 @@ export async function restrictStageForTeacher(
     return teacherId
 }
 
-export async function approveStageForAll(accessToken: string, stageId: number) {
-    await axios.post(
-        endpoints.stages.approveStageForAll(stageId),
-        null,
-        getAuthConfig(accessToken)
-    )
+export async function approveStageForAllInRole(accessToken: string, stageId: number, roleId: string) {
+    await axios.post(endpoints.stages.approveStageForAllInRole(stageId, roleId), null, getAuthConfig(accessToken))
     return null
 }
 
-export async function restrictStageForAll(
-    accessToken: string,
-    stageId: number
-) {
-    await axios.delete(
-        endpoints.stages.approveStageForAll(stageId),
-        getAuthConfig(accessToken)
-    )
+export async function restrictStageForAll(accessToken: string, stageId: number, roleId: string) {
+    await axios.delete(endpoints.stages.approveStageForAllInRole(stageId, roleId), getAuthConfig(accessToken))
     return null
 }

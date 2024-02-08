@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import {
-    approveStageForAll,
+    approveStageForAllInRole,
     approveStageForTeacher,
     getAllStages,
     getTeachersStages,
@@ -35,13 +35,8 @@ export function useApproveStageForTeacher() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async ({
-            teacherId,
-            stageId,
-        }: {
-            teacherId: number
-            stageId: number
-        }) => approveStageForTeacher(accessToken, teacherId, stageId),
+        mutationFn: async ({ teacherId, stageId }: { teacherId: number; stageId: number }) =>
+            approveStageForTeacher(accessToken, teacherId, stageId),
         onSuccess: async (teacherId) => {
             await queryClient.invalidateQueries(['teacherStages', teacherId])
             toast(t('dashboard.stageApprovedForTeacher'))
@@ -58,16 +53,11 @@ export function useRestrictStageForTeacher() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async ({
-            teacherId,
-            stageId,
-        }: {
-            teacherId: number
-            stageId: number
-        }) => restrictStageForTeacher(accessToken, teacherId, stageId),
+        mutationFn: async ({ teacherId, stageId }: { teacherId: number; stageId: number }) =>
+            restrictStageForTeacher(accessToken, teacherId, stageId),
         onSuccess: async (teacherId) => {
             await queryClient.invalidateQueries(['teacherStages', teacherId])
-            toast(t('dashboard.stageApprovedForTeacher'))
+            toast(t('dashboard.stageRestrictedForTeacher'))
         },
         onError: () => {
             toast(`${t('error.unknownError')}!`)
@@ -81,8 +71,8 @@ export function useApproveStageForAll() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async ({ stageId }: { stageId: number }) =>
-            approveStageForAll(accessToken, stageId),
+        mutationFn: async ({ stageId, roleId }: { stageId: number; roleId: string }) =>
+            approveStageForAllInRole(accessToken, stageId, roleId),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['teacherStages'])
             toast(t('dashboard.stageApprovedForAll'))
@@ -99,8 +89,8 @@ export function useRestrictStageForAll() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async ({ stageId }: { stageId: number }) =>
-            restrictStageForAll(accessToken, stageId),
+        mutationFn: async ({ stageId, roleId }: { stageId: number; roleId: string }) =>
+            restrictStageForAll(accessToken, stageId, roleId),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['teacherStages'])
             toast(t('dashboard.stageRestrictedForAll'))
@@ -117,13 +107,8 @@ export function useDocumentNextStage() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async ({
-            documentId,
-            stageId,
-        }: {
-            documentId: number
-            stageId: number
-        }) => moveDocumentToStage(accessToken, documentId, stageId),
+        mutationFn: async ({ documentId, stageId }: { documentId: number; stageId: number }) =>
+            moveDocumentToStage(accessToken, documentId, stageId),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['studentDocuments'])
             toast(t('feed.documentMovedToNextStage'))

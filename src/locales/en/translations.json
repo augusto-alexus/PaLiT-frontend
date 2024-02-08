@@ -93,7 +93,8 @@
     "stageRestrictedForAll": "Stage restricted for all",
     "stageRestrictedForTeacher": "Stage restricted for teacher",
     "teacher": "Teacher",
-    "noTeachers": "No teachers in the system"
+    "noTeachers": "No teachers in the system",
+    "noUsersWithRole": "No users with role <{{roleName}}>"
   },
   "feed": {
     "workHasntStartedYet": "Work hasn't started yet",
@@ -133,6 +134,11 @@
     "language": "Language",
     "theme": "Theme",
     "stage": "Stage"
+  },
+  "roles": {
+    "teacher": "Teacher",
+    "HoD": "Head of Department",
+    "PS": "Secretary"
   },
   "request": {
     "approved": "Invite accepted",

@@ -35,7 +35,12 @@ export function signUpTeacher(dto: ITeacherSignUpDTO) {
     return axios.post(endpoints.signUpTeacher, dto)
 }
 
-interface IRoleDTO {
+export async function getAllRoles() {
+    const response = await axios.get(endpoints.role.getAll)
+    return response.data as IRoleDTO[]
+}
+
+export interface IRoleDTO {
     id: string
     name: Role
 }

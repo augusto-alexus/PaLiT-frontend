@@ -11,7 +11,7 @@ export function Header() {
     const { myProjectStarted } = useMyProject()
     const navItems = getHeaderNavs(role, myProjectStarted)
     return (
-        <header className='sticky left-0 top-0 z-10 mx-auto mb-8 mt-6 flex h-fit w-10/12 flex-row place-content-around place-items-center border-b border-cs-additional-gray bg-cs-bg-white p-4 pb-8'>
+        <header className='sticky left-0 top-0 z-10 mx-auto mb-8 flex h-fit w-10/12 flex-row place-content-around place-items-center border-b border-cs-additional-gray bg-cs-bg-white p-4 pb-8 pt-6'>
             <ProjectLogo />
             <HeaderNav navItems={navItems} />
             <HeaderTools />

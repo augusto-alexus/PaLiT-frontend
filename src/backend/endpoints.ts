@@ -18,6 +18,9 @@ export default Object.freeze({
     approveRequest: (requestId: number) => prefixEndpoints(`request/${requestId}`),
     currentAdvisor: prefixEndpoints('student/current-adviser'),
     currentStudents: prefixEndpoints('teacher/current-student'),
+    role: Object.freeze({
+        getAll: prefixEndpoints('role/all'),
+    }),
     files: Object.freeze({
         getDocument: (documentId: string) => prefixEndpoints(`file/${documentId}`),
         reviewDocument: (documentId: number) => prefixEndpoints(`file/${documentId}`),
@@ -29,7 +32,8 @@ export default Object.freeze({
     stages: Object.freeze({
         getAll: prefixEndpoints('stage/all'),
         getTeachersStages: (teacherId: number) => prefixEndpoints(`teacher-stage-approve/teacher/${teacherId}`),
-        approveStageForAll: (stageId: number) => prefixEndpoints(`teacher-stage-approve/${stageId}`),
+        approveStageForAllInRole: (stageId: number, roleId: string) =>
+            prefixEndpoints(`teacher-stage-approve/${stageId}/${roleId}`),
         teacherStageApprove: prefixEndpoints('teacher-stage-approve'),
     }),
     comments: Object.freeze({

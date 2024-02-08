@@ -1,4 +1,4 @@
-import { IMyStudentDTO, IStageDTO } from '~/backend'
+import { IMyStudentDTO, IRoleDTO, IStageDTO } from '~/backend'
 import { Language } from './common'
 import { IStudent, parseStudentDTO } from './student'
 
@@ -6,6 +6,7 @@ export interface ITeacher {
     teacherId: number
     firstName: string
     lastName: string
+    roleDTO: IRoleDTO
 }
 
 export interface IMyStudent {

@@ -1,6 +1,6 @@
 import { ICurrentUserDTO } from '~/backend'
 
-export type Role = 'student' | 'teacher' | 'HoD'
+export type Role = 'student' | 'teacher' | 'HoD' | 'PS'
 
 export interface ICurrentUser {
     id: number
