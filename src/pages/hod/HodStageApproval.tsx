@@ -23,23 +23,21 @@ export function HodStageApproval() {
     const psRole = roles?.find((r) => r.name === 'PS')
 
     return (
-        <div className='mx-auto flex w-10/12 gap-24 pb-12'>
-            <div className='flex w-full flex-col gap-12'>
-                {teachers?.length ? (
-                    <h2 className='text-center text-2xl font-semibold'>{t('dashboard.stage2TeacherMapping')}</h2>
-                ) : (
-                    <h2 className='text-center text-2xl font-semibold'>{t('dashboard.noTeachers')}</h2>
-                )}
-                {teachers?.length && (
-                    <div className='flex flex-col flex-nowrap gap-16'>
-                        {teacherRole && (
-                            <TeacherStageTable roleDTO={teacherRole} allTeachers={teachers} showStages={true} />
-                        )}
-                        {hodRole && <TeacherStageTable roleDTO={hodRole} allTeachers={teachers} showStages={false} />}
-                        {psRole && <TeacherStageTable roleDTO={psRole} allTeachers={teachers} showStages={false} />}
-                    </div>
-                )}
-            </div>
+        <div className='flex w-full flex-col gap-12'>
+            {teachers?.length ? (
+                <h2 className='text-center text-2xl font-semibold'>{t('dashboard.stage2TeacherMapping')}</h2>
+            ) : (
+                <h2 className='text-center text-2xl font-semibold'>{t('dashboard.noTeachers')}</h2>
+            )}
+            {teachers?.length && (
+                <div className='flex flex-col flex-nowrap gap-16'>
+                    {teacherRole && (
+                        <TeacherStageTable roleDTO={teacherRole} allTeachers={teachers} showStages={true} />
+                    )}
+                    {hodRole && <TeacherStageTable roleDTO={hodRole} allTeachers={teachers} showStages={false} />}
+                    {psRole && <TeacherStageTable roleDTO={psRole} allTeachers={teachers} showStages={false} />}
+                </div>
+            )}
         </div>
     )
 }

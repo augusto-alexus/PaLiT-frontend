@@ -22,7 +22,7 @@ export const routes = {
         users: Object.freeze({
             root: 'users',
             aRoot: '/hod/users',
-            user: (id?: string) => `${id ? id : ':id'}`,
+            user: (userId?: string) => `${userId ? userId : ':userId'}`,
         }),
     }),
 }

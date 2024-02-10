@@ -33,6 +33,7 @@
   "noTeachersInTheSystem": "No teachers in the system",
   "everyStudentReceivedInvitation": "Invitations were sent to every student",
   "everyTeacherReceivedInvitation": "Invitations were sent to every teacher",
+  "role": "Role",
   "workNotStarted": {
     "title": "You haven't started your work yet",
     "invite": "Invite",
@@ -43,6 +44,8 @@
     "theRestForStudent": "invitation from one to start working on your thesis"
   },
   "yourStudents": "Your students",
+  "bachelorStudentLimit": "Bachelor student limit",
+  "masterStudentLimit": "Master student limit",
   "youCanTeachAdditionally": "You can teach additionally",
   "singularStudentBachelor": "more bachelor student",
   "singularStudentMaster": "more master student",
@@ -98,7 +101,8 @@
     "teacher": "Teacher",
     "noTeachers": "No teachers in the system",
     "noUsersWithRole": "No users with role <{{roleName}}>",
-    "noUsers": "No users in the system"
+    "noUsers": "No users in the system",
+    "backToUsersTable": "Go to users table"
   },
   "feed": {
     "workHasntStartedYet": "Work hasn't started yet",
@@ -140,9 +144,11 @@
     "stage": "Stage"
   },
   "roles": {
+    "student": "Student",
     "teacher": "Teacher",
     "HoD": "Head of Department",
-    "PS": "Secretary"
+    "PS": "Secretary",
+    "unknown": "Unknown"
   },
   "request": {
     "approved": "Invite accepted",

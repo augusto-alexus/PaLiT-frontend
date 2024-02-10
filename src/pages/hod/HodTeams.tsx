@@ -41,22 +41,20 @@ export function HodTeams() {
     }, [] as ITeamTableRow[])
 
     return (
-        <div className='mx-auto flex w-10/12 gap-24'>
-            <div className='flex w-full flex-col gap-12'>
-                <h2 className='text-center text-2xl font-semibold'>{t('dashboard.teams')}</h2>
-                <div className='mx-auto flex w-11/12 flex-col gap-4'>
-                    <Table<ITeamTableRow>
-                        cols={tableCols}
-                        rows={tableRows}
-                        options={{
-                            sortFn: (a, b) => {
-                                const t = a.teacherName.localeCompare(b.teacherName)
-                                if (t !== 0) return t
-                                return a.studentName.localeCompare(b.studentName)
-                            },
-                        }}
-                    />
-                </div>
+        <div className='flex w-full flex-col gap-12'>
+            <h2 className='text-center text-2xl font-semibold'>{t('dashboard.teams')}</h2>
+            <div className='mx-auto flex w-11/12 flex-col gap-4'>
+                <Table<ITeamTableRow>
+                    cols={tableCols}
+                    rows={tableRows}
+                    options={{
+                        sortFn: (a, b) => {
+                            const t = a.teacherName.localeCompare(b.teacherName)
+                            if (t !== 0) return t
+                            return a.studentName.localeCompare(b.studentName)
+                        },
+                    }}
+                />
             </div>
         </div>
     )

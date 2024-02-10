@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios'
 import { Role } from '~/models'
 import { getAuthConfig } from './base'
 import endpoints from './endpoints'
+import { IFullUserInfoDTO } from './user.ts'
 
 export class JWTExpiredError extends Error {}
 
@@ -15,7 +16,7 @@ export async function getCurrentUser(accessToken: string) {
                 },
             })
         )
-        .then(({ data }) => data as ICurrentUserDTO)
+        .then(({ data }) => data as IFullUserInfoDTO)
         .catch((error: AxiosError) => {
             if (error.response?.status === 401) throw new JWTExpiredError()
             else throw error
@@ -43,28 +44,6 @@ export async function getAllRoles() {
 export interface IRoleDTO {
     id: string
     name: Role
-}
-
-interface IStudentDTO {
-    studentId: number
-    degree: string
-}
-
-interface ITeacherDTO {
-    teacherId: number
-    generalBachelor: number
-    generalMaster: number
-    availableStageIdSet: number[]
-}
-
-export interface ICurrentUserDTO {
-    firstName: string
-    lastName: string
-    email: string
-    userId: number
-    roleDTO: IRoleDTO
-    studentDTO?: IStudentDTO
-    teacherDTO?: ITeacherDTO
 }
 
 interface ISignInDTO {

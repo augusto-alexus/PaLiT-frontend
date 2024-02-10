@@ -9,9 +9,12 @@ export function useAllUsers() {
     return { users, ...rest }
 }
 
-export function useUserById(id: string) {
+export function useUserById(id: string | undefined) {
     const { data: user, ...rest } = useQuery({
-        queryFn: () => getUserById(id),
+        enabled: !!id,
+        queryFn: () => {
+            if (id) return getUserById(id)
+        },
         queryKey: ['user', id],
     })
     return { user, ...rest }

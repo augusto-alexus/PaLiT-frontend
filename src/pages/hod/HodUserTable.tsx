@@ -33,18 +33,15 @@ export function HodUserTable() {
     )
 
     return (
-        <div className='mx-auto flex w-10/12 gap-24'>
-            <div className='flex w-full flex-col gap-12'>
-                <h2 className='text-center text-2xl font-semibold'>{t('dashboard.users')}</h2>
-                <div className='mx-auto flex w-5/12 flex-col gap-4'>
-                    <Table<ITeamTableRow>
-                        cols={tableCols}
-                        rows={tableRows}
-                        options={{
-                            sortFn: (a, b) => a.fullName.localeCompare(b.fullName),
-                        }}
-                    />
-                </div>
+        <div className='flex w-full flex-col gap-12'>
+            <div className='mx-auto flex w-5/12 flex-col gap-4'>
+                <Table<ITeamTableRow>
+                    cols={tableCols}
+                    rows={tableRows}
+                    options={{
+                        sortFn: (a, b) => a.fullName.localeCompare(b.fullName),
+                    }}
+                />
             </div>
         </div>
     )

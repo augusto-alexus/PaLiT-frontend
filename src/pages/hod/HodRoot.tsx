@@ -5,5 +5,9 @@ import { routes } from '~/pages'
 export function HodRoot() {
     const { role } = useCurrentUser()
     if (role !== 'HoD') return <Navigate to={routes.authRedirect} />
-    return <Outlet />
+    return (
+        <div className='mx-auto flex w-10/12 gap-24 pb-12'>
+            <Outlet />
+        </div>
+    )
 }

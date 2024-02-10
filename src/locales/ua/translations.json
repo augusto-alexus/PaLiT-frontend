@@ -33,6 +33,7 @@
   "noTeachersInTheSystem": "В системі немає жодного вчителя",
   "everyStudentReceivedInvitation": "Запрошення були надіслані до усіх студентів",
   "everyTeacherReceivedInvitation": "Запрошення були надіслані до усіх вчителів",
+  "role": "Роль",
   "workNotStarted": {
     "title": "Ви ще не розпочали свою роботу",
     "invite": "Запросіть",
@@ -43,6 +44,8 @@
     "theRestForStudent": "запрошення від куратора щоб розпочати працювати над кваліфікаційною роботою"
   },
   "yourStudents": "Ваші студенти",
+  "bachelorStudentLimit": "Ліміт студентів бакалаврів",
+  "masterStudentLimit": "Ліміт студентів магістрів",
   "youCanTeachAdditionally": "Ви можете взяти під керівництво ще",
   "singularStudentBachelor": "студента-бакалавра",
   "singularStudentMaster": "студента-магістра",
@@ -98,7 +101,8 @@
     "teacher": "Куратор",
     "noTeachers": "Немає жодного керівника в системі",
     "noUsersWithRole": "Немає жодного користувача з роллю <{{roleName}}>",
-    "noUsers": "Немає жодного користувача в системі"
+    "noUsers": "Немає жодного користувача в системі",
+    "backToUsersTable": "Повернутися до таблиці користувачів"
   },
   "feed": {
     "workHasntStartedYet": "Робота ще не розпочалася",
@@ -140,9 +144,11 @@
     "stage": "Стадія"
   },
   "roles": {
+    "student": "Студент",
     "teacher": "Куратор",
     "HoD": "Голова департаменту",
-    "PS": "Секретар"
+    "PS": "Секретар",
+    "unknown": "Невідома"
   },
   "request": {
     "approved": "Запрошення прийнято",

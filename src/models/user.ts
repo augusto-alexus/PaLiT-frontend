@@ -1,4 +1,4 @@
-import { ICurrentUserDTO } from '~/backend'
+import { IFullUserInfoDTO } from '~/backend'
 
 export type Role = 'student' | 'teacher' | 'HoD' | 'PS'
 
@@ -16,7 +16,7 @@ export interface ICurrentUser {
     allowedStageIds?: number[]
 }
 
-export function getCurrentUserFromDTO(dto: ICurrentUserDTO): ICurrentUser {
+export function getCurrentUserFromDTO(dto: IFullUserInfoDTO): ICurrentUser {
     const role = dto.roleDTO.name
     if (role !== 'teacher' && role !== 'student' && role !== 'HoD')
         throw new Error('Unrecognized role for current user')
