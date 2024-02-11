@@ -28,6 +28,7 @@ export default Object.freeze({
             prefixEndpoints(`file/${documentId}/move-to-next-stage/${stageId}`),
         getStudentDocuments: (studentId: string) => prefixEndpoints(`student/${studentId}/file-info`),
         uploadFile: (studentId: number) => prefixEndpoints(`file/student/${studentId}`),
+        uploadCsv: prefixEndpoints('email/csv'),
     }),
     stages: Object.freeze({
         getAll: prefixEndpoints('stage/all'),

@@ -24,6 +24,21 @@ export async function uploadDocument(accessToken: string, studentId: number, doc
     return (await response.json()) as object
 }
 
+export async function uploadUserInvitationCsv(accessToken: string, document: File) {
+    const formData = new FormData()
+    formData.append('file', document)
+
+    const response = await fetch(endpoints.files.uploadCsv, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+
+    return (await response.json()) as object
+}
+
 export async function reviewDocument(
     accessToken: string,
     documentId: number,
