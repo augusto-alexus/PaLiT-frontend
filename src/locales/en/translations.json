@@ -34,6 +34,9 @@
   "everyStudentReceivedInvitation": "Invitations were sent to every student",
   "everyTeacherReceivedInvitation": "Invitations were sent to every teacher",
   "role": "Role",
+  "selectRole": "Select role",
+  "cancel": "Cancel",
+  "submit": "Submit",
   "workNotStarted": {
     "title": "You haven't started your work yet",
     "invite": "Invite",
@@ -102,7 +105,10 @@
     "noTeachers": "No teachers in the system",
     "noUsersWithRole": "No users with role <{{roleName}}>",
     "noUsers": "No users in the system",
-    "backToUsersTable": "Go to users table"
+    "backToUsersTable": "Go to users table",
+    "addUser": "Add user",
+    "editUser": "Edit user",
+    "userUpdated": "User info updated"
   },
   "feed": {
     "workHasntStartedYet": "Work hasn't started yet",

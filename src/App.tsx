@@ -22,7 +22,7 @@ import {
     TeacherList,
     HodUserTable,
     HodRoot,
-    HodUser,
+    HodUser, HodUserEdit,
 } from '~/pages'
 import './i18.ts'
 
@@ -32,14 +32,15 @@ function App() {
             <Routes>
                 <Route path={routes.signIn} element={<SignIn />} />
                 <Route path={routes.signUp} element={<SignUp />} />
-                <Route path='*' element={<AuthPagesWrapper />}>
-                    <Route index path='*' element={<AuthRedirect />} />
+                <Route path="*" element={<AuthPagesWrapper />}>
+                    <Route index path="*" element={<AuthRedirect />} />
                     <Route path={routes.hod.root} element={<HodRoot />}>
                         <Route path={routes.hod.stageApproval} element={<HodStageApproval />} />
                         <Route path={routes.hod.teams} element={<HodTeams />} />
                         <Route path={routes.hod.users.root}>
                             <Route index element={<HodUserTable />} />
                             <Route path={routes.hod.users.user()} element={<HodUser />} />
+                            <Route path={routes.hod.users.userEdit} element={<HodUserEdit />} />
                         </Route>
                     </Route>
                     <Route path={routes.studentList} element={<StudentList />} />
@@ -57,7 +58,7 @@ function App() {
                     </Route>
                 </Route>
             </Routes>
-            <ToastContainer theme='dark' />
+            <ToastContainer theme="dark" />
         </>
     )
 }

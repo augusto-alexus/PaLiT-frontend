@@ -1,6 +1,6 @@
 import axios from 'axios'
 import endpoints from '~/backend/endpoints.ts'
-import { IRoleDTO } from '~/backend/auth.ts'
+import { IRoleDTO, IStudentSignUpDTO, ITeacherSignUpDTO } from '~/backend/auth.ts'
 
 export async function getAllUsers() {
     const response = await axios.get(endpoints.user.getAll)
@@ -10,6 +10,26 @@ export async function getAllUsers() {
 export async function getUserById(id: string) {
     const response = await axios.get(endpoints.user.getById(id))
     return response.data as IFullUserInfoDTO
+}
+
+export async function createStudent(studentCreate: IStudentSignUpDTO) {
+    const response = await axios.post(endpoints.user.createStudent, studentCreate)
+    return response.data as object
+}
+
+export async function createTeacher(teacherCreate: ITeacherSignUpDTO) {
+    const response = await axios.post(endpoints.user.createTeacher, teacherCreate)
+    return response.data as object
+}
+
+export async function updateStudent(userId: string, studentUpdate: IStudentUpdateDTO) {
+    await axios.put(endpoints.user.updateStudent(userId), studentUpdate)
+    return userId
+}
+
+export async function updateTeacher(userId: string, teacherUpdate: ITeacherUpdateDTO) {
+    await axios.put(endpoints.user.updateTeacher(userId), teacherUpdate)
+    return userId
 }
 
 export interface IUser {
@@ -42,4 +62,23 @@ interface ITeacherDTO {
     generalBachelor: number
     generalMaster: number
     availableStageIdSet: number[]
+}
+
+interface IUserUpdateDTO {
+    lastName: string
+    firstName: string
+    email: string
+    roleId: string
+}
+
+export interface IStudentUpdateDTO extends IUserUpdateDTO {
+    cluster: string
+    degree: string
+    faculty: string
+    graduateDate: string
+}
+
+export interface ITeacherUpdateDTO extends IUserUpdateDTO {
+    generalBachelor: number
+    generalMaster: number
 }

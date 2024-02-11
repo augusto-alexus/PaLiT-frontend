@@ -47,7 +47,9 @@ export default Object.freeze({
     }),
     user: Object.freeze({
         createStudent: prefixEndpoints('user/student'),
+        updateStudent: (userId: string) => prefixEndpoints(`user/student/${userId}`),
         createTeacher: prefixEndpoints('user/teacher'),
+        updateTeacher: (userId: string) => prefixEndpoints(`user/teacher/${userId}`),
         getAll: prefixEndpoints('user/all'),
         getById: (id: string) => prefixEndpoints(`user/${id}`),
         deleteById: (id: string) => prefixEndpoints(`user/${id}`),

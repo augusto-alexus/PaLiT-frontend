@@ -11,7 +11,7 @@ export function HodUserTable() {
     if (isLoading) return <Loading />
 
     if (!users || !users?.length)
-        return <h2 className='w-full text-center text-2xl font-semibold'>{t('dashboard.noUsers')}</h2>
+        return <h2 className="w-full text-center text-2xl font-semibold">{t('dashboard.noUsers')}</h2>
 
     const tableCols: ITableHeader[] = [
         { key: 'fullName', label: t('fullName') },
@@ -26,15 +26,15 @@ export function HodUserTable() {
                 fullName: `${u.lastName}, ${u.firstName}`,
                 openUserBtn: (
                     <Link to={routes.hod.users.user(u.userId.toString())}>
-                        <i className='ri-pencil-fill' />
+                        <i className="ri-pencil-fill" />
                     </Link>
                 ),
-            } as ITeamTableRow)
+            } as ITeamTableRow),
     )
 
     return (
-        <div className='flex w-full flex-col gap-12'>
-            <div className='mx-auto flex w-5/12 flex-col gap-4'>
+        <div className="flex w-full flex-col gap-12">
+            <div className="flex mx-auto w-5/12 flex-col gap-4">
                 <Table<ITeamTableRow>
                     cols={tableCols}
                     rows={tableRows}
@@ -43,6 +43,9 @@ export function HodUserTable() {
                     }}
                 />
             </div>
+            <Link to={routes.hod.users.aUserEdit} className="mb-10 font-normal mx-auto">
+                {'+ ' + t('dashboard.addUser')}
+            </Link>
         </div>
     )
 }

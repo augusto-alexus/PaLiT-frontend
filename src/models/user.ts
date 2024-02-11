@@ -37,3 +37,18 @@ export function getCurrentUserFromDTO(dto: IFullUserInfoDTO): ICurrentUser {
         allowedStageIds: dto.teacherDTO?.availableStageIdSet,
     }
 }
+
+export interface IUserUpdateForm {
+    lastName: string
+    firstName: string
+    email: string
+    password: string
+    confirmPassword: string
+    roleId: string
+    degree: string
+    group: string
+    faculty: string
+    gradYear: string
+    bachelorStudentLimit: number
+    masterStudentLimit: number
+}

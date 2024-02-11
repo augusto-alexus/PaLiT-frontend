@@ -23,6 +23,9 @@ export const routes = {
             root: 'users',
             aRoot: '/hod/users',
             user: (userId?: string) => `${userId ? userId : ':userId'}`,
+            aUser: (userId?: string) => `/hod/users/${userId ? userId : ':userId'}`,
+            userEdit: 'edit',
+            aUserEdit: '/hod/users/edit',
         }),
     }),
 }

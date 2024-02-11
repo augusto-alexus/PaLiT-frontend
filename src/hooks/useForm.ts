@@ -1,12 +1,13 @@
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from 'react'
 
 export function useForm<T extends object>(
     defaultState: T,
-    query: (form: T) => void
+    query: (form: T) => void,
 ): {
     form: T
+    setForm: Dispatch<SetStateAction<T>>,
     onFieldChange: (
-        e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+        e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     ) => void
     onCheckboxFieldChange: (e: ChangeEvent<HTMLInputElement>) => void
     onSubmit: (e: FormEvent<HTMLFormElement>) => void
@@ -14,7 +15,7 @@ export function useForm<T extends object>(
     const [form, setForm] = useState<T>(defaultState)
 
     const onFieldChange = (
-        e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+        e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     ) => {
         setForm((v) => ({
             ...v,
@@ -34,5 +35,5 @@ export function useForm<T extends object>(
         query(form)
     }
 
-    return { form, onFieldChange, onCheckboxFieldChange, onSubmit }
+    return { form, setForm, onFieldChange, onCheckboxFieldChange, onSubmit }
 }

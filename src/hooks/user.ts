@@ -1,5 +1,17 @@
-import { useQuery } from '@tanstack/react-query'
-import { getAllUsers, getUserById } from '~/backend'
+import { MutationFunction, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+    createStudent, createTeacher,
+    getAllUsers,
+    getUserById,
+    IStudentSignUpDTO,
+    IStudentUpdateDTO, ITeacherSignUpDTO,
+    ITeacherUpdateDTO,
+    updateStudent,
+    updateTeacher,
+} from '~/backend'
+import { AxiosError } from 'axios'
+import { toast } from '~/components'
+import { useTranslation } from 'react-i18next'
 
 export function useAllUsers() {
     const { data: users, ...rest } = useQuery({
@@ -9,7 +21,7 @@ export function useAllUsers() {
     return { users, ...rest }
 }
 
-export function useUserById(id: string | undefined) {
+export function useUserById(id: string | null | undefined) {
     const { data: user, ...rest } = useQuery({
         enabled: !!id,
         queryFn: () => {
@@ -18,4 +30,68 @@ export function useUserById(id: string | undefined) {
         queryKey: ['user', id],
     })
     return { user, ...rest }
+}
+
+function useUserCreate<Args, Out>(mutationFn: MutationFunction<Args, Out>, onSuccess?: () => void) {
+    const { t } = useTranslation()
+    return useMutation({
+        mutationFn,
+        onSuccess: () => onSuccess?.(),
+        onError: (error: AxiosError | never) => {
+            if (error instanceof AxiosError) {
+                toast(`${t('error.unknownError')}! ${error.message}`)
+            } else {
+                toast(`${t('error.unknownError')}!`)
+            }
+        },
+    })
+}
+
+export function useStudentCreate(onSuccess?: () => void) {
+    return useUserCreate(async ({ studentCreate }: {
+            studentCreate: IStudentSignUpDTO
+        }) => createStudent(studentCreate),
+        onSuccess)
+}
+
+export function useTeacherCreate(onSuccess?: () => void) {
+    return useUserCreate(async ({ teacherCreate }: {
+            teacherCreate: ITeacherSignUpDTO
+        }) => createTeacher(teacherCreate),
+        onSuccess)
+}
+
+function useUserUpdate<Args, Out>(mutationFn: MutationFunction<Out, Args>, onSuccess?: () => void) {
+    const { t } = useTranslation()
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn,
+        onSuccess: async (userId) => {
+            await queryClient.invalidateQueries(['user', userId])
+            onSuccess?.()
+        },
+        onError: (error: AxiosError | never) => {
+            if (error instanceof AxiosError) {
+                toast(`${t('error.unknownError')}! ${error.message}`)
+            } else {
+                toast(`${t('error.unknownError')}!`)
+            }
+        },
+    })
+}
+
+export function useStudentUpdate(onSuccess?: () => void) {
+    return useUserUpdate(async ({ userId, studentUpdate }: {
+            userId: string,
+            studentUpdate: IStudentUpdateDTO
+        }) => updateStudent(userId, studentUpdate),
+        onSuccess)
+}
+
+export function useTeacherUpdate(onSuccess?: () => void) {
+    return useUserUpdate(async ({ userId, teacherUpdate }: {
+            userId: string,
+            teacherUpdate: ITeacherUpdateDTO
+        }) => updateTeacher(userId, teacherUpdate),
+        onSuccess)
 }
