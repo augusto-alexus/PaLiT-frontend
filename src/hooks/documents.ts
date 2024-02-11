@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useOutletContext } from 'react-router-dom'
 import { getStudentDocuments, postComment, reviewDocument } from '~/backend'
 import { toast } from '~/components'
-import { useAccessToken, useCurrentUser, useDocumentNextStage } from '~/hooks'
+import { useCurrentUser, useDocumentNextStage } from '~/hooks'
 import { IMyStudent } from '~/models'
 
 export function useAllStudentDocuments(studentId: string | undefined) {
@@ -31,7 +31,6 @@ export function useStudentDocument(studentId: string | undefined, documentId: st
 }
 
 export function useDocumentReview() {
-    const accessToken = useAccessToken()
     const { id } = useCurrentUser()
     const { t } = useTranslation()
     const queryClient = useQueryClient()
@@ -46,7 +45,7 @@ export function useDocumentReview() {
             documentId: number
             verdict: 'approved' | 'rejected'
             nextStageId?: number
-        }) => reviewDocument(accessToken, documentId, verdict, nextStageId),
+        }) => reviewDocument(documentId, verdict, nextStageId),
         onSuccess: async ({ approved, documentId, nextStageId }) => {
             await queryClient.invalidateQueries([
                 'studentDocuments',
@@ -68,7 +67,6 @@ export function useDocumentReview() {
 
 export function useMakeComment() {
     const { t } = useTranslation()
-    const accessToken = useAccessToken()
     const { role } = useCurrentUser()
     const queryClient = useQueryClient()
 
@@ -85,7 +83,7 @@ export function useMakeComment() {
             studentId: number
             teacherId: number
             comment: string
-        }) => postComment(accessToken, documentId, stageId, studentId, teacherId, comment, role),
+        }) => postComment(documentId, stageId, studentId, teacherId, comment, role),
         onSuccess: async (data) => {
             await queryClient.invalidateQueries(['documentComments', data])
             toast(t('feed.commentSaved'))

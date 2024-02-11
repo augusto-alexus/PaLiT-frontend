@@ -1,29 +1,21 @@
-import axios from 'axios'
 import { Language, parseStudentDTO } from '~/models'
-import { getAuthConfig } from './base'
 import endpoints from './endpoints'
 import { IStageDTO } from './stages'
+import axios from './base.ts'
 
 export async function getAllStudents() {
     const response = await axios.get(endpoints.getAllStudents)
     return (response.data as IStudentDTO[]).map(parseStudentDTO)
 }
 
-export async function getMyProject(accessToken: string) {
-    const response = await axios.get(
-        endpoints.currentAdvisor,
-        getAuthConfig(accessToken)
-    )
+export async function getMyProject() {
+    const response = await axios.get(endpoints.currentAdvisor)
     return parseMyProjectDTO(response.data as IMyProjectDTO)
 }
 
 function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {
     return {
-        language: dto?.language
-            ? dto.language === 'UA'
-                ? 'Українська'
-                : 'English'
-            : undefined,
+        language: dto?.language ? (dto.language === 'UA' ? 'Українська' : 'English') : undefined,
         theme: dto.theme,
         stage: dto.stageDTO,
         advisor: {

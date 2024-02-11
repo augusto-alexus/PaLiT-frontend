@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { approveRequest, getRequests, rejectRequest } from '~/backend'
 import { toast } from '~/components'
-import { useAccessToken, useCurrentUser } from '~/hooks'
+import { useCurrentUser } from '~/hooks'
 import { routes } from '~/pages'
 import { Request } from '~/pages/components'
 
@@ -12,11 +12,10 @@ export function Invitations() {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const currentUser = useCurrentUser()
-    const accessToken = useAccessToken()
     const queryClient = useQueryClient()
     const { mutate: mutateReject } = useMutation({
         mutationFn: async ({ requestId }: { requestId: number }) => {
-            return rejectRequest({ accessToken, requestId })
+            return rejectRequest(requestId)
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries(['requests'])
@@ -25,7 +24,7 @@ export function Invitations() {
     })
     const { mutate: mutateApprove } = useMutation({
         mutationFn: async ({ requestId }: { requestId: number }) => {
-            return approveRequest({ accessToken, requestId })
+            return approveRequest(requestId)
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries(['requests'])
@@ -38,8 +37,7 @@ export function Invitations() {
                 if (error.response?.status === 409) {
                     toast(`${t('error.studentAlreadyHasTeacher')}!`)
                 } else if (error.response?.status === 403) {
-                    if (currentUser.role === 'student')
-                        toast(`${t('error.inviteLimitTeacher')}!`)
+                    if (currentUser.role === 'student') toast(`${t('error.inviteLimitTeacher')}!`)
                     else toast(`${t('error.inviteLimitYou')}!`)
                 } else {
                     toast(`${t('unknownError')}! ${error.message}`)
@@ -49,24 +47,16 @@ export function Invitations() {
             }
         },
     })
-    const { data } = useQuery(['requests'], () =>
-        getRequests(accessToken, currentUser.role)
-    )
+    const { data } = useQuery(['requests'], () => getRequests(currentUser.role))
 
     if (!data?.filter((r) => !r.approved)?.length)
-        return (
-            <div className='text-center text-2xl font-semibold'>
-                {t('request.empty')}
-            </div>
-        )
+        return <div className='text-center text-2xl font-semibold'>{t('request.empty')}</div>
 
     const othersRequests = data
         .filter(
             (request) =>
-                (request.direction == 'STUDENT' &&
-                    currentUser.role == 'student') ||
-                (request.direction == 'TEACHER' &&
-                    currentUser.role == 'teacher')
+                (request.direction == 'STUDENT' && currentUser.role == 'student') ||
+                (request.direction == 'TEACHER' && currentUser.role == 'teacher')
         )
         .filter((r) => !r.approved)
 
@@ -74,10 +64,8 @@ export function Invitations() {
         .filter(
             (request) =>
                 !(
-                    (request.direction == 'STUDENT' &&
-                        currentUser.role == 'student') ||
-                    (request.direction == 'TEACHER' &&
-                        currentUser.role == 'teacher')
+                    (request.direction == 'STUDENT' && currentUser.role == 'student') ||
+                    (request.direction == 'TEACHER' && currentUser.role == 'teacher')
                 )
         )
         .filter((r) => !r.approved)
@@ -87,38 +75,26 @@ export function Invitations() {
             <div className='flex flex-col gap-16 md:flex-row lg:gap-40'>
                 {!!othersRequests.length && (
                     <div className='max-w-lg'>
-                        <div className='mb-8 text-center text-2xl font-semibold'>
-                            {t('request.forMe')}
-                        </div>
+                        <div className='mb-8 text-center text-2xl font-semibold'>{t('request.forMe')}</div>
                         {othersRequests.map((request) => (
                             <Request
                                 key={request.requestId}
                                 request={request}
-                                onReject={(requestId) =>
-                                    mutateReject({ requestId })
-                                }
-                                onApprove={(requestId) =>
-                                    mutateApprove({ requestId })
-                                }
+                                onReject={(requestId) => mutateReject({ requestId })}
+                                onApprove={(requestId) => mutateApprove({ requestId })}
                             />
                         ))}
                     </div>
                 )}
                 {!!myRequests.length && (
                     <div className='max-w-lg'>
-                        <div className='mb-8 text-center text-2xl font-semibold'>
-                            {t('request.my')}
-                        </div>
+                        <div className='mb-8 text-center text-2xl font-semibold'>{t('request.my')}</div>
                         {myRequests.map((request) => (
                             <Request
                                 key={request.requestId}
                                 request={request}
-                                onReject={(requestId) =>
-                                    mutateReject({ requestId })
-                                }
-                                onApprove={(requestId) =>
-                                    mutateApprove({ requestId })
-                                }
+                                onReject={(requestId) => mutateReject({ requestId })}
+                                onApprove={(requestId) => mutateApprove({ requestId })}
                             />
                         ))}
                     </div>

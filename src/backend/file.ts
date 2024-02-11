@@ -1,7 +1,6 @@
-import axios from 'axios'
-import { getAuthConfig } from './base'
 import endpoints from './endpoints'
 import { IStageDTO } from './stages'
+import axios from './base.ts'
 
 export async function getStudentDocuments(studentId: string) {
     const response = await axios.get(endpoints.files.getStudentDocuments(studentId))
@@ -28,27 +27,20 @@ export async function uploadUserInvitationCsv(accessToken: string, document: Fil
     const formData = new FormData()
     formData.append('file', document)
 
-    const response = await fetch(endpoints.files.uploadCsv, {
+    return fetch(endpoints.files.uploadCsv, {
         method: 'POST',
         body: formData,
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
     })
-
-    return (await response.json()) as object
 }
 
-export async function reviewDocument(
-    accessToken: string,
-    documentId: number,
-    verdict: 'approved' | 'rejected',
-    nextStageId?: number
-) {
+export async function reviewDocument(documentId: number, verdict: 'approved' | 'rejected', nextStageId?: number) {
     const formData = new FormData()
     formData.append('isApproved', verdict === 'approved' ? 'true' : 'false')
 
-    const response = await axios.put(endpoints.files.reviewDocument(documentId), formData, getAuthConfig(accessToken))
+    const response = await axios.put(endpoints.files.reviewDocument(documentId), formData)
 
     return { ...response.data, documentId, nextStageId } as {
         approved: string
@@ -57,12 +49,8 @@ export async function reviewDocument(
     }
 }
 
-export async function moveDocumentToStage(accessToken: string, documentId: number, stageId: number) {
-    const response = await axios.put(
-        endpoints.files.moveToNextStage(documentId, stageId),
-        undefined,
-        getAuthConfig(accessToken)
-    )
+export async function moveDocumentToStage(documentId: number, stageId: number) {
+    const response = await axios.put(endpoints.files.moveToNextStage(documentId, stageId))
     return response.data as object
 }
 

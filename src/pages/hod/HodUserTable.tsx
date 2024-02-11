@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { ITableHeader, Loading, Table } from '~/components'
+import { Button, ITableHeader, Loading, Table, toast } from '~/components'
 import { useAccessToken, useAllUsers } from '~/hooks'
 import { Link } from 'react-router-dom'
 import { routes } from '~/pages'
@@ -47,26 +47,46 @@ export function HodUserTable() {
                     }}
                 />
             </div>
-            <Link to={routes.hod.users.aUserEdit} className='mx-auto mb-10 font-normal'>
+            <Link to={routes.hod.users.aUserEdit} className='mx-auto font-normal'>
                 {'+ ' + t('dashboard.addUser')}
             </Link>
-            <input
-                id='upload-document'
-                type='file'
-                disabled={!!csvFile}
-                accept='.csv'
-                onChange={(e) => {
-                    if (e.target.files === null) return
-                    setCsvFile(e.target.files[0])
-                }}
-            />
-            <button
-                onClick={() => {
-                    uploadUserInvitationCsv(accessToken, csvFile!)
-                }}
-            >
-                submit
-            </button>
+            <div className='mx-auto flex flex-col gap-4'>
+                <label
+                    htmlFor='upload-csv'
+                    className={`cursor-pointer ${!!csvFile ? 'text-cs-secondary' : 'text-cs-link'}`}
+                    onClick={() => {
+                        if (csvFile)
+                            uploadUserInvitationCsv(accessToken, csvFile)
+                                .then(() => {
+                                    toast(t('fileUploadedSuccessfully'))
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                    toast(t('error.unknownError') + '. ' + t('error.checkCsvFormatting'))
+                                })
+                                .finally(() => {
+                                    setCsvFile(null)
+                                })
+                    }}
+                >
+                    {!!csvFile ? t('confirmUploadWork') : t('dashboard.inviteUsersCsv')}
+                </label>
+                <input
+                    id='upload-csv'
+                    key={csvFile?.name}
+                    type='file'
+                    disabled={!!csvFile}
+                    accept='.csv'
+                    className='hidden'
+                    onChange={(e) => {
+                        if (e.target.files === null) return
+                        setCsvFile(e.target.files[0])
+                    }}
+                />
+                <Button preset='text' hidden={!csvFile} className='text-cs-warning' onClick={() => setCsvFile(null)}>
+                    {t('cancel')}
+                </Button>
+            </div>
         </div>
     )
 }

@@ -1,14 +1,13 @@
-import { AxiosRequestConfig } from 'axios'
+import axios from 'axios'
 
-export function getAuthConfig(
-    accessToken: string,
-    config: AxiosRequestConfig = {}
-) {
-    return {
-        ...config,
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-            ...config.headers,
-        },
+export const baseUrl = 'http://localhost:8080/api'
+
+const axiosInstance = axios.create({ baseURL: baseUrl })
+
+export function updateAxiosInstanceToken(accessToken: string) {
+    axiosInstance.defaults.headers.common = {
+        Authorization: `Bearer ${accessToken}`,
     }
 }
+
+export default axiosInstance

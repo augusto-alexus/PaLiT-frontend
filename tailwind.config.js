@@ -18,6 +18,7 @@ export default {
                 'cs-disabled': '#657671',
                 'cs-additional-gray': '#9BA5A2',
                 'cs-additional-green': '#A4C716',
+                'cs-link': '#747BFF',
             },
         },
     },

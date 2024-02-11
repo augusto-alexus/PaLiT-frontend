@@ -1,73 +1,37 @@
-import axios from 'axios'
 import { Language, RequestDirection, Role } from '~/models'
-import { getAuthConfig } from './base'
 import endpoints from './endpoints'
+import axios from './base.ts'
 
-export function getRequests(accessToken: string, role: Role) {
-    if (role == 'student') return getRequestsStudent(accessToken)
-    return getRequestsTeacher(accessToken)
+export function getRequests(role: Role) {
+    if (role == 'student') return getRequestsStudent()
+    return getRequestsTeacher()
 }
 
-async function getRequestsTeacher(accessToken: string) {
-    const response = await axios.get(
-        endpoints.getAllRequestsTeacher,
-        getAuthConfig(accessToken)
-    )
+async function getRequestsTeacher() {
+    const response = await axios.get(endpoints.getAllRequestsTeacher)
     return (response.data as IRequestStudent[]).map(parseRequest)
 }
 
-async function getRequestsStudent(accessToken: string) {
-    const response = await axios.get(
-        endpoints.getAllRequestsStudent,
-        getAuthConfig(accessToken)
-    )
+async function getRequestsStudent() {
+    const response = await axios.get(endpoints.getAllRequestsStudent)
     return (response.data as IRequestTeacher[]).map(parseRequest)
 }
 
-export async function makeRequest(
-    role: Role,
-    { accessToken, userId, requestBody }: IRequestDTO
-) {
-    const endpoint =
-        role === 'teacher'
-            ? endpoints.teacher2StudentRequest
-            : endpoints.student2TeacherRequest
-    const response = await axios.post(
-        endpoint(userId),
-        requestBody,
-        getAuthConfig(accessToken)
-    )
+export async function makeRequest(role: Role, { userId, requestBody }: IRequestDTO) {
+    const endpoint = role === 'teacher' ? endpoints.teacher2StudentRequest : endpoints.student2TeacherRequest
+    const response = await axios.post(endpoint(userId), requestBody)
     return response.data as object
 }
 
-export async function rejectRequest({
-    accessToken,
-    requestId,
-}: {
-    accessToken: string
-    requestId: number
-}) {
-    const response = await axios.delete(
-        endpoints.rejectRequest(requestId),
-        getAuthConfig(accessToken)
-    )
+export async function rejectRequest(requestId: number) {
+    const response = await axios.delete(endpoints.rejectRequest(requestId))
     return response.data as object
 }
 
-export async function approveRequest({
-    accessToken,
-    requestId,
-}: {
-    accessToken: string
-    requestId: number
-}) {
+export async function approveRequest(requestId: number) {
     const formData = new FormData()
     formData.append('approved', 'true')
-    const response = await axios.put(
-        endpoints.approveRequest(requestId),
-        formData,
-        getAuthConfig(accessToken)
-    )
+    const response = await axios.put(endpoints.approveRequest(requestId), formData)
     return response.data as object
 }
 
@@ -78,10 +42,7 @@ function parseRequest(data: IRequestStudent | IRequestTeacher): IRequest {
             id: data.studentRequestDTO.studentId,
             firstName: data.studentRequestDTO.firstName,
             lastName: data.studentRequestDTO.lastName,
-            degree:
-                data.studentRequestDTO.degree === 'BACHELOR'
-                    ? 'bachelor'
-                    : 'master',
+            degree: data.studentRequestDTO.degree === 'BACHELOR' ? 'bachelor' : 'master',
             faculty: data.studentRequestDTO.faculty,
             cluster: data.studentRequestDTO.cluster,
             graduateDate: data.studentRequestDTO.graduateDate,
@@ -92,10 +53,7 @@ function parseRequest(data: IRequestStudent | IRequestTeacher): IRequest {
             firstName: data.teacherRequestDTO.firstName,
             lastName: data.teacherRequestDTO.lastName,
         }
-    } else
-        throw new Error(
-            "Request data doesn't conform to any known request DTO types."
-        )
+    } else throw new Error("Request data doesn't conform to any known request DTO types.")
 
     return {
         requestId: data.requestId,
@@ -157,7 +115,6 @@ interface IRequestBody {
 }
 
 export interface IRequestDTO {
-    accessToken: string
     userId: number
     requestBody: IRequestBody
 }

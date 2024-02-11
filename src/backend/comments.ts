@@ -1,11 +1,9 @@
-import axios from 'axios'
 import { IStageDTO } from '~/backend/stages.ts'
 import { Role } from '~/models'
-import { getAuthConfig } from './base'
 import endpoints from './endpoints'
+import axios from './base.ts'
 
 export async function postComment(
-    accessToken: string,
     documentId: number,
     stageId: number,
     studentId: number,
@@ -13,28 +11,16 @@ export async function postComment(
     comment: string,
     authorRole: Role
 ) {
-    await axios.post(
-        endpoints.comments.postComment(
-            documentId,
-            studentId,
-            teacherId,
-            stageId
-        ),
-        {
-            text: comment,
-            fromType: authorRole.toUpperCase(),
-        },
-        getAuthConfig(accessToken)
-    )
+    await axios.post(endpoints.comments.postComment(documentId, studentId, teacherId, stageId), {
+        text: comment,
+        fromType: authorRole.toUpperCase(),
+    })
 
     return documentId
 }
 
-export async function getComments(accessToken: string, documentId: number) {
-    const response = await axios.get(
-        endpoints.comments.getComments(documentId),
-        getAuthConfig(accessToken)
-    )
+export async function getComments(documentId: number) {
+    const response = await axios.get(endpoints.comments.getComments(documentId))
     return (response.data as ICommentDTO[]).map(getCommentFromDTO)
 }
 

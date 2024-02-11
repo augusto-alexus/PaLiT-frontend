@@ -108,7 +108,8 @@
     "backToUsersTable": "Go to users table",
     "addUser": "Add user",
     "editUser": "Edit user",
-    "userUpdated": "User info updated"
+    "userUpdated": "User info updated",
+    "inviteUsersCsv": "Invite users with CSV"
   },
   "feed": {
     "workHasntStartedYet": "Work hasn't started yet",
@@ -171,6 +172,7 @@
     "inviteLimitTeacher": "Teacher can't join any more students",
     "inviteLimitYou": "You can't join any more students",
     "studentAlreadyHasTeacher": "Student already has a teacher",
-    "unknownError": "Unknown error occurred"
+    "unknownError": "Unknown error occurred",
+    "checkCsvFormatting": "Check CSV formatting"
   }
 }

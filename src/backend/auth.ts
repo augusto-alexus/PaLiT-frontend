@@ -1,21 +1,18 @@
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { Role } from '~/models'
-import { getAuthConfig } from './base'
 import endpoints from './endpoints'
 import { IFullUserInfoDTO } from './user.ts'
+import axios, { updateAxiosInstanceToken } from './base.ts'
 
 export class JWTExpiredError extends Error {}
 
 export async function getCurrentUser(accessToken: string) {
     return axios
-        .get(
-            endpoints.currentUser,
-            getAuthConfig(accessToken, {
-                data: {
-                    user: accessToken,
-                },
-            })
-        )
+        .get(endpoints.currentUser, {
+            data: {
+                user: accessToken,
+            },
+        })
         .then(({ data }) => data as IFullUserInfoDTO)
         .catch((error: AxiosError) => {
             if (error.response?.status === 401) throw new JWTExpiredError()
@@ -25,7 +22,12 @@ export async function getCurrentUser(accessToken: string) {
 
 export async function signIn(form: ISignInDTO) {
     const response = await axios.post(endpoints.signIn, form)
+    updateAxiosInstanceToken(response.data.accessToken)
     return response.data as { accessToken: string }
+}
+
+export function logOut() {
+    axios.defaults.headers.common = {}
 }
 
 export function signUpStudent(dto: IStudentSignUpDTO) {

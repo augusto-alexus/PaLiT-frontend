@@ -1,35 +1,16 @@
-import axios from 'axios'
-import {
-    IHoDRequest,
-    Language,
-    parseHoDRequestDTO,
-    RequestDirection,
-} from '~/models'
-import { getAuthConfig } from './base.ts'
-import endpoints from './endpoints.ts'
+import { IHoDRequest, Language, parseHoDRequestDTO, RequestDirection } from '~/models'
+import endpoints from './endpoints'
+import axios from './base.ts'
 
-export async function getAllRequests(
-    accessToken: string
-): Promise<IHoDRequest[]> {
-    const response = await axios.get(
-        endpoints.hod.getAllRequests,
-        getAuthConfig(accessToken)
-    )
+export async function getAllRequests(): Promise<IHoDRequest[]> {
+    const response = await axios.get(endpoints.hod.getAllRequests)
     return (response.data as IHoDRequestDTO[]).map(parseHoDRequestDTO)
 }
 
-export async function updateRequest(
-    accessToken: string,
-    requestId: number,
-    approved: boolean
-): Promise<[boolean, boolean]> {
+export async function updateRequest(requestId: number, approved: boolean): Promise<[boolean, boolean]> {
     const formData = new FormData()
     formData.append('approved', String(approved))
-    const response = await axios.put(
-        endpoints.hod.updateRequest(requestId),
-        formData,
-        getAuthConfig(accessToken)
-    )
+    const response = await axios.put(endpoints.hod.updateRequest(requestId), formData)
     return [response.status === 200, approved]
 }
 

@@ -3,37 +3,21 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { getComments, IDocumentDTO, IStageDTO } from '~/backend'
-import {
-    Avatar,
-    Button,
-    DisplayError,
-    Feed,
-    IconButton,
-    IFeedElement,
-    Loading,
-    TextArea,
-} from '~/components'
-import {
-    useAccessToken,
-    useCurrentUser,
-    useDocumentReview,
-    useMakeComment,
-    useTeamInfo,
-} from '~/hooks'
+import { Avatar, Button, DisplayError, Feed, IconButton, IFeedElement, Loading, TextArea } from '~/components'
+import { useCurrentUser, useDocumentReview, useMakeComment, useTeamInfo } from '~/hooks'
 import { routes } from '~/pages'
 import { useFeedStore } from '~/store'
 
 export function DocumentFeedItem({
-                                     document,
-                                     selectedStage,
-                                     stages,
-                                 }: {
+    document,
+    selectedStage,
+    stages,
+}: {
     document: IDocumentDTO
     selectedStage: number
     stages: IStageDTO[]
 }) {
-    const { showCommentsForDocumentId, setShowCommentsForDocumentId } =
-        useFeedStore()
+    const { showCommentsForDocumentId, setShowCommentsForDocumentId } = useFeedStore()
     const { documentId } = document
     const showComments = showCommentsForDocumentId === documentId
 
@@ -45,28 +29,22 @@ export function DocumentFeedItem({
     const curStageOrder = (document?.stageDTO?.serialOrder as number) ?? 0
     const nextStage = stages.find((s) => s.serialOrder === curStageOrder + 1)
     return (
-        <div
-            className={`${
-                showComments ? 'sticky left-0 top-0 z-10' : ''
-            } flex flex-col gap-8 py-1`}
-        >
-            <div className="flex flex-row place-items-start gap-2">
+        <div className={`${showComments ? 'sticky left-0 top-0 z-10' : ''} flex flex-col gap-8 py-1`}>
+            <div className='flex flex-row place-items-start gap-2'>
                 <IconButton
-                    onClick={() =>
-                        navigate(routes.filePreview(document.documentId))
-                    }
+                    onClick={() => navigate(routes.filePreview(document.documentId))}
                     title={t('feed.viewDocument')}
                 >
-                    <i className="ri-eye-line" />
+                    <i className='ri-eye-line' />
                 </IconButton>
                 <IconButton
                     isActive={showComments}
                     onClick={() => setShowCommentsForDocumentId(documentId)}
                     title={t('feed.commentDocument')}
                 >
-                    <i className="ri-chat-1-line" />
+                    <i className='ri-chat-1-line' />
                 </IconButton>
-                <div className="place-self-center">
+                <div className='place-self-center'>
                     {t('feed.studentUploadedFile')}: {document.originalName}
                 </div>
                 {role === 'teacher' && !wasReviewed && nextStage && (
@@ -80,27 +58,22 @@ export function DocumentFeedItem({
                         }
                         title={t('feed.approveDocument')}
                     >
-                        <i className="ri-check-line" />
+                        <i className='ri-check-line' />
                     </IconButton>
                 )}
                 {role === 'teacher' && !wasReviewed && (
                     <IconButton
-                        onClick={() =>
-                            reviewDocument({ documentId, verdict: 'rejected' })
-                        }
+                        onClick={() => reviewDocument({ documentId, verdict: 'rejected' })}
                         title={t('feed.rejectDocument')}
                     >
-                        <i className="ri-close-line" />
+                        <i className='ri-close-line' />
                     </IconButton>
                 )}
             </div>
             {showComments && <DocumentCommentsFeed documentId={documentId} />}
             {showComments && (
-                <div className="mb-8">
-                    <CommentInput
-                        documentId={documentId}
-                        selectedStage={selectedStage}
-                    />
+                <div className='mb-8'>
+                    <CommentInput documentId={documentId} selectedStage={selectedStage} />
                 </div>
             )}
         </div>
@@ -108,50 +81,36 @@ export function DocumentFeedItem({
 }
 
 function DocumentCommentsFeed({ documentId }: { documentId: number }) {
-    const accessToken = useAccessToken()
     const {
         data: comments,
         isLoading,
         isFetching,
     } = useQuery({
         queryKey: ['documentComments', documentId],
-        queryFn: () => getComments(accessToken, documentId),
+        queryFn: () => getComments(documentId),
     })
     const { isLoading: isLoadingTeamInfo, teacher, student } = useTeamInfo()
     if ((isLoading && isFetching) || isLoadingTeamInfo) return <Loading />
-    const feedElements = comments
-        ?.map((c) => {
-            return {
-                iconL: (
-                    <Avatar
-                        small
-                        user={{
-                            role: c.from,
-                            firstName:
-                                c.from === 'student'
-                                    ? student.firstName
-                                    : teacher.firstName,
-                            lastName:
-                                c.from === 'student'
-                                    ? student.lastName
-                                    : teacher.lastName,
-                        }}
-                    />
-                ),
-                content: c.text,
-                date: new Date(c.createdAt),
-            } as IFeedElement
-        })
+    const feedElements = comments?.map((c) => {
+        return {
+            iconL: (
+                <Avatar
+                    small
+                    user={{
+                        role: c.from,
+                        firstName: c.from === 'student' ? student.firstName : teacher.firstName,
+                        lastName: c.from === 'student' ? student.lastName : teacher.lastName,
+                    }}
+                />
+            ),
+            content: c.text,
+            date: new Date(c.createdAt),
+        } as IFeedElement
+    })
     return <Feed data={feedElements} />
 }
 
-function CommentInput({
-                          documentId,
-                          selectedStage,
-                      }: {
-    documentId: number
-    selectedStage: number
-}) {
+function CommentInput({ documentId, selectedStage }: { documentId: number; selectedStage: number }) {
     const { t } = useTranslation()
     const [comment, setComment] = useState<string>('')
     const { mutate: makeComment } = useMakeComment()
@@ -159,12 +118,7 @@ function CommentInput({
     if (isLoading) return <Loading />
     const studentId = student.studentId
     const teacherId = teacher.teacherId
-    if (!studentId || !teacherId)
-        return (
-            <DisplayError
-                error={new Error('studentId or teacherId is undefined')}
-            />
-        )
+    if (!studentId || !teacherId) return <DisplayError error={new Error('studentId or teacherId is undefined')} />
 
     return (
         <form
@@ -179,17 +133,17 @@ function CommentInput({
                 })
                 setComment('')
             }}
-            className="flex flex-row place-items-start gap-4"
+            className='flex flex-row place-items-start gap-4'
         >
             <Avatar />
             <TextArea
                 required
-                name="comment"
+                name='comment'
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder={t('yourComment') + '...'}
             />
-            <Button preset="filled" type="submit">
+            <Button preset='filled' type='submit'>
                 {t('send')}
             </Button>
         </form>

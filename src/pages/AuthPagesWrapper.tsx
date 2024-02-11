@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
-import { getCurrentUser, JWTExpiredError } from '~/backend'
+import { getCurrentUser, JWTExpiredError, updateAxiosInstanceToken } from '~/backend'
 import { DisplayError, Header, Loading, toast } from '~/components'
 import { getCurrentUserFromDTO } from '~/models'
 import { routes } from '~/pages'
@@ -10,6 +10,7 @@ import { useAuthStore } from '~/store'
 export function AuthPagesWrapper() {
     const { t } = useTranslation()
     const authStore = useAuthStore()
+    if (authStore.accessToken) updateAxiosInstanceToken(authStore.accessToken)
     const navigate = useNavigate()
     const { isLoading, error } = useQuery({
         enabled: !!authStore.accessToken,

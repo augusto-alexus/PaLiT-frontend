@@ -5,6 +5,7 @@ import { useCurrentUser, useMyProject } from '~/hooks'
 import { Role } from '~/models'
 import { routes } from '~/pages'
 import { useAuthStore } from '~/store'
+import { logOut } from '~/backend'
 
 export function Header() {
     const { role } = useCurrentUser()
@@ -99,6 +100,7 @@ function HeaderTools() {
                 preset='icon'
                 title={t('logout')}
                 onClick={() => {
+                    logOut()
                     authStore.reset()
                 }}
                 className='text-cs-text-dark focus:text-cs-warning focus:outline-none'

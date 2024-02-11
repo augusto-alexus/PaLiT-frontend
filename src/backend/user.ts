@@ -1,6 +1,6 @@
-import axios from 'axios'
-import endpoints from '~/backend/endpoints.ts'
-import { IRoleDTO, IStudentSignUpDTO, ITeacherSignUpDTO } from '~/backend/auth.ts'
+import endpoints from './endpoints'
+import { IRoleDTO, IStudentSignUpDTO, ITeacherSignUpDTO } from './auth'
+import axios from './base.ts'
 
 export async function getAllUsers() {
     const response = await axios.get(endpoints.user.getAll)
