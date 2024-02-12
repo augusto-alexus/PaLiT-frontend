@@ -1,6 +1,10 @@
 export const routes = {
     signIn: 'sign-in',
-    signUp: 'sign-up',
+    signUp: {
+        root: 'sign-up',
+        student: 'student',
+        teacher: 'teacher',
+    },
     dashboard: 'dashboard',
     files: 'files',
     filePreview: (documentId?: number) => `file-preview/${documentId ? documentId : ':documentId'}`,

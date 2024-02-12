@@ -1,19 +1,21 @@
 import { IStudentSignUpDTO, ITeacherSignUpDTO } from '~/backend'
 
-export interface ISignUpForm {
+export interface ISignUpTeacherForm {
     lastName: string
     firstName: string
     email: string
     password: string
     confirmPassword: string
-    isStudent: boolean
+}
+
+export interface ISignUpStudentForm extends ISignUpTeacherForm {
     gradDate: string
     gradLevel: string
     group: string
     faculty: string
 }
 
-export function getTeacherSignUpDTO(form: ISignUpForm): ITeacherSignUpDTO {
+export function getTeacherSignUpDTO(form: ISignUpTeacherForm): ITeacherSignUpDTO {
     return {
         firstName: form.firstName,
         lastName: form.lastName,
@@ -22,7 +24,7 @@ export function getTeacherSignUpDTO(form: ISignUpForm): ITeacherSignUpDTO {
     }
 }
 
-export function getStudentSignUpDTO(form: ISignUpForm): IStudentSignUpDTO {
+export function getStudentSignUpDTO(form: ISignUpStudentForm): IStudentSignUpDTO {
     return {
         firstName: form.firstName,
         lastName: form.lastName,

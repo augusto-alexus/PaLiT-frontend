@@ -1,44 +1,19 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
-import { signIn } from '~/backend'
-import { Button, Input, Password, ProjectLogo, toast, WithNulpBg } from '~/components'
-import { useForm } from '~/hooks'
+import { useNavigate } from 'react-router-dom'
+import { Button, Input, Password, ProjectLogo, WithNulpBg } from '~/components'
+import { useForm, useSignIn } from '~/hooks'
 import { routes } from '~/pages'
-import { useAuthStore } from '~/store'
 
 export function SignIn() {
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const authStore = useAuthStore()
-    const queryClient = useQueryClient()
-    const mutation = useMutation({
-        mutationFn: async ({ email, password }: { email: string; password: string }) => signIn({ email, password }),
-        onSuccess: async ({ accessToken }) => {
-            authStore.reset()
-            authStore.setAccessToken(accessToken)
-            await queryClient.resetQueries()
-            navigate(`/${routes.authRedirect}`)
-        },
-        onError: (error) => {
-            if (error instanceof AxiosError) {
-                if (error.response?.status === 403) {
-                    toast(`${t('error.wrongCredentials')}!`)
-                } else {
-                    toast(`${t('error.unknownError')}! ${error.message}`)
-                }
-            } else {
-                toast(`${t('error.unknownError')}!`)
-            }
-        },
-    })
+    const { mutate: signIn } = useSignIn(() => navigate(`/${routes.authRedirect}`))
     const { form, onFieldChange, onSubmit } = useForm<ISignInForm>(
         {
             email: '',
             password: '',
         },
-        (form) => mutation.mutate({ email: form.email, password: form.password })
+        (form) => signIn({ email: form.email, password: form.password })
     )
 
     return (
@@ -73,13 +48,7 @@ export function SignIn() {
                             placeholder={t('enterYourPassword')}
                         />
                     </div>
-                    <Button>{t('signInSubmit')}</Button>
-                    <div className='self-start'>
-                        {t('notRegisteredYet')}
-                        <Link to={`/${routes.signUp}`} className='ml-4'>
-                            {t('signUp')}
-                        </Link>
-                    </div>
+                    <Button className='mt-8'>{t('signInSubmit')}</Button>
                 </form>
             </main>
         </div>
