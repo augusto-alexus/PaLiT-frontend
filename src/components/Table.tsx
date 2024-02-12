@@ -1,5 +1,4 @@
-// I have no idea how to avoid any here, and I don't care
-export function Table<T extends Record<string, any>>({
+export function Table<T extends Record<string, never>>({
     cols,
     rows,
     options,
@@ -23,7 +22,10 @@ export function Table<T extends Record<string, any>>({
             <thead>
                 <tr>
                     {cols.map((h, idx) => (
-                        <th key={idx} className='border border-slate-600 px-5 py-2 text-left text-lg'>
+                        <th
+                            key={idx}
+                            className={`border border-slate-600 px-5 py-2 text-left text-lg ${h?.style ?? ''}`}
+                        >
                             {h.label}
                         </th>
                     ))}
@@ -52,4 +54,5 @@ export function Table<T extends Record<string, any>>({
 export interface ITableHeader {
     key: string
     label: string
+    style?: string
 }

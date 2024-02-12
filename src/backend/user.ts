@@ -32,6 +32,11 @@ export async function updateTeacher(userId: string, teacherUpdate: ITeacherUpdat
     return userId
 }
 
+export async function deleteUser(userId: string) {
+    await axios.delete(endpoints.user.deleteById(userId))
+    return userId
+}
+
 export interface IUser {
     userId: number
     email: string

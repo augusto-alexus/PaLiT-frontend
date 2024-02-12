@@ -1,10 +1,13 @@
 import { MutationFunction, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-    createStudent, createTeacher,
+    createStudent,
+    createTeacher,
+    deleteUser,
     getAllUsers,
     getUserById,
     IStudentSignUpDTO,
-    IStudentUpdateDTO, ITeacherSignUpDTO,
+    IStudentUpdateDTO,
+    ITeacherSignUpDTO,
     ITeacherUpdateDTO,
     updateStudent,
     updateTeacher,
@@ -48,17 +51,17 @@ function useUserCreate<Args, Out>(mutationFn: MutationFunction<Args, Out>, onSuc
 }
 
 export function useStudentCreate(onSuccess?: () => void) {
-    return useUserCreate(async ({ studentCreate }: {
-            studentCreate: IStudentSignUpDTO
-        }) => createStudent(studentCreate),
-        onSuccess)
+    return useUserCreate(
+        async ({ studentCreate }: { studentCreate: IStudentSignUpDTO }) => createStudent(studentCreate),
+        onSuccess
+    )
 }
 
 export function useTeacherCreate(onSuccess?: () => void) {
-    return useUserCreate(async ({ teacherCreate }: {
-            teacherCreate: ITeacherSignUpDTO
-        }) => createTeacher(teacherCreate),
-        onSuccess)
+    return useUserCreate(
+        async ({ teacherCreate }: { teacherCreate: ITeacherSignUpDTO }) => createTeacher(teacherCreate),
+        onSuccess
+    )
 }
 
 function useUserUpdate<Args, Out>(mutationFn: MutationFunction<Out, Args>, onSuccess?: () => void) {
@@ -72,7 +75,9 @@ function useUserUpdate<Args, Out>(mutationFn: MutationFunction<Out, Args>, onSuc
         },
         onError: (error: AxiosError | never) => {
             if (error instanceof AxiosError) {
-                toast(`${t('error.unknownError')}! ${error.message}`)
+                if (error?.response?.status === 409) {
+                    toast(`${t('error.userWithEmailExists')}!`)
+                } else toast(`${t('error.unknownError')}! ${error.message}`)
             } else {
                 toast(`${t('error.unknownError')}!`)
             }
@@ -81,17 +86,37 @@ function useUserUpdate<Args, Out>(mutationFn: MutationFunction<Out, Args>, onSuc
 }
 
 export function useStudentUpdate(onSuccess?: () => void) {
-    return useUserUpdate(async ({ userId, studentUpdate }: {
-            userId: string,
-            studentUpdate: IStudentUpdateDTO
-        }) => updateStudent(userId, studentUpdate),
-        onSuccess)
+    return useUserUpdate(
+        async ({ userId, studentUpdate }: { userId: string; studentUpdate: IStudentUpdateDTO }) =>
+            updateStudent(userId, studentUpdate),
+        onSuccess
+    )
 }
 
 export function useTeacherUpdate(onSuccess?: () => void) {
-    return useUserUpdate(async ({ userId, teacherUpdate }: {
-            userId: string,
-            teacherUpdate: ITeacherUpdateDTO
-        }) => updateTeacher(userId, teacherUpdate),
-        onSuccess)
+    return useUserUpdate(
+        async ({ userId, teacherUpdate }: { userId: string; teacherUpdate: ITeacherUpdateDTO }) =>
+            updateTeacher(userId, teacherUpdate),
+        onSuccess
+    )
+}
+
+export function useDeleteUser(onSuccess?: () => void) {
+    const { t } = useTranslation()
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async ({ userId }: { userId: string }) => deleteUser(userId),
+        onSuccess: async (userId) => {
+            await queryClient.invalidateQueries(['users'])
+            await queryClient.invalidateQueries(['user', userId])
+            onSuccess?.()
+        },
+        onError: (error: AxiosError | never) => {
+            if (error instanceof AxiosError) {
+                toast(`${t('error.unknownError')}! ${error.message}`)
+            } else {
+                toast(`${t('error.unknownError')}!`)
+            }
+        },
+    })
 }

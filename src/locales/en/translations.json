@@ -107,8 +107,11 @@
     "noUsers": "No users in the system",
     "backToUsersTable": "Go to users table",
     "addUser": "Add user",
+    "userCreated": "User created",
     "editUser": "Edit user",
     "userUpdated": "User info updated",
+    "areYouSureYouWantToDeleteUser": "Are you sure you want to delete user {{fullName}}",
+    "userDeleted": "User deleted",
     "inviteUsersCsv": "Invite users with CSV"
   },
   "feed": {

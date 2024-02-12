@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Button, ITableHeader, Loading, Table, toast } from '~/components'
-import { useAccessToken, useAllUsers } from '~/hooks'
+import { useAccessToken, useAllUsers, useDeleteUser } from '~/hooks'
 import { Link } from 'react-router-dom'
 import { routes } from '~/pages'
 import { useState } from 'react'
@@ -10,6 +10,7 @@ export function HodUserTable() {
     const accessToken = useAccessToken()
     const { t } = useTranslation()
     const { users, isLoading } = useAllUsers()
+    const { mutate: deleteUser } = useDeleteUser(() => toast(t('dashboard.userDeleted')))
     const [csvFile, setCsvFile] = useState<File | null>(null)
 
     if (isLoading) return <Loading />
@@ -20,7 +21,8 @@ export function HodUserTable() {
     const tableCols: ITableHeader[] = [
         { key: 'fullName', label: t('fullName') },
         { key: 'email', label: t('email') },
-        { key: 'openUserBtn', label: '' },
+        { key: 'openUserBtn', label: '', style: 'w-12' },
+        { key: 'deleteUserBtn', label: '', style: 'w-12' },
     ]
 
     const tableRows = users.map(
@@ -33,12 +35,29 @@ export function HodUserTable() {
                         <i className='ri-pencil-fill' />
                     </Link>
                 ),
+                deleteUserBtn: (
+                    <a
+                        href='#'
+                        onClick={() => {
+                            if (
+                                confirm(
+                                    t('dashboard.areYouSureYouWantToDeleteUser', {
+                                        fullName: u.lastName + ' ' + u.firstName,
+                                    }) + '?'
+                                )
+                            )
+                                deleteUser({ userId: u.userId.toString() })
+                        }}
+                    >
+                        <i className='ri-delete-bin-2-fill text-cs-warning' />
+                    </a>
+                ),
             } as ITeamTableRow)
     )
 
     return (
         <div className='flex w-full flex-col gap-12'>
-            <div className='mx-auto flex w-5/12 flex-col gap-4'>
+            <div className='mx-auto flex w-4/12 flex-col gap-4'>
                 <Table<ITeamTableRow>
                     cols={tableCols}
                     rows={tableRows}
@@ -53,15 +72,14 @@ export function HodUserTable() {
             <div className='mx-auto flex flex-col gap-4'>
                 <label
                     htmlFor='upload-csv'
-                    className={`cursor-pointer ${!!csvFile ? 'text-cs-secondary' : 'text-cs-link'}`}
+                    className={`cursor-pointer ${csvFile ? 'text-cs-secondary' : 'text-cs-link'}`}
                     onClick={() => {
                         if (csvFile)
                             uploadUserInvitationCsv(accessToken, csvFile)
                                 .then(() => {
                                     toast(t('fileUploadedSuccessfully'))
                                 })
-                                .catch((err) => {
-                                    console.log(err)
+                                .catch(() => {
                                     toast(t('error.unknownError') + '. ' + t('error.checkCsvFormatting'))
                                 })
                                 .finally(() => {
@@ -69,7 +87,7 @@ export function HodUserTable() {
                                 })
                     }}
                 >
-                    {!!csvFile ? t('confirmUploadWork') : t('dashboard.inviteUsersCsv')}
+                    {csvFile ? t('confirmUploadWork') : t('dashboard.inviteUsersCsv')}
                 </label>
                 <input
                     id='upload-csv'
