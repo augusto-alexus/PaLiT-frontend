@@ -1,25 +1,22 @@
-import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getRequests, IStudentDTO } from '~/backend'
 import { Button, DisplayError, Loading } from '~/components'
-import { useAllStudents, useCurrentUser } from '~/hooks'
+import { useAllStudents, useInvitations } from '~/hooks'
 import { RequestForm } from '~/pages/components'
+import { IStudent } from '~/models'
 
-export function StudentList() {
+export function TeacherInviteStudents() {
     const { t } = useTranslation()
     const [showRequestFormFor, setShowRequestFormFor] = useState<number | null>(null)
-
-    const currentUser = useCurrentUser()
-    const { data: requests } = useQuery(['requests'], () => getRequests(currentUser.role))
-
+    const { data: invites } = useInvitations()
     const { isLoading, error, data: allStudents } = useAllStudents()
 
     if (isLoading) return <Loading />
     if (error) return <DisplayError error={error} />
     if (!allStudents?.length)
         return <h2 className='text-center text-2xl font-semibold'>{t('noStudentsInTheSystem')}</h2>
-    const data = allStudents.filter((t) => requests?.every((r) => r.user.id !== t.studentId))
+
+    const data = allStudents.filter((t) => invites?.every((r) => r.user.id !== t.studentId))
     if (!data?.length)
         return <h2 className='text-center text-2xl font-semibold'>{t('everyStudentReceivedInvitation')}</h2>
 
@@ -47,7 +44,7 @@ function StudentInfoRow({
     showRequestForm,
     setShowRequestFormFor,
 }: {
-    student: IStudentDTO
+    student: IStudent
     showRequestForm: boolean
     setShowRequestFormFor: (setFor: number) => void
 }) {

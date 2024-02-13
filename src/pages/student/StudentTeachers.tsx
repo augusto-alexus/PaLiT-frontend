@@ -1,18 +1,15 @@
-import { useQuery } from '@tanstack/react-query'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getRequests } from '~/backend'
 import { Button, DisplayError, Loading } from '~/components'
-import { useAllTeachers, useCurrentUser, useMyProject } from '~/hooks'
+import { useAllTeachers, useInvitations, useMyProject } from '~/hooks'
 import { ITeacher } from '~/models'
-import { RequestForm } from './components'
+import { RequestForm } from '~/pages/components'
 
-export function TeacherList() {
+export function StudentTeachers() {
     const { t } = useTranslation()
     const [showRequestFormFor, setShowRequestFormFor] = useState<number | null>(null)
 
-    const currentUser = useCurrentUser()
-    const { data: requests } = useQuery(['requests'], () => getRequests(currentUser.role))
+    const { data: requests } = useInvitations()
 
     const { isLoading, error, data: allTeachers } = useAllTeachers()
 
@@ -29,19 +26,18 @@ export function TeacherList() {
     return (
         <div className='mx-auto flex w-full max-w-md flex-col gap-8'>
             {data.map((teacher) => (
-                <Fragment key={teacher.teacherId}>
-                    <TeacherInfoRow
-                        teacher={teacher}
-                        canMakeRequest={!myProjectStarted}
-                        showRequestForm={showRequestFormFor === teacher.teacherId}
-                        setShowRequestFormFor={(setFor) =>
-                            setShowRequestFormFor((curValue) => {
-                                if (curValue === setFor) return null
-                                else return setFor
-                            })
-                        }
-                    />
-                </Fragment>
+                <TeacherInfoRow
+                    key={teacher.teacherId}
+                    teacher={teacher}
+                    canMakeRequest={!myProjectStarted}
+                    showRequestForm={showRequestFormFor === teacher.teacherId}
+                    setShowRequestFormFor={(setFor) =>
+                        setShowRequestFormFor((curValue) => {
+                            if (curValue === setFor) return null
+                            else return setFor
+                        })
+                    }
+                />
             ))}
         </div>
     )

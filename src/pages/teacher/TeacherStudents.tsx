@@ -1,29 +1,27 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { getMyStudents } from '~/backend'
 import { useCurrentUser } from '~/hooks'
 import { IMyStudent } from '~/models'
 import { routes } from '~/pages'
 
-export function MyStudents() {
+export function TeacherStudents() {
     const { t } = useTranslation()
-    const { role, bachelorStudentsLimit, masterStudentsLimit } = useCurrentUser()
+    const { bachelorStudentsLimit, masterStudentsLimit } = useCurrentUser()
     const { data } = useQuery({
-        enabled: role === 'teacher',
         queryKey: ['myStudents'],
         queryFn: () => getMyStudents(),
     })
-    if (role !== 'teacher') return <Navigate to={`/${routes.authRedirect}`} />
     const anyStudents = !!data?.length
     if (!anyStudents)
         return (
             <div className='flex w-full flex-col gap-8'>
                 <div className='text-center text-2xl font-semibold text-cs-text-dark'>{t('workNotStarted.title')}</div>
                 <div className='mx-auto max-w-md text-center text-xl text-cs-text-dark'>
-                    <Link to={`/${routes.studentList}`}>{t('workNotStarted.invite')}</Link>{' '}
+                    <Link to={routes.teacher.aStudents}>{t('workNotStarted.invite')}</Link>{' '}
                     {t('workNotStarted.studentOr')}
-                    <Link to={`/${routes.invitations}`}> {t('workNotStarted.accept')}</Link>{' '}
+                    <Link to={routes.common.aInvitations}> {t('workNotStarted.accept')}</Link>{' '}
                     {t('workNotStarted.theRestForTeacher')}
                 </div>
             </div>

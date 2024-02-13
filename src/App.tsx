@@ -6,28 +6,29 @@ import '~/App.css'
 import {
     AuthPagesWrapper,
     AuthRedirect,
-    FilePreview,
     HodStageApproval,
     HodTeams,
     Invitations,
     MyProject,
     MyStudent,
-    MyStudents,
+    TeacherStudents,
     routes,
     SignIn,
     SignUpStudent,
     StudentWorkReview,
     StudentFeed,
-    StudentList,
-    TeacherList,
+    StudentTeachers,
     HodUserTable,
     HodRoot,
     HodUser,
     HodUserEdit,
     SignUpRoot,
+    SignUpTeacher,
+    TeacherRoot,
+    TeacherInviteStudents,
+    StudentRoot,
 } from '~/pages'
 import './i18.ts'
-import { SignUpTeacher } from '~/pages/auth'
 
 function App() {
     return (
@@ -40,6 +41,7 @@ function App() {
                 </Route>
                 <Route path='*' element={<AuthPagesWrapper />}>
                     <Route index path='*' element={<AuthRedirect />} />
+
                     <Route path={routes.hod.root} element={<HodRoot />}>
                         <Route path={routes.hod.stageApproval} element={<HodStageApproval />} />
                         <Route path={routes.hod.teams} element={<HodTeams />} />
@@ -49,18 +51,26 @@ function App() {
                             <Route path={routes.hod.users.userEdit} element={<HodUserEdit />} />
                         </Route>
                     </Route>
-                    <Route path={routes.studentList} element={<StudentList />} />
-                    <Route path={routes.teacherList} element={<TeacherList />} />
-                    <Route path={routes.invitations} element={<Invitations />} />
-                    <Route path={routes.myStudents} element={<MyStudents />} />
+
+                    <Route path={routes.teacher.root} element={<TeacherRoot />}>
+                        <Route path={routes.teacher.students} element={<TeacherInviteStudents />} />
+                        <Route path={routes.teacher.myStudents} element={<TeacherStudents />} />
+                        <Route path={routes.teacher.invitations} element={<Invitations />} />
+                    </Route>
+
+                    <Route path={routes.student.root} element={<StudentRoot />}>
+                        <Route path={routes.student.teachers} element={<StudentTeachers />} />
+                    </Route>
+
+                    <Route path={routes.common.invitations} element={<Invitations />} />
+                    <Route path={routes.common.workReview()} element={<StudentWorkReview />} />
+
                     <Route path={routes.myStudent()} element={<MyStudent />}>
                         <Route index element={<StudentFeed />} />
-                        <Route path={routes.filePreview()} element={<FilePreview />} />
                     </Route>
-                    <Route path={routes.studentWorkReview()} element={<StudentWorkReview />} />
+
                     <Route path={routes.myProject} element={<MyProject />}>
                         <Route index element={<StudentFeed />} />
-                        <Route path={routes.filePreview()} element={<FilePreview />} />
                     </Route>
                 </Route>
             </Routes>

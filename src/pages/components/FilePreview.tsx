@@ -1,26 +1,21 @@
 import { useTranslation } from 'react-i18next'
-import { Navigate, useParams } from 'react-router-dom'
 import endpoints from '~/backend/endpoints.ts'
 import { DisplayError, Loading } from '~/components'
-import { routes } from '~/pages/routes.ts'
 import { useStudentDocument } from '~/hooks'
 
-export function FilePreview() {
+export function FilePreview({ studentId, documentId }: { studentId: string; documentId: string }) {
     const { t } = useTranslation()
-    const { studentId, documentId } = useParams()
-    const { data: doc, isLoading, isFetching, error } = useStudentDocument(studentId, documentId)
+    const { data: doc, isInitialLoading, error } = useStudentDocument(studentId, documentId)
 
-    if (!studentId || !documentId) return <Navigate to={routes.authRedirect} />
-    if (isLoading && isFetching) return <Loading />
+    if (isInitialLoading) return <Loading />
     if (error) return <DisplayError error={error} />
 
-    if (!doc) {
+    if (!doc)
         return (
             <DisplayError
                 error={Error(`No document found with id ${documentId} associated with student ${studentId}`)}
             />
         )
-    }
 
     const dotNameSplit = doc.originalName.split('.')
     let extension = t('unknownExtension')

@@ -9,8 +9,9 @@ export function useAllStudents() {
     })
 }
 
-export function useStudent(studentId: string) {
+export function useStudent(studentId: string | null | undefined) {
     return useQuery({
+        enabled: !!studentId,
         queryKey: ['student', studentId],
         queryFn: async () => {
             const allStudents = await getAllStudents()

@@ -12,18 +12,11 @@ export function MyProject() {
     if (!myProjectStarted)
         return (
             <div className='flex w-full flex-col gap-8'>
-                <div className='text-center text-2xl font-semibold text-cs-text-dark'>
-                    {t('workNotStarted.title')}
-                </div>
+                <div className='text-center text-2xl font-semibold text-cs-text-dark'>{t('workNotStarted.title')}</div>
                 <div className='mx-auto max-w-md text-center text-xl text-cs-text-dark'>
-                    <Link to={`/${routes.teacherList}`}>
-                        {t('workNotStarted.invite')}
-                    </Link>{' '}
+                    <Link to={routes.student.aTeachers}>{t('workNotStarted.invite')}</Link>{' '}
                     {t('workNotStarted.teacherOr')}
-                    <Link to={`/${routes.invitations}`}>
-                        {' '}
-                        {t('workNotStarted.accept')}
-                    </Link>{' '}
+                    <Link to={routes.common.aInvitations}> {t('workNotStarted.accept')}</Link>{' '}
                     {t('workNotStarted.theRestForStudent')}
                 </div>
             </div>

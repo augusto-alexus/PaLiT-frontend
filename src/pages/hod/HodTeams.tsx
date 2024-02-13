@@ -43,7 +43,7 @@ export function HodTeams() {
     return (
         <div className='flex w-full flex-col gap-12'>
             <h2 className='text-center text-2xl font-semibold'>{t('dashboard.teams')}</h2>
-            <div className='mx-auto flex w-11/12 flex-col gap-4'>
+            <div className='mx-auto flex w-7/12 flex-col gap-4'>
                 <Table<ITeamTableRow>
                     cols={tableCols}
                     rows={tableRows}

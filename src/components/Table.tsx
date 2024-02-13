@@ -1,4 +1,5 @@
-export function Table<T extends Record<string, never>>({
+// idc and idk how to deal with any here
+export function Table<T extends Record<string, any>>({
     cols,
     rows,
     options,

@@ -18,7 +18,7 @@ export function useAllStudentDocuments(studentId: string | undefined) {
     })
 }
 
-export function useStudentDocument(studentId: string | undefined, documentId: string | undefined) {
+export function useStudentDocument(studentId: string | null | undefined, documentId: string | null | undefined) {
     return useQuery({
         enabled: !!studentId && !!documentId,
         queryKey: ['studentWork', studentId, documentId],

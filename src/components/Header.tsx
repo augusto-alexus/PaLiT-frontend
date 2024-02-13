@@ -33,21 +33,19 @@ function getHeaderNavs(role: Role, myProjectStarted: boolean): INavItem[] {
 }
 
 function getStudentHeaderNavs(myProjectStarted: boolean): INavItem[] {
-    const navs: INavItem[] = [
-        { to: routes.myProject, tLabel: 'navigation.myProject' },
-        { to: routes.teacherList, tLabel: 'navigation.teachers' },
-    ]
+    const navs: INavItem[] = [{ to: routes.myProject, tLabel: 'navigation.myProject' }]
     if (!myProjectStarted) {
-        navs.push({ to: routes.invitations, tLabel: 'navigation.invites' })
+        navs.push({ to: routes.student.aTeachers, tLabel: 'navigation.teachers' })
+        navs.push({ to: routes.common.aInvitations, tLabel: 'navigation.invites' })
     }
     return navs
 }
 
 function getTeacherHeaderNavs(): INavItem[] {
     return [
-        { to: routes.myStudents, tLabel: 'navigation.myStudents' },
-        { to: routes.studentList, tLabel: 'navigation.students' },
-        { to: routes.invitations, tLabel: 'navigation.invites' },
+        { to: routes.teacher.aMyStudents, tLabel: 'navigation.myStudents' },
+        { to: routes.teacher.aStudents, tLabel: 'navigation.students' },
+        { to: routes.common.aInvitations, tLabel: 'navigation.invites' },
     ]
 }
 
@@ -55,7 +53,7 @@ function getHodHeaderNavs(): INavItem[] {
     return [
         { to: routes.hod.aStageApproval, tLabel: 'navigation.stageApproval' },
         { to: routes.hod.aTeams, tLabel: 'navigation.teams' },
-        { to: routes.hod.users.aRoot, tLabel: 'navigation.users' },
+        { to: routes.hod.users.aRoot, tLabel: 'navigation.usersControl' },
     ]
 }
 

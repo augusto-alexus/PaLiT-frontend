@@ -70,8 +70,6 @@ export function StudentFeed() {
         })
     const sortedFeedElements = feedElements.sort((a, b) => a.date.getTime() - b.date.getTime())
 
-    const projectApproved: boolean = (role === 'teacher' && !!outletContext?.myStudent) || role === 'student'
-
     const teacherCanViewStage = allowedStageIds?.some((s) => s === selectedStage)
 
     return (
@@ -80,20 +78,17 @@ export function StudentFeed() {
             {role === 'teacher' && !teacherCanViewStage ? (
                 <div className='text-center text-2xl font-semibold text-cs-text-dark'>{t('feed.cantViewStage')}</div>
             ) : !feedElements.length ? (
-                <div className='text-center text-2xl font-semibold text-cs-text-dark'>
+                <div className='mt-8 text-center text-2xl font-semibold text-cs-text-dark'>
                     {t('feed.workHasntStartedYet')}
                 </div>
             ) : (
-                <div className='scrollbar max-h-[600px] overflow-y-auto py-2'>
+                <div className='scrollbar mt-8 max-h-[600px] overflow-y-auto py-2'>
                     <div className='mx-auto w-[95%] overflow-x-visible'>
                         <Feed data={sortedFeedElements} />
                     </div>
                 </div>
             )}
-            {!projectApproved && (
-                <div className='text-md col-span-5 mt-2 text-center text-cs-warning'>{t('hodRequestNotApproved')}</div>
-            )}
-            {role === 'student' && projectApproved && myProject?.stage?.stageId === selectedStage && (
+            {role === 'student' && myProject?.stage?.stageId === selectedStage && (
                 <div className='mt-16'>
                     <FileUpload />
                 </div>
