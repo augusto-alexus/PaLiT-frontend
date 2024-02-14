@@ -9,8 +9,8 @@ import {
     HodStageApproval,
     HodTeams,
     Invitations,
-    MyProject,
-    MyStudent,
+    StudentMyProject,
+    TeacherStudent,
     TeacherStudents,
     routes,
     SignIn,
@@ -55,23 +55,20 @@ function App() {
                     <Route path={routes.teacher.root} element={<TeacherRoot />}>
                         <Route path={routes.teacher.students} element={<TeacherInviteStudents />} />
                         <Route path={routes.teacher.myStudents} element={<TeacherStudents />} />
+                        <Route path={routes.teacher.myStudent()} element={<TeacherStudent />}>
+                            <Route index element={<StudentFeed />} />
+                        </Route>
                         <Route path={routes.teacher.invitations} element={<Invitations />} />
                     </Route>
 
                     <Route path={routes.student.root} element={<StudentRoot />}>
                         <Route path={routes.student.teachers} element={<StudentTeachers />} />
+                        <Route path={routes.student.myProject} element={<StudentMyProject />} />
                     </Route>
 
                     <Route path={routes.common.invitations} element={<Invitations />} />
                     <Route path={routes.common.workReview()} element={<StudentWorkReview />} />
-
-                    <Route path={routes.myStudent()} element={<MyStudent />}>
-                        <Route index element={<StudentFeed />} />
-                    </Route>
-
-                    <Route path={routes.myProject} element={<MyProject />}>
-                        <Route index element={<StudentFeed />} />
-                    </Route>
+                    <Route path={routes.common.studentFeed()} element={<StudentFeed />} />
                 </Route>
             </Routes>
             <ToastContainer theme='dark' />

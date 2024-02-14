@@ -20,19 +20,13 @@ export function FilePreview({ studentId, documentId }: { studentId: string; docu
     const dotNameSplit = doc.originalName.split('.')
     let extension = t('unknownExtension')
     if (dotNameSplit.length > 1) extension = '.' + dotNameSplit[dotNameSplit.length - 1]
+    const fileUrl = endpoints.files.getDocument(documentId)
 
     if (doc.originalName.endsWith('.pdf')) {
         return (
-            <object
-                className='mx-auto'
-                data={endpoints.files.getDocument(documentId)}
-                type='application/pdf'
-                width='100%'
-                height='100%'
-            >
+            <object className='mx-auto' data={fileUrl} type='application/pdf' width='100%' height='100%'>
                 <p className='text-center text-2xl'>
-                    {t('previewNotSupported')}. {t('youCanDownload...')}{' '}
-                    <a href={endpoints.files.getDocument(documentId)}>{t('...here')}</a>.
+                    {t('previewNotSupported')}. {t('youCanDownload...')} <a href={fileUrl}>{t('...here')}</a>.
                 </p>
             </object>
         )
@@ -44,7 +38,7 @@ export function FilePreview({ studentId, documentId }: { studentId: string; docu
                 {t('previewImpossibleWithExtension', { extension })}.
             </div>
             <p className='mt-4 text-center text-xl text-cs-text-dark'>
-                {t('youCanDownload...')} <a href={endpoints.files.getDocument(documentId)}>{t('...here')}</a>.
+                {t('youCanDownload...')} <a href={fileUrl}>{t('...here')}</a>.
             </p>
         </>
     )

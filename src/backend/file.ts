@@ -36,20 +36,26 @@ export async function uploadUserInvitationCsv(accessToken: string, document: Fil
     })
 }
 
-export async function reviewDocument(documentId: number, verdict: 'approved' | 'rejected', nextStageId?: number) {
+export async function reviewDocument(
+    documentId: string,
+    studentId: string,
+    verdict: 'approved' | 'rejected',
+    nextStageId?: number
+) {
     const formData = new FormData()
     formData.append('isApproved', verdict === 'approved' ? 'true' : 'false')
 
     const response = await axios.put(endpoints.files.reviewDocument(documentId), formData)
 
-    return { ...response.data, documentId, nextStageId } as {
+    return { ...response.data, documentId, studentId, nextStageId } as {
         approved: string
-        documentId: number
+        documentId: string
+        studentId: string
         nextStageId: number
     }
 }
 
-export async function moveDocumentToStage(documentId: number, stageId: number) {
+export async function moveDocumentToStage(documentId: string, stageId: number) {
     const response = await axios.put(endpoints.files.moveToNextStage(documentId, stageId))
     return response.data as object
 }
@@ -60,5 +66,5 @@ export interface IDocumentDTO {
     approved: boolean
     approvedDate: string
     originalName: string
-    stageDTO?: IStageDTO
+    stageDTO: IStageDTO
 }

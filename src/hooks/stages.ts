@@ -99,7 +99,7 @@ export function useDocumentNextStage() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async ({ documentId, stageId }: { documentId: number; stageId: number }) =>
+        mutationFn: async ({ documentId, stageId }: { documentId: string; stageId: number }) =>
             moveDocumentToStage(documentId, stageId),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['studentDocuments'])

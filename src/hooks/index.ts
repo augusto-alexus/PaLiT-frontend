@@ -1,5 +1,4 @@
 export * from './useForm'
-export * from './useTeamInfo'
 export * from './auth'
 export * from './stages'
 export * from './requests'

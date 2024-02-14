@@ -127,7 +127,10 @@
     "documentMovedToNextStage": "Document moved to the next stage",
     "studentUploadedFile": "Student uploaded the file",
     "commentSaved": "Comment saved",
-    "nextStage": "Project moved to the next stage"
+    "nextStage": "Project moved to the next stage",
+    "review": "Review",
+    "checkHistory": "Check history",
+    "projectInfo": "Project info"
   },
   "yourComment": "Your comment",
   "send": "Send",

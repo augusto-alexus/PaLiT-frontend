@@ -1,14 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import { Link, Navigate, Outlet } from 'react-router-dom'
-import { useCurrentUser, useMyProject } from '~/hooks'
-import { routes } from '~/pages'
+import { Link } from 'react-router-dom'
+import { useMyProject } from '~/hooks'
+import { routes, StudentFeed } from '~/pages'
 import { SidebarContainer } from '~/pages/components'
 
-export function MyProject() {
+export function StudentMyProject() {
     const { t } = useTranslation()
-    const { role } = useCurrentUser()
     const { myProjectStarted } = useMyProject()
-    if (role !== 'student') return <Navigate to={`/${routes.authRedirect}`} />
     if (!myProjectStarted)
         return (
             <div className='flex w-full flex-col gap-8'>
@@ -24,7 +22,7 @@ export function MyProject() {
 
     return (
         <SidebarContainer>
-            <Outlet />
+            <StudentFeed />
         </SidebarContainer>
     )
 }

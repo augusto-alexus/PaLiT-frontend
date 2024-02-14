@@ -15,25 +15,26 @@ export const routes = {
         aMyStudents: '/teacher/my-students',
         invitations: 'invitations',
         aInvitations: '/teacher/invitations',
+        myStudent: (studentId?: string) => buildUrlWithSearchParams('my-student', { studentId }),
+        aMyStudent: (studentId?: string) => buildUrlWithSearchParams('/teacher/my-student', { studentId }),
     },
     common: {
         invitations: 'invitations',
         aInvitations: '/invitations',
         workReview: (studentId?: string, documentId?: string) =>
-            buildUrlWithSearchParams('work-review', { studentId: studentId ?? '', documentId: documentId ?? '' }),
+            buildUrlWithSearchParams('work-review', { studentId, documentId }),
         aWorkReview: (studentId?: string, documentId?: string) =>
-            buildUrlWithSearchParams('/work-review', { studentId: studentId ?? '', documentId: documentId ?? '' }),
+            buildUrlWithSearchParams('/work-review', { studentId, documentId }),
+        studentFeed: (studentId?: string) => buildUrlWithSearchParams('student-feed', { studentId }),
+        aStudentFeed: (studentId?: string) => buildUrlWithSearchParams('/student-feed', { studentId }),
     },
     student: {
         root: 'student',
         teachers: 'teachers',
         aTeachers: '/student/teachers',
+        myProject: 'my-project',
+        aMyProject: '/student/my-project',
     },
-    dashboard: 'dashboard',
-    files: 'files',
-    filePreview: (documentId?: number) => `file-preview/${documentId ? documentId : ':documentId'}`,
-    myProject: 'my-project',
-    myStudent: (studentId?: number) => `my-student/${studentId ? studentId : ':studentId'}`,
     hod: Object.freeze({
         root: 'hod',
         stageApproval: 'stage-approval',
@@ -51,8 +52,13 @@ export const routes = {
     }),
 }
 
-function buildUrlWithSearchParams(baseUrl: string, searchParamsData: Record<string, string>): string {
-    const searchParams = new URLSearchParams(searchParamsData)
-    if (searchParams.size > 0) return baseUrl + '?' + searchParams.toString()
+function buildUrlWithSearchParams(baseUrl: string, searchParamsData: Record<string, string | undefined>): string {
+    const searchParams: string[] = Object.entries(searchParamsData).reduce((res, e) => {
+        if (e[1]) res.push(e[0] + '=' + e[1])
+        return res
+    }, [] as string[])
+    if (searchParams.length > 0) {
+        return baseUrl + '?' + searchParams.join('&')
+    }
     return baseUrl
 }

@@ -1,42 +1,40 @@
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 import { getComments, IDocumentDTO, IStageDTO } from '~/backend'
-import { Avatar, Button, DisplayError, Feed, IconButton, IFeedElement, Loading, TextArea } from '~/components'
-import { useCurrentUser, useDocumentReview, useMakeComment, useTeamInfo } from '~/hooks'
+import { Avatar, Feed, IconButton, IFeedElement, Loading } from '~/components'
+import { useAllUsers, useCurrentUser, useDocumentReview } from '~/hooks'
 import { routes } from '~/pages'
 import { useFeedStore } from '~/store'
+import { CommentInput } from '~/pages/components'
 
 export function DocumentFeedItem({
     document,
-    selectedStage,
+    studentId,
     stages,
 }: {
     document: IDocumentDTO
-    selectedStage: number
+    studentId: string
     stages: IStageDTO[]
 }) {
     const { showCommentsForDocumentId, setShowCommentsForDocumentId } = useFeedStore()
     const { documentId } = document
     const showComments = showCommentsForDocumentId === documentId
 
-    const { role } = useCurrentUser()
+    const { id, role } = useCurrentUser()
     const { t } = useTranslation()
-    const navigate = useNavigate()
     const wasReviewed = document.approved || !!document.approvedDate
     const { mutate: reviewDocument } = useDocumentReview()
-    const curStageOrder = (document?.stageDTO?.serialOrder as number) ?? 0
+    const curStageOrder = document.stageDTO.serialOrder
     const nextStage = stages.find((s) => s.serialOrder === curStageOrder + 1)
     return (
         <div className={`${showComments ? 'sticky left-0 top-0 z-10' : ''} flex flex-col gap-8 py-1`}>
-            <div className='flex flex-row place-items-start gap-2'>
-                <IconButton
-                    onClick={() => navigate(routes.filePreview(document.documentId))}
-                    title={t('feed.viewDocument')}
+            <div className='flex flex-row place-items-start items-center gap-2'>
+                <a
+                    className='text-cs-text-neutral hover:text-cs-secondary'
+                    href={routes.common.aWorkReview(studentId, document.documentId.toString())}
                 >
                     <i className='ri-eye-line' />
-                </IconButton>
+                </a>
                 <IconButton
                     isActive={showComments}
                     onClick={() => setShowCommentsForDocumentId(documentId)}
@@ -51,7 +49,8 @@ export function DocumentFeedItem({
                     <IconButton
                         onClick={() =>
                             reviewDocument({
-                                documentId,
+                                documentId: documentId.toString(),
+                                studentId,
                                 verdict: 'approved',
                                 nextStageId: nextStage.stageId,
                             })
@@ -63,7 +62,13 @@ export function DocumentFeedItem({
                 )}
                 {role === 'teacher' && !wasReviewed && (
                     <IconButton
-                        onClick={() => reviewDocument({ documentId, verdict: 'rejected' })}
+                        onClick={() =>
+                            reviewDocument({
+                                documentId: documentId.toString(),
+                                studentId,
+                                verdict: 'rejected',
+                            })
+                        }
                         title={t('feed.rejectDocument')}
                     >
                         <i className='ri-close-line' />
@@ -73,7 +78,7 @@ export function DocumentFeedItem({
             {showComments && <DocumentCommentsFeed documentId={documentId} />}
             {showComments && (
                 <div className='mb-8'>
-                    <CommentInput documentId={documentId} selectedStage={selectedStage} />
+                    <CommentInput documentId={documentId.toString()} userId={id.toString()} />
                 </div>
             )}
         </div>
@@ -81,26 +86,22 @@ export function DocumentFeedItem({
 }
 
 function DocumentCommentsFeed({ documentId }: { documentId: number }) {
-    const {
-        data: comments,
-        isLoading,
-        isFetching,
-    } = useQuery({
+    const { data: comments, isInitialLoading: isInitLoadingComments } = useQuery({
         queryKey: ['documentComments', documentId],
         queryFn: () => getComments(documentId),
     })
-    const { isLoading: isLoadingTeamInfo, teacher, student } = useTeamInfo()
-    if ((isLoading && isFetching) || isLoadingTeamInfo) return <Loading />
+    const { users, isInitialLoading: isInitLoadingUsers } = useAllUsers()
+    if (isInitLoadingComments || isInitLoadingUsers) return <Loading />
+
     const feedElements = comments?.map((c) => {
+        const user = users?.find((u) => u.userId.toString() === c.userId)
         return {
             iconL: (
                 <Avatar
+                    firstName={user?.firstName ?? '?'}
+                    lastName={user?.lastName ?? '?'}
+                    bgColor={'bg-cs-secondary'}
                     small
-                    user={{
-                        role: c.from,
-                        firstName: c.from === 'student' ? student.firstName : teacher.firstName,
-                        lastName: c.from === 'student' ? student.lastName : teacher.lastName,
-                    }}
                 />
             ),
             content: c.text,
@@ -108,44 +109,4 @@ function DocumentCommentsFeed({ documentId }: { documentId: number }) {
         } as IFeedElement
     })
     return <Feed data={feedElements} />
-}
-
-function CommentInput({ documentId, selectedStage }: { documentId: number; selectedStage: number }) {
-    const { t } = useTranslation()
-    const [comment, setComment] = useState<string>('')
-    const { mutate: makeComment } = useMakeComment()
-    const { isLoading, teacher, student } = useTeamInfo()
-    if (isLoading) return <Loading />
-    const studentId = student.studentId
-    const teacherId = teacher.teacherId
-    if (!studentId || !teacherId) return <DisplayError error={new Error('studentId or teacherId is undefined')} />
-
-    return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault()
-                makeComment({
-                    documentId,
-                    stageId: selectedStage,
-                    studentId,
-                    teacherId,
-                    comment,
-                })
-                setComment('')
-            }}
-            className='flex flex-row place-items-start gap-4'
-        >
-            <Avatar />
-            <TextArea
-                required
-                name='comment'
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder={t('yourComment') + '...'}
-            />
-            <Button preset='filled' type='submit'>
-                {t('send')}
-            </Button>
-        </form>
-    )
 }

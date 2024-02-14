@@ -33,7 +33,7 @@ function getHeaderNavs(role: Role, myProjectStarted: boolean): INavItem[] {
 }
 
 function getStudentHeaderNavs(myProjectStarted: boolean): INavItem[] {
-    const navs: INavItem[] = [{ to: routes.myProject, tLabel: 'navigation.myProject' }]
+    const navs: INavItem[] = [{ to: routes.student.aMyProject, tLabel: 'navigation.myProject' }]
     if (!myProjectStarted) {
         navs.push({ to: routes.student.aTeachers, tLabel: 'navigation.teachers' })
         navs.push({ to: routes.common.aInvitations, tLabel: 'navigation.invites' })
@@ -81,9 +81,10 @@ function HeaderNav({ navItems }: { navItems: INavItem[] }) {
 function HeaderTools() {
     const { t, i18n } = useTranslation()
     const authStore = useAuthStore()
+    const currentUser = useCurrentUser()
     return (
         <div className='flex flex-row place-items-center gap-4'>
-            <Avatar />
+            <Avatar firstName={currentUser.firstName} lastName={currentUser.lastName} bgColor={'bg-cs-primary'} />
             <Button
                 preset='icon'
                 title={t('changeLanguage')}

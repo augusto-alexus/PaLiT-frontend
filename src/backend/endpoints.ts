@@ -19,9 +19,9 @@ export default Object.freeze({
         getAll: 'role/all',
     }),
     files: Object.freeze({
-        getDocument: (documentId: string) => `file/${documentId}`,
-        reviewDocument: (documentId: number) => `file/${documentId}`,
-        moveToNextStage: (documentId: number, stageId: number) => `file/${documentId}/move-to-next-stage/${stageId}`,
+        getDocument: (documentId: string) => baseUrl + `/file/${documentId}`,
+        reviewDocument: (documentId: string) => `file/${documentId}`,
+        moveToNextStage: (documentId: string, stageId: number) => `file/${documentId}/move-to-next-stage/${stageId}`,
         getStudentDocuments: (studentId: string) => `student/${studentId}/file-info`,
         uploadFile: (studentId: number) => baseUrl + `/file/student/${studentId}`,
         uploadCsv: baseUrl + '/email/csv',
@@ -33,8 +33,7 @@ export default Object.freeze({
         teacherStageApprove: 'teacher-stage-approve',
     }),
     comments: Object.freeze({
-        postComment: (documentId: number, studentId: number, teacherId: number, stageId: number) =>
-            `comment/${documentId}/${studentId}/${teacherId}/${stageId}`,
+        postComment: (documentId: string, userId: string) => `comment/${documentId}/${userId}`,
         getComments: (documentId: number) => `comment/${documentId}`,
     }),
     hod: Object.freeze({

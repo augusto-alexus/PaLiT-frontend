@@ -1,11 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { useTranslation } from 'react-i18next'
-import { useOutletContext } from 'react-router-dom'
 import { getStudentDocuments, postComment, reviewDocument } from '~/backend'
 import { toast } from '~/components'
-import { useCurrentUser, useDocumentNextStage } from '~/hooks'
-import { IMyStudent } from '~/models'
+import { useDocumentNextStage } from '~/hooks'
+import { useTranslation } from 'react-i18next'
 
 export function useAllStudentDocuments(studentId: string | undefined) {
     return useQuery({
@@ -31,26 +29,23 @@ export function useStudentDocument(studentId: string | null | undefined, documen
 }
 
 export function useDocumentReview() {
-    const { id } = useCurrentUser()
     const { t } = useTranslation()
     const queryClient = useQueryClient()
-    const outletContext = useOutletContext<{ myStudent?: IMyStudent }>()
     const { mutate: moveDocumentToNextStage } = useDocumentNextStage()
     return useMutation({
         mutationFn: async ({
             documentId,
+            studentId,
             verdict,
             nextStageId,
         }: {
-            documentId: number
+            documentId: string
+            studentId: string
             verdict: 'approved' | 'rejected'
             nextStageId?: number
-        }) => reviewDocument(documentId, verdict, nextStageId),
-        onSuccess: async ({ approved, documentId, nextStageId }) => {
-            await queryClient.invalidateQueries([
-                'studentDocuments',
-                outletContext?.myStudent?.student?.studentId || id,
-            ])
+        }) => reviewDocument(documentId, studentId, verdict, nextStageId),
+        onSuccess: async ({ approved, documentId, studentId, nextStageId }) => {
+            await queryClient.invalidateQueries(['studentDocuments', studentId])
             if (approved === 'true') {
                 moveDocumentToNextStage({ documentId, stageId: nextStageId })
             } else toast(t('feed.documentRejected'))
@@ -67,23 +62,11 @@ export function useDocumentReview() {
 
 export function useMakeComment() {
     const { t } = useTranslation()
-    const { role } = useCurrentUser()
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async ({
-            documentId,
-            stageId,
-            studentId,
-            teacherId,
-            comment,
-        }: {
-            documentId: number
-            stageId: number
-            studentId: number
-            teacherId: number
-            comment: string
-        }) => postComment(documentId, stageId, studentId, teacherId, comment, role),
+        mutationFn: async ({ documentId, userId, comment }: { documentId: string; userId: string; comment: string }) =>
+            postComment(documentId, userId, comment),
         onSuccess: async (data) => {
             await queryClient.invalidateQueries(['documentComments', data])
             toast(t('feed.commentSaved'))

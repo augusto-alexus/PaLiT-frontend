@@ -1,21 +1,9 @@
-import { IStageDTO } from '~/backend/stages.ts'
-import { Role } from '~/models'
+import { IStageDTO } from './stages.ts'
 import endpoints from './endpoints'
 import axios from './base.ts'
 
-export async function postComment(
-    documentId: number,
-    stageId: number,
-    studentId: number,
-    teacherId: number,
-    comment: string,
-    authorRole: Role
-) {
-    await axios.post(endpoints.comments.postComment(documentId, studentId, teacherId, stageId), {
-        text: comment,
-        fromType: authorRole.toUpperCase(),
-    })
-
+export async function postComment(documentId: string, userId: string, comment: string) {
+    await axios.post(endpoints.comments.postComment(documentId, userId), { text: comment })
     return documentId
 }
 
@@ -27,7 +15,7 @@ export async function getComments(documentId: number) {
 function getCommentFromDTO(dto: ICommentDTO): IComment {
     return {
         text: dto.text,
-        from: dto.fromType.toLowerCase() as Role,
+        userId: dto.userId,
         stageId: dto.stageDTO.stageId,
         createdAt: dto.createdDate,
     }
@@ -35,14 +23,14 @@ function getCommentFromDTO(dto: ICommentDTO): IComment {
 
 interface ICommentDTO {
     text: string
-    fromType: 'STUDENT' | 'TEACHER'
+    userId: string
     stageDTO: IStageDTO
     createdDate: string
 }
 
 export interface IComment {
     text: string
-    from: Role
+    userId: string
     stageId: number
     createdAt: string
 }

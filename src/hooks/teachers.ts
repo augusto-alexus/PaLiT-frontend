@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { getAllTeachers, getMyStudents } from '~/backend'
-import { useCurrentUser } from '~/hooks'
 
 export function useAllTeachers() {
     return useQuery({
@@ -19,15 +18,19 @@ export function useTeacher(teacherId: string) {
     })
 }
 
-export function useMyStudent(studentId: string | number | undefined) {
-    const { role } = useCurrentUser()
-    const { data: myStudents, isLoading } = useQuery({
-        enabled: role === 'teacher',
-        queryKey: ['myStudents', studentId],
-        queryFn: () => getMyStudents(),
+export function useMyStudents() {
+    return useQuery({
+        queryKey: ['myStudents'],
+        queryFn: getMyStudents,
     })
-    return {
-        myStudent: myStudents?.find((s) => s.student.studentId == studentId),
-        isLoading,
-    }
+}
+
+export function useMyStudent(studentId?: string | null) {
+    return useQuery({
+        queryKey: ['myStudents', studentId],
+        queryFn: async () => {
+            const myStudents = await getMyStudents()
+            return myStudents?.find((s) => s.student.studentId.toString() === studentId)
+        },
+    })
 }

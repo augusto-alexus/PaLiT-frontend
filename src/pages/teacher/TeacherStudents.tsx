@@ -1,18 +1,13 @@
-import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
-import { getMyStudents } from '~/backend'
-import { useCurrentUser } from '~/hooks'
+import { useCurrentUser, useMyStudents } from '~/hooks'
 import { IMyStudent } from '~/models'
 import { routes } from '~/pages'
 
 export function TeacherStudents() {
     const { t } = useTranslation()
     const { bachelorStudentsLimit, masterStudentsLimit } = useCurrentUser()
-    const { data } = useQuery({
-        queryKey: ['myStudents'],
-        queryFn: () => getMyStudents(),
-    })
+    const { data } = useMyStudents()
     const anyStudents = !!data?.length
     if (!anyStudents)
         return (
@@ -62,7 +57,7 @@ function MyStudentInfoRow({ myStudent }: { myStudent: IMyStudent }) {
     const { student } = myStudent
     return (
         <div
-            onClick={() => navigate(`/${routes.myStudent(student.studentId)}`)}
+            onClick={() => navigate(routes.teacher.aMyStudent(student.studentId.toString()))}
             className='flex w-full max-w-sm flex-col rounded-t-3xl border-b border-b-cs-additional-gray p-4 pb-4 hover:cursor-pointer hover:bg-cs-bg-neutral'
         >
             <div className='my-1 grid grid-cols-5 gap-2'>
