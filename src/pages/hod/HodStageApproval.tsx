@@ -124,8 +124,8 @@ function TeacherStageTable({
         <table className='mx-auto w-full table-fixed border-separate md:w-4/5 lg:w-3/4 xl:w-2/3'>
             <TableHeader roleDTO={roleDTO} showStages={showStages} showTooltip={teachersWithRole.length > 1} />
             <tbody>
-                {teachersWithRole?.map((t) => (
-                    <TeacherStages key={t.teacherId + crypto.randomUUID()} teacher={t} />
+                {teachersWithRole?.map((t, idx) => (
+                    <TeacherStages key={`${t.teacherId} | ${idx}`} teacher={t} />
                 ))}
             </tbody>
         </table>
