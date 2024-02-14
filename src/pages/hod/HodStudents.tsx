@@ -11,7 +11,8 @@ export function HodStudents() {
     const { data, isInitialLoading } = useAllStudentsWithInfo()
 
     if (isInitialLoading) return <Loading />
-    if (!data) return <h2 className='text-2xl text-cs-text-dark'>{t('dashboard.noUsers')}</h2>
+    if (!data?.length)
+        return <h2 className='w-full text-center text-2xl text-cs-text-dark'>{t('dashboard.noUsers')}</h2>
 
     const tableCols: ITableHeader[] = [
         { key: 'studentFullName', label: t('dashboard.student') },
@@ -26,7 +27,7 @@ export function HodStudents() {
         currentStage: s.documentDTO.stageDTO.name,
         workStatus:
             s.documentDTO.approved === 'false'
-                ? !!s.documentDTO.approvedDate
+                ? s.documentDTO.approvedDate
                     ? t('workStatuses.rejected')
                     : t('workStatuses.toReview')
                 : t('workStatuses.accepted'),

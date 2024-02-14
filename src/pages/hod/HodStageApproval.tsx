@@ -115,7 +115,7 @@ function TeacherStageTable({
     const teachersWithRole = allTeachers.filter((t) => t.roleDTO.id === roleDTO.id)
     if (teachersWithRole.length === 0)
         return (
-            <h2 className='text-2xl text-cs-text-dark'>
+            <h2 className='text-center text-2xl text-cs-text-dark'>
                 {t('dashboard.noUsersWithRole', { roleName: t(`roles.${roleDTO.name}`) })}
             </h2>
         )

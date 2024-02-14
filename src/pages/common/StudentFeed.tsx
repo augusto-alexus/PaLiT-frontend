@@ -76,7 +76,10 @@ export function StudentFeed() {
         return -stageDelta
     })?.[0]
 
-    const canUpload = role === 'student' && myProject?.stage?.stageId === selectedStage && !!lastDocument?.approvedDate
+    const canUpload =
+        role === 'student' &&
+        myProject?.stage?.stageId === selectedStage &&
+        (!!lastDocument?.approvedDate || !lastDocument)
 
     return (
         <div className='mx-auto my-4 flex w-10/12 flex-col gap-4'>
