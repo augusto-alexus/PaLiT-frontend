@@ -65,4 +65,10 @@ export interface ITeacherSignUpDTO {
     lastName: string
     email: string
     password: string
+    token?: string
+}
+
+export interface IHodTeacherCreateDTO extends ITeacherSignUpDTO {
+    generalBachelor: number
+    generalMaster: number
 }

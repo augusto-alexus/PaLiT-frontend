@@ -35,15 +35,14 @@ export function useAcceptInvitation(onSuccess?: () => void) {
     const queryClient = useQueryClient()
     const { t } = useTranslation()
     return useMutation({
-        mutationFn: async ({ requestId }: { requestId: number }) => {
-            return approveRequest(requestId)
-        },
+        mutationFn: ({ requestId }: { requestId: number }) => approveRequest(requestId),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['requests'])
             await queryClient.invalidateQueries(['myProject'])
             onSuccess?.()
         },
         onError: (error) => {
+            console.log('===>', error)
             if (error instanceof AxiosError) {
                 if (error.response?.status === 409) {
                     toast(`${t('error.studentAlreadyHasTeacher')}!`)

@@ -13,7 +13,13 @@ import { routes } from '~/pages'
 import { Button, DisplayError, Input, Loading, Password, Select, toast } from '~/components'
 import { IUserUpdateForm } from '~/models'
 import { useEffect } from 'react'
-import { IFullUserInfoDTO, IStudentSignUpDTO, IStudentUpdateDTO, ITeacherSignUpDTO, ITeacherUpdateDTO } from '~/backend'
+import {
+    IFullUserInfoDTO,
+    IHodTeacherCreateDTO,
+    IStudentSignUpDTO,
+    IStudentUpdateDTO,
+    ITeacherUpdateDTO,
+} from '~/backend'
 
 export function HodUserEdit() {
     const navigate = useNavigate()
@@ -206,12 +212,14 @@ function getFormStateFromUser(user: IFullUserInfoDTO | undefined): IUserUpdateFo
     }
 }
 
-function getTeacherCreateDTO(form: IUserUpdateForm): ITeacherSignUpDTO {
+function getTeacherCreateDTO(form: IUserUpdateForm): IHodTeacherCreateDTO {
     return {
         lastName: form.lastName,
         firstName: form.firstName,
         email: form.email,
         password: form.password,
+        generalBachelor: form.bachelorStudentLimit,
+        generalMaster: form.masterStudentLimit,
     }
 }
 

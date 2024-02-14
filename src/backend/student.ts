@@ -13,6 +13,11 @@ export async function getMyProject() {
     return parseMyProjectDTO(response.data as IMyProjectDTO)
 }
 
+export async function getAllStudentsWithInfo() {
+    const response = await axios.get(endpoints.student.getAllStudentsWithStatus)
+    return response.data as IHodStudentInfo[]
+}
+
 function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {
     return {
         language: dto?.language ? (dto.language === 'UA' ? 'Українська' : 'English') : undefined,
@@ -23,6 +28,34 @@ function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {
             firstName: dto?.teacherRequestDTO?.firstName,
             lastName: dto?.teacherRequestDTO?.lastName,
         },
+    }
+}
+
+export interface IHodStudentInfo {
+    userDTO: {
+        userId: string
+        firstName: string
+        lastName: string
+        email: string
+    }
+    studentDTO: {
+        studentId: string
+        degree: 'BACHELOR' | 'MASTER' | string
+        cluster: string
+        faculty: string
+        graduateDate: string
+    }
+    documentDTO: {
+        documentId: string
+        approved: string
+        originalName: string
+        stageDTO: {
+            stageId: number
+            serialOrder: number
+            name: string
+        }
+        approvedDate: string | null
+        createdDate: string
     }
 }
 

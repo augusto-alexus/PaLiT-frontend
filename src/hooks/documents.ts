@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 export function useAllStudentDocuments(studentId: string | undefined) {
     return useQuery({
         enabled: !!studentId,
-        queryKey: ['studentWork', studentId],
+        queryKey: ['studentDocuments', studentId],
         queryFn: async () => {
             if (!studentId) throw new Error('Trying to fetch document while student id is unknown')
             return getStudentDocuments(studentId)
@@ -19,7 +19,7 @@ export function useAllStudentDocuments(studentId: string | undefined) {
 export function useStudentDocument(studentId: string | null | undefined, documentId: string | null | undefined) {
     return useQuery({
         enabled: !!studentId && !!documentId,
-        queryKey: ['studentWork', studentId, documentId],
+        queryKey: ['studentDocuments', studentId, documentId],
         queryFn: async () => {
             if (!studentId || !documentId) throw new Error('Trying to fetch document while student id is unknown')
             const allDocuments = await getStudentDocuments(studentId)
@@ -44,10 +44,12 @@ export function useDocumentReview() {
             verdict: 'approved' | 'rejected'
             nextStageId?: number
         }) => reviewDocument(documentId, studentId, verdict, nextStageId),
-        onSuccess: async ({ approved, documentId, studentId, nextStageId }) => {
-            await queryClient.invalidateQueries(['studentDocuments', studentId])
+        onSuccess: async ({ approved, documentId, nextStageId }) => {
+            await queryClient.invalidateQueries(['studentDocuments'])
             if (approved === 'true') {
-                moveDocumentToNextStage({ documentId, stageId: nextStageId })
+                nextStageId
+                    ? moveDocumentToNextStage({ documentId, stageId: nextStageId })
+                    : toast(t('feed.documentApproved'))
             } else toast(t('feed.documentRejected'))
         },
         onError: (error: AxiosError | never) => {

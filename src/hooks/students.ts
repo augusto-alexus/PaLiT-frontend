@@ -1,11 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
-import { getAllStudents, getMyProject, IMyProject } from '~/backend'
+import { getAllStudents, getAllStudentsWithInfo, getMyProject, IMyProject } from '~/backend'
 import { useCurrentUser } from '~/hooks'
 
 export function useAllStudents() {
     return useQuery({
         queryKey: ['students'],
         queryFn: getAllStudents,
+    })
+}
+
+export function useAllStudentsWithInfo() {
+    return useQuery({
+        queryKey: ['studentsWithInfo'],
+        queryFn: getAllStudentsWithInfo,
     })
 }
 
@@ -22,7 +29,7 @@ export function useStudent(studentId: string | null | undefined) {
 
 export function useMyProject(): IUseMyProject {
     const currentUser = useCurrentUser()
-    const { data: myProject } = useQuery({
+    const { data: myProject, isInitialLoading } = useQuery({
         enabled: currentUser.role === 'student',
         queryKey: ['myProject'],
         queryFn: () => getMyProject(),
@@ -33,10 +40,12 @@ export function useMyProject(): IUseMyProject {
     return Object.freeze({
         myProject,
         myProjectStarted,
+        isInitialLoading,
     })
 }
 
 interface IUseMyProject {
     myProject: IMyProject | undefined
     myProjectStarted: boolean
+    isInitialLoading: boolean
 }

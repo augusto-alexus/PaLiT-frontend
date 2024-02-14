@@ -35,8 +35,15 @@ export const routes = {
         myProject: 'my-project',
         aMyProject: '/student/my-project',
     },
+    ps: Object.freeze({
+        root: 'ps',
+        students: 'students',
+        aStudents: '/ps/students',
+    }),
     hod: Object.freeze({
         root: 'hod',
+        students: 'students',
+        aStudents: '/hod/students',
         stageApproval: 'stage-approval',
         aStageApproval: '/hod/stage-approval',
         teams: 'teams',

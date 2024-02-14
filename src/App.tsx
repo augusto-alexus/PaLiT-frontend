@@ -27,8 +27,11 @@ import {
     TeacherRoot,
     TeacherInviteStudents,
     StudentRoot,
+    CommonStudentFeedWrapper,
 } from '~/pages'
 import './i18.ts'
+import { HodStudents } from '~/pages/hod/HodStudents.tsx'
+import { PsRoot } from '~/pages/ps'
 
 function App() {
     return (
@@ -43,6 +46,7 @@ function App() {
                     <Route index path='*' element={<AuthRedirect />} />
 
                     <Route path={routes.hod.root} element={<HodRoot />}>
+                        <Route path={routes.hod.students} element={<HodStudents />} />
                         <Route path={routes.hod.stageApproval} element={<HodStageApproval />} />
                         <Route path={routes.hod.teams} element={<HodTeams />} />
                         <Route path={routes.hod.users.root}>
@@ -50,6 +54,10 @@ function App() {
                             <Route path={routes.hod.users.user()} element={<HodUser />} />
                             <Route path={routes.hod.users.userEdit} element={<HodUserEdit />} />
                         </Route>
+                    </Route>
+
+                    <Route path={routes.ps.root} element={<PsRoot />}>
+                        <Route path={routes.ps.students} element={<HodStudents />} />
                     </Route>
 
                     <Route path={routes.teacher.root} element={<TeacherRoot />}>
@@ -68,7 +76,7 @@ function App() {
 
                     <Route path={routes.common.invitations} element={<Invitations />} />
                     <Route path={routes.common.workReview()} element={<StudentWorkReview />} />
-                    <Route path={routes.common.studentFeed()} element={<StudentFeed />} />
+                    <Route path={routes.common.studentFeed()} element={<CommonStudentFeedWrapper />} />
                 </Route>
             </Routes>
             <ToastContainer theme='dark' />

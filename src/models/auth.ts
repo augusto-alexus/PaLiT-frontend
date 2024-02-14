@@ -15,16 +15,17 @@ export interface ISignUpStudentForm extends ISignUpTeacherForm {
     faculty: string
 }
 
-export function getTeacherSignUpDTO(form: ISignUpTeacherForm): ITeacherSignUpDTO {
+export function getTeacherSignUpDTO(form: ISignUpTeacherForm, token: string): ITeacherSignUpDTO {
     return {
         firstName: form.firstName,
         lastName: form.lastName,
         email: form.email,
         password: form.password,
+        token,
     }
 }
 
-export function getStudentSignUpDTO(form: ISignUpStudentForm): IStudentSignUpDTO {
+export function getStudentSignUpDTO(form: ISignUpStudentForm, token: string): IStudentSignUpDTO {
     return {
         firstName: form.firstName,
         lastName: form.lastName,
@@ -34,5 +35,6 @@ export function getStudentSignUpDTO(form: ISignUpStudentForm): IStudentSignUpDTO
         faculty: form.faculty,
         graduateDate: form.gradDate,
         degree: form.gradLevel,
+        token,
     }
 }

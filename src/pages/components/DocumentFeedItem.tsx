@@ -1,8 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { getComments, IDocumentDTO, IStageDTO } from '~/backend'
+import { IDocumentDTO, IStageDTO } from '~/backend'
 import { Avatar, Feed, IconButton, IFeedElement, Loading } from '~/components'
-import { useAllUsers, useCurrentUser, useDocumentReview } from '~/hooks'
+import { useAllUsers, useCheckIfStageMoveAllowed, useCurrentUser, useDocumentReview, useGetComments } from '~/hooks'
 import { routes } from '~/pages'
 import { useFeedStore } from '~/store'
 import { CommentInput } from '~/pages/components'
@@ -17,12 +16,13 @@ export function DocumentFeedItem({
     stages: IStageDTO[]
 }) {
     const { showCommentsForDocumentId, setShowCommentsForDocumentId } = useFeedStore()
+    const isStageMoveAllowed = useCheckIfStageMoveAllowed()
+
     const { documentId } = document
     const showComments = showCommentsForDocumentId === documentId
 
-    const { id, role } = useCurrentUser()
+    const { id } = useCurrentUser()
     const { t } = useTranslation()
-    const wasReviewed = document.approved || !!document.approvedDate
     const { mutate: reviewDocument } = useDocumentReview()
     const curStageOrder = document.stageDTO.serialOrder
     const nextStage = stages.find((s) => s.serialOrder === curStageOrder + 1)
@@ -45,7 +45,7 @@ export function DocumentFeedItem({
                 <div className='place-self-center'>
                     {t('feed.studentUploadedFile')}: {document.originalName}
                 </div>
-                {role === 'teacher' && !wasReviewed && nextStage && (
+                {nextStage && isStageMoveAllowed(document.stageDTO.stageId, document.approvedDate) && (
                     <IconButton
                         onClick={() =>
                             reviewDocument({
@@ -60,7 +60,7 @@ export function DocumentFeedItem({
                         <i className='ri-check-line' />
                     </IconButton>
                 )}
-                {role === 'teacher' && !wasReviewed && (
+                {isStageMoveAllowed(document.stageDTO.stageId, document.approvedDate) && (
                     <IconButton
                         onClick={() =>
                             reviewDocument({
@@ -75,7 +75,7 @@ export function DocumentFeedItem({
                     </IconButton>
                 )}
             </div>
-            {showComments && <DocumentCommentsFeed documentId={documentId} />}
+            {showComments && <DocumentCommentsFeed documentId={documentId.toString()} />}
             {showComments && (
                 <div className='mb-8'>
                     <CommentInput documentId={documentId.toString()} userId={id.toString()} />
@@ -85,22 +85,19 @@ export function DocumentFeedItem({
     )
 }
 
-function DocumentCommentsFeed({ documentId }: { documentId: number }) {
-    const { data: comments, isInitialLoading: isInitLoadingComments } = useQuery({
-        queryKey: ['documentComments', documentId],
-        queryFn: () => getComments(documentId),
-    })
+export function DocumentCommentsFeed({ documentId }: { documentId: string }) {
+    const { data: comments, isInitialLoading: isInitLoadingComments } = useGetComments(documentId)
     const { users, isInitialLoading: isInitLoadingUsers } = useAllUsers()
     if (isInitLoadingComments || isInitLoadingUsers) return <Loading />
 
     const feedElements = comments?.map((c) => {
-        const user = users?.find((u) => u.userId.toString() === c.userId)
+        const user = users?.find((u) => u.userId.toString() === c.userId.toString())
         return {
             iconL: (
                 <Avatar
                     firstName={user?.firstName ?? '?'}
                     lastName={user?.lastName ?? '?'}
-                    bgColor={'bg-cs-secondary'}
+                    bgColor={'bg-cs-primary'}
                     small
                 />
             ),

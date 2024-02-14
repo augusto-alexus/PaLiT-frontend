@@ -65,6 +65,7 @@
     "ENG": "Англійська"
   },
   "navigation": {
+    "goBack": "Повернутися назад",
     "dashboard": "Панель керування",
     "myProject": "Моя робота",
     "myStudents": "Мої студенти",
@@ -114,10 +115,17 @@
     "userDeleted": "Користувача видалено",
     "inviteUsersCsv": "Надіслати запрошення користувачам через CSV"
   },
+  "workStatus": "Статус роботи",
+  "workStatuses": {
+    "toReview": "Очікує відгуку",
+    "accepted": "Прийнята",
+    "rejected": "Відхилена"
+  },
   "feed": {
     "workHasntStartedYet": "Робота ще не розпочалася",
-    "cantViewStage": "Вам не дозволено переглядати цю стадію",
+    "cantViewStage": "Вам не дозволено переглядати роботи на цій стадії",
     "viewDocument": "Перегляд документа",
+    "viewLastDocument": "Перегляд останнього документа",
     "commentDocument": "Коментувати документ",
     "approveDocument": "Одобрити документ",
     "rejectDocument": "Відхилити документ",
@@ -179,6 +187,7 @@
     "inviteLimitYou": "Ви не можете прийняти більше студентів",
     "studentAlreadyHasTeacher": "Студент вже має куратора",
     "unknownError": "Сталася невідома помилка",
-    "checkCsvFormatting": "Перевірте формат CSV файлу"
+    "checkCsvFormatting": "Перевірте формат CSV файлу",
+    "credentialsDoNotMatch": "Помилка верифікації. Переконайтеся, що вказана Вами пошта співпадає з тією, з якої ви отримали запрошення"
   }
 }

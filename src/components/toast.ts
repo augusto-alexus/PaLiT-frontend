@@ -1,9 +1,9 @@
 import { toast as toastify_toast } from 'react-toastify'
 
-export function toast(label: string) {
+export function toast(label: string, autoClose: number = 1500) {
     toastify_toast(label, {
         position: 'top-right',
-        autoClose: 1500,
+        autoClose,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

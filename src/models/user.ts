@@ -18,7 +18,7 @@ export interface ICurrentUser {
 
 export function getCurrentUserFromDTO(dto: IFullUserInfoDTO): ICurrentUser {
     const role = dto.roleDTO.name
-    if (role !== 'teacher' && role !== 'student' && role !== 'HoD')
+    if (role !== 'teacher' && role !== 'student' && role !== 'HoD' && role !== 'PS')
         throw new Error('Unrecognized role for current user')
     const degree = dto.studentDTO?.degree.toLowerCase()
     if (degree !== undefined && degree !== 'bachelor' && degree !== 'master')

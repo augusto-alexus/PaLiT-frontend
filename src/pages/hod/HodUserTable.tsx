@@ -74,17 +74,13 @@ export function HodUserTable() {
                     htmlFor='upload-csv'
                     className={`cursor-pointer ${csvFile ? 'text-cs-secondary' : 'text-cs-link'}`}
                     onClick={() => {
-                        if (csvFile)
-                            uploadUserInvitationCsv(accessToken, csvFile)
-                                .then(() => {
-                                    toast(t('fileUploadedSuccessfully'))
-                                })
-                                .catch(() => {
-                                    toast(t('error.unknownError') + '. ' + t('error.checkCsvFormatting'))
-                                })
-                                .finally(() => {
-                                    setCsvFile(null)
-                                })
+                        if (csvFile) {
+                            void uploadUserInvitationCsv(accessToken, csvFile)
+                            setTimeout(() => {
+                                toast(t('fileUploadedSuccessfully'))
+                                setCsvFile(null)
+                            }, 700)
+                        }
                     }}
                 >
                     {csvFile ? t('confirmUploadWork') : t('dashboard.inviteUsersCsv')}

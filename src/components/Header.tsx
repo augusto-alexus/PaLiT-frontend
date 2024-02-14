@@ -29,6 +29,7 @@ function getHeaderNavs(role: Role, myProjectStarted: boolean): INavItem[] {
     if (role === 'student') return getStudentHeaderNavs(myProjectStarted)
     if (role === 'teacher') return getTeacherHeaderNavs()
     if (role === 'HoD') return getHodHeaderNavs()
+    if (role === 'PS') return getPsHeaderNavs()
     throw new Error(`Unexpected role ${role as string} in 'getHeaderNavs'`)
 }
 
@@ -51,10 +52,15 @@ function getTeacherHeaderNavs(): INavItem[] {
 
 function getHodHeaderNavs(): INavItem[] {
     return [
+        { to: routes.hod.aStudents, tLabel: 'navigation.students' },
         { to: routes.hod.aStageApproval, tLabel: 'navigation.stageApproval' },
         { to: routes.hod.aTeams, tLabel: 'navigation.teams' },
         { to: routes.hod.users.aRoot, tLabel: 'navigation.usersControl' },
     ]
+}
+
+function getPsHeaderNavs(): INavItem[] {
+    return [{ to: routes.ps.aStudents, tLabel: 'navigation.students' }]
 }
 
 function HeaderNav({ navItems }: { navItems: INavItem[] }) {

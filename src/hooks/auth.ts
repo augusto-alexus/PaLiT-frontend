@@ -21,12 +21,15 @@ export function useCurrentUser() {
 export function useTeacherSignUp(onSuccess?: () => void) {
     const { t } = useTranslation()
     return useMutation({
-        mutationFn: (form: ISignUpTeacherForm) => signUpTeacher(getTeacherSignUpDTO(form)),
+        mutationFn: ({ form, token }: { form: ISignUpTeacherForm; token: string }) =>
+            signUpTeacher(getTeacherSignUpDTO(form, token)),
         onSuccess,
         onError: (error) => {
             if (error instanceof AxiosError) {
                 if (error.response?.status === 409) {
                     toast(`${t('error.userWithEmailExists')}!`)
+                } else if (error.response?.status === 400) {
+                    toast(`${t('error.credentialsDoNotMatch')}!`, 10000)
                 } else {
                     toast(`${t('error.unknownError')}! ${error.message}`)
                 }
@@ -40,12 +43,15 @@ export function useTeacherSignUp(onSuccess?: () => void) {
 export function useStudentSignUp(onSuccess?: () => void) {
     const { t } = useTranslation()
     return useMutation({
-        mutationFn: (form: ISignUpStudentForm) => signUpStudent(getStudentSignUpDTO(form)),
+        mutationFn: ({ form, token }: { form: ISignUpStudentForm; token: string }) =>
+            signUpStudent(getStudentSignUpDTO(form, token)),
         onSuccess,
         onError: (error) => {
             if (error instanceof AxiosError) {
                 if (error.response?.status === 409) {
                     toast(`${t('error.userWithEmailExists')}!`)
+                } else if (error.response?.status === 400) {
+                    toast(`${t('error.credentialsDoNotMatch')}!`, 10000)
                 } else {
                     toast(`${t('error.unknownError')}! ${error.message}`)
                 }

@@ -65,6 +65,7 @@
     "ENG": "English"
   },
   "navigation": {
+    "goBack": "Go back",
     "dashboard": "Dashboard",
     "myProject": "My project",
     "myStudents": "My students",
@@ -114,10 +115,17 @@
     "userDeleted": "User deleted",
     "inviteUsersCsv": "Invite users with CSV"
   },
+  "workStatus": "Work status",
+  "workStatuses": {
+    "toReview": "To review",
+    "accepted": "Accepted",
+    "rejected": "Rejected"
+  },
   "feed": {
     "workHasntStartedYet": "Work hasn't started yet",
-    "cantViewStage": "You can't view this stage",
+    "cantViewStage": "You can't view works on this stage",
     "viewDocument": "View document",
+    "viewLastDocument": "View last document",
     "commentDocument": "Comment document",
     "approveDocument": "Approve document",
     "rejectDocument": "Reject document",
@@ -179,6 +187,7 @@
     "inviteLimitYou": "You can't join any more students",
     "studentAlreadyHasTeacher": "Student already has a teacher",
     "unknownError": "Unknown error occurred",
-    "checkCsvFormatting": "Check CSV formatting"
+    "checkCsvFormatting": "Check CSV formatting",
+    "credentialsDoNotMatch": "Credentials do not match. Check that you entered the same email you received the invitation from"
   }
 }

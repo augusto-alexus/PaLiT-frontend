@@ -18,6 +18,9 @@ export default Object.freeze({
     role: Object.freeze({
         getAll: 'role/all',
     }),
+    student: Object.freeze({
+        getAllStudentsWithStatus: 'student/hod-info',
+    }),
     files: Object.freeze({
         getDocument: (documentId: string) => baseUrl + `/file/${documentId}`,
         reviewDocument: (documentId: string) => `file/${documentId}`,
@@ -34,7 +37,7 @@ export default Object.freeze({
     }),
     comments: Object.freeze({
         postComment: (documentId: string, userId: string) => `comment/${documentId}/${userId}`,
-        getComments: (documentId: number) => `comment/${documentId}`,
+        getComments: (documentId: string) => `comment/${documentId}`,
     }),
     hod: Object.freeze({
         getAllRequests: 'request/head-department/all',

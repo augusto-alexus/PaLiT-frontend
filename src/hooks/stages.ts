@@ -11,6 +11,7 @@ import {
     restrictStageForTeacher,
 } from '~/backend'
 import { toast } from '~/components'
+import { useCurrentUser } from '~/hooks/auth.ts'
 
 export function useAllStages() {
     return useQuery({
@@ -26,6 +27,16 @@ export function useGetTeacherStages(teacherId: number) {
     })
 }
 
+export function useCheckIfStageMoveAllowed() {
+    const { role, allowedStageIds } = useCurrentUser()
+    return (docStageId: number, docApprovedDate: string | null | undefined): boolean => {
+        const roleAllowed = role !== 'student'
+        const stageAllowed = allowedStageIds?.includes(docStageId) ?? false
+        const alreadyReviewed = !!docApprovedDate
+        return roleAllowed && stageAllowed && !alreadyReviewed
+    }
+}
+
 export function useApproveStageForTeacher() {
     const { t } = useTranslation()
     const queryClient = useQueryClient()
@@ -35,6 +46,7 @@ export function useApproveStageForTeacher() {
             approveStageForTeacher(teacherId, stageId),
         onSuccess: async (teacherId) => {
             await queryClient.invalidateQueries(['teacherStages', teacherId])
+            await queryClient.invalidateQueries(['currentUser'])
             toast(t('dashboard.stageApprovedForTeacher'))
         },
         onError: () => {
@@ -52,6 +64,7 @@ export function useRestrictStageForTeacher() {
             restrictStageForTeacher(teacherId, stageId),
         onSuccess: async (teacherId) => {
             await queryClient.invalidateQueries(['teacherStages', teacherId])
+            await queryClient.invalidateQueries(['currentUser'])
             toast(t('dashboard.stageRestrictedForTeacher'))
         },
         onError: () => {
@@ -69,6 +82,7 @@ export function useApproveStageForAll() {
             approveStageForAllInRole(stageId, roleId),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['teacherStages'])
+            await queryClient.invalidateQueries(['currentUser'])
             toast(t('dashboard.stageApprovedForAll'))
         },
         onError: () => {
@@ -86,6 +100,7 @@ export function useRestrictStageForAll() {
             restrictStageForAll(stageId, roleId),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['teacherStages'])
+            await queryClient.invalidateQueries(['currentUser'])
             toast(t('dashboard.stageRestrictedForAll'))
         },
         onError: () => {

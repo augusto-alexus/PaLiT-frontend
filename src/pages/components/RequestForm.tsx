@@ -25,6 +25,7 @@ export function RequestForm({ userId }: { userId: number }) {
             if (error instanceof AxiosError) {
                 if (error.response?.status === 403) {
                     if (currentUser.role === 'teacher') toast(`${t('error.studentAlreadyHasTeacher')}!`)
+                    else toast(`${t('error.inviteLimitTeacher')}!`)
                 } else {
                     toast(`${t('unknownError')}! ${error.message}`)
                 }

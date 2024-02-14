@@ -12,24 +12,15 @@ export function FileUpload() {
     const currentUser = useCurrentUser()
     const queryClient = useQueryClient()
     const mutation = useMutation({
-        mutationFn: async ({
-            studentId,
-            file,
-        }: {
-            studentId: number
-            file: File
-        }) => uploadDocument(accessToken, studentId, file),
+        mutationFn: async ({ studentId, file }: { studentId: number; file: File }) =>
+            uploadDocument(accessToken, studentId, file),
         onSuccess: async (data) => {
             if ('status' in data) {
-                if (data.status === 409)
-                    toast(`${t('error.previousFileNotReviewed')}!`)
+                if (data.status === 409) toast(`${t('error.previousFileNotReviewed')}!`)
                 else toast(`${t('error.unknownError')}!`)
                 return
             }
-            await queryClient.invalidateQueries([
-                'studentDocuments',
-                currentUser.id,
-            ])
+            await queryClient.invalidateQueries(['studentDocuments'])
             setFile(null)
             toast(`${t('fileUploadedSuccessfully')}!`)
         },
@@ -45,10 +36,7 @@ export function FileUpload() {
                     onClick={(e) => {
                         if (file) {
                             e.preventDefault()
-                            if (!currentUser.studentId)
-                                throw new Error(
-                                    "Couldn't upload file: studentId not found."
-                                )
+                            if (!currentUser.studentId) throw new Error("Couldn't upload file: studentId not found.")
                             mutation.mutate({
                                 studentId: currentUser.studentId,
                                 file,

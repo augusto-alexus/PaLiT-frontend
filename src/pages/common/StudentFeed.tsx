@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { getStudentDocuments, IDocumentDTO, IStageDTO } from '~/backend'
 import {
     DisplayError,
@@ -65,14 +65,26 @@ export function StudentFeed() {
                 feedElements.push(reviewFeedItem(d, t, d.approved))
             }
         })
+
     const sortedFeedElements = feedElements.sort((a, b) => a.date.getTime() - b.date.getTime())
 
-    const teacherCanViewStage = currentUser.allowedStageIds?.some((s) => s === selectedStage)
+    const canViewStage = currentUser.allowedStageIds?.some((s) => s === selectedStage)
+
+    const lastDocument = documents?.sort((a, b) => {
+        const stageDelta = a.stageDTO.serialOrder - b.stageDTO.serialOrder
+        if (stageDelta === 0) return new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
+        return -stageDelta
+    })?.[0]
+
+    const canUpload = role === 'student' && myProject?.stage?.stageId === selectedStage && !!lastDocument?.approvedDate
 
     return (
         <div className='mx-auto my-4 flex w-10/12 flex-col gap-4'>
+            <Link to={-1 as any} className='left-1/6 absolute top-36 text-sm'>
+                <i className='ri-arrow-go-back-line' /> {t('navigation.goBack')}
+            </Link>
             <Tabs items={stageTabs} setItem={(id) => setSelectedStage(id)} />
-            {role === 'teacher' && !teacherCanViewStage ? (
+            {role !== 'student' && !canViewStage ? (
                 <div className='mt-8 text-center text-2xl font-semibold text-cs-text-dark'>
                     {t('feed.cantViewStage')}
                 </div>
@@ -87,7 +99,7 @@ export function StudentFeed() {
                     </div>
                 </div>
             )}
-            {role === 'student' && myProject?.stage?.stageId === selectedStage && (
+            {canUpload && (
                 <div className='mt-16'>
                     <FileUpload />
                 </div>

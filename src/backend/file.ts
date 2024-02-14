@@ -51,7 +51,7 @@ export async function reviewDocument(
         approved: string
         documentId: string
         studentId: string
-        nextStageId: number
+        nextStageId?: number
     }
 }
 

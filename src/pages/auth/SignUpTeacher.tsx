@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
-import { Button, Input, Password, toast } from '~/components'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Button, DisplayError, Input, Password, toast } from '~/components'
 import { useForm, useTeacherSignUp } from '~/hooks'
 import { ISignUpTeacherForm } from '~/models'
 import { routes } from '~/pages'
@@ -8,6 +8,8 @@ import { routes } from '~/pages'
 export function SignUpTeacher() {
     const { t } = useTranslation()
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
+    const token = searchParams.get('token')
     const { mutate: signUp } = useTeacherSignUp(() => {
         toast(`${t('signUpSuccessful')}!`)
         navigate(`/${routes.signIn}`)
@@ -25,9 +27,11 @@ export function SignUpTeacher() {
                 toast(`${t('passwordsNotMatching')}!`)
                 return
             }
-            signUp(form)
+            if (token) signUp({ form, token })
         }
     )
+
+    if (!token) return <DisplayError error={Error('No token for registration')} />
 
     return (
         <form onSubmit={onSubmit} className='flex w-[19.5rem] flex-col gap-4 sm:w-[24rem] lg:w-[32rem]'>
