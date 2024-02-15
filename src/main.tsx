@@ -17,7 +17,7 @@ if (path) {
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
-            <BrowserRouter basename='/PaLiT-frontend'>
+            <BrowserRouter>
                 <App />
             </BrowserRouter>
             <ReactQueryDevtools initialIsOpen={true} />
