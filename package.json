@@ -3,11 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://augusto-alexus.github.io/PaLiT-frontend",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "deploy": "gh-pages -d dist",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -38,7 +36,6 @@
     "eslint": "^8.46.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
-    "gh-pages": "^6.1.1",
     "postcss": "^8.4.27",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.4.1",
