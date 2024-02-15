@@ -1,4 +1,4 @@
-import { Navigate, useSearchParams } from 'react-router-dom'
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { DisplayError, Loading, toast } from '~/components'
 import { useCurrentUser, useGetComments, useStudentDocument } from '~/hooks'
 import {
@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { routes } from '~/pages'
 
 export function StudentWorkReview() {
+    const navigate = useNavigate()
     const { t } = useTranslation()
     const { id, role, allowedStageIds } = useCurrentUser()
     const [searchParams] = useSearchParams()
@@ -43,7 +44,7 @@ export function StudentWorkReview() {
             </div>
             <div className='row-span-2 flex flex-col justify-between'>
                 <div>
-                    <a href={routes.common.aStudentFeed(studentId)}>
+                    <a onClick={() => navigate(routes.common.aStudentFeed(studentId))}>
                         <i className='ri-history-line' /> {t('feed.checkHistory')}
                     </a>
                     <h3 className='mb-4 mt-4 text-xl font-bold text-cs-text-dark'>{t('feed.review')}</h3>

@@ -5,6 +5,7 @@ import { useAllUsers, useCheckIfStageMoveAllowed, useCurrentUser, useDocumentRev
 import { routes } from '~/pages'
 import { useFeedStore } from '~/store'
 import { CommentInput } from '~/pages/components'
+import { useNavigate } from 'react-router-dom'
 
 export function DocumentFeedItem({
     document,
@@ -15,6 +16,7 @@ export function DocumentFeedItem({
     studentId: string
     stages: IStageDTO[]
 }) {
+    const navigate = useNavigate()
     const { showCommentsForDocumentId, setShowCommentsForDocumentId } = useFeedStore()
     const isStageMoveAllowed = useCheckIfStageMoveAllowed()
 
@@ -29,12 +31,12 @@ export function DocumentFeedItem({
     return (
         <div className={`${showComments ? 'sticky left-0 top-0 z-10' : ''} flex flex-col gap-8 py-1`}>
             <div className='flex flex-row place-items-start items-center gap-2'>
-                <a
+                <IconButton
                     className='text-cs-text-neutral hover:text-cs-secondary'
-                    href={routes.common.aWorkReview(studentId, document.documentId.toString())}
+                    onClick={() => navigate(routes.common.aWorkReview(studentId, document.documentId.toString()))}
                 >
                     <i className='ri-eye-line' />
-                </a>
+                </IconButton>
                 <IconButton
                     isActive={showComments}
                     onClick={() => setShowCommentsForDocumentId(documentId)}

@@ -42,7 +42,6 @@ export function useAcceptInvitation(onSuccess?: () => void) {
             onSuccess?.()
         },
         onError: (error) => {
-            console.log('===>', error)
             if (error instanceof AxiosError) {
                 if (error.response?.status === 409) {
                     toast(`${t('error.studentAlreadyHasTeacher')}!`)
