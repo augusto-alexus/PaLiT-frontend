@@ -153,6 +153,7 @@
   "fileUploadedSuccessfully": "File uploaded successfully",
   "logout": "Log out",
   "changeLanguage": "Change language",
+  "changeTheme": "Change theme",
   "hodRequestNotApproved": "Head of Department didn't approve this work yet",
   "projectInfo": {
     "student": "Student",
@@ -189,6 +190,7 @@
     "unknownError": "Unknown error occurred",
     "checkCsvFormatting": "Check CSV formatting",
     "credentialsDoNotMatch": "Credentials do not match. Check that you entered the same email you received the invitation from",
-    "userCantBeDelete": "User can't be deleted"
+    "userCantBeDelete": "User can't be deleted",
+    "youCantUpdateTheme": "You can't update this theme"
   }
 }

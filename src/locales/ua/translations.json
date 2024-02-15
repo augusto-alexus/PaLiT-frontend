@@ -153,6 +153,7 @@
   "fileUploadedSuccessfully": "Файл завантажено успішно",
   "logout": "Вийти з системи",
   "changeLanguage": "Змінити мову",
+  "changeTheme": "Змінити тему",
   "hodRequestNotApproved": "Голова кафедри наразі не одобрив цю роботу",
   "projectInfo": {
     "student": "Студент",
@@ -189,6 +190,7 @@
     "unknownError": "Сталася невідома помилка",
     "checkCsvFormatting": "Перевірте формат CSV файлу",
     "credentialsDoNotMatch": "Помилка верифікації. Переконайтеся, що вказана Вами пошта співпадає з тією, з якої ви отримали запрошення",
-    "userCantBeDelete": "Цього користувача видалити неможливо"
+    "userCantBeDelete": "Цього користувача видалити неможливо",
+    "youCantUpdateTheme": "Ви не можете оновити цю тему"
   }
 }

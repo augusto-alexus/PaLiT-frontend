@@ -1,9 +1,10 @@
 import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IMyStudent } from '~/models'
-import { useGetTheme, useMyProject, useStudent } from '~/hooks'
+import { useCurrentUser, useMyProject, useStudent } from '~/hooks'
 import { Loading } from '~/components'
 import { useSearchParams } from 'react-router-dom'
+import { ThemeUpdateForm } from '~/pages/components/ThemeUpdateForm.tsx'
 
 export function SidebarContainer({ children, myStudent }: PropsWithChildren<{ myStudent?: IMyStudent }>) {
     return (
@@ -18,13 +19,14 @@ export function SidebarContainer({ children, myStudent }: PropsWithChildren<{ my
 
 export function ProjectInfo({ language, stageName }: IProjectInfoProps) {
     const { t } = useTranslation()
+    const currentUser = useCurrentUser()
     const [searchParams] = useSearchParams()
-    const studentId = searchParams.get('studentId')
-    const { data: theme, isInitialLoading: isThemeLoading } = useGetTheme(studentId)
+    let studentId = searchParams.get('studentId')
+    if (currentUser.role === 'student') studentId = currentUser?.studentId?.toString() ?? null
     const { data: student, isInitialLoading: isStudentLoading } = useStudent(studentId)
     const { myProject, isInitialLoading: isMyProjectLoading } = useMyProject()
 
-    if (isMyProjectLoading || isStudentLoading || isThemeLoading) return <Loading />
+    if (isMyProjectLoading || isStudentLoading) return <Loading />
 
     const studentFullName = student ? student.lastName + ' ' + student.firstName : undefined
     const studentDegree = student && student.degree ? t(`degrees.${student.degree}`) : undefined
@@ -32,19 +34,19 @@ export function ProjectInfo({ language, stageName }: IProjectInfoProps) {
 
     return (
         <div className='flex flex-col gap-2'>
-            <InfoRow infoKey={t('projectInfo.student')} value={studentFullName} />
+            {currentUser.role !== 'student' && <InfoRow infoKey={t('projectInfo.student')} value={studentFullName} />}
             <InfoRow infoKey={t('projectInfo.teacher')} value={teacherFullName} />
             <InfoRow infoKey={t('projectInfo.degree')} value={studentDegree} />
             <InfoRow infoKey={t('projectInfo.faculty')} value={student?.faculty} />
             <InfoRow infoKey={t('projectInfo.group')} value={student?.cluster} />
             <InfoRow infoKey={t('projectInfo.language')} value={language || myProject?.language} />
-            <InfoRow infoKey={t('projectInfo.theme')} value={theme?.theme || myProject?.theme} />
             <InfoRow infoKey={t('projectInfo.stage')} value={stageName || myProject?.stage?.name} />
+            {studentId && <ThemeUpdateForm studentId={studentId} />}
         </div>
     )
 }
 
-function InfoRow({ infoKey, value }: { infoKey: string; value?: string }) {
+export function InfoRow({ infoKey, value }: { infoKey: string; value?: string }) {
     if (!value) return <></>
     return (
         <div className='flex flex-row justify-between gap-4 bg-white py-2 align-baseline text-cs-text-dark'>

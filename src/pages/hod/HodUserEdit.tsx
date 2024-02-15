@@ -127,11 +127,16 @@ export function HodUserEdit() {
                     <option disabled hidden value=''>
                         {t('selectRole')}
                     </option>
-                    {roles.map((r) => (
-                        <option key={r.id} value={r.id} hidden={!isNewUser && r.id === studentRole.id}>
-                            {t(`roles.${r.name}`)}
-                        </option>
-                    ))}
+                    {roles
+                        .filter((r) => {
+                            if (isNewUser) return r.name === 'student' || r.name === 'teacher'
+                            return true
+                        })
+                        .map((r) => (
+                            <option key={r.id} value={r.id} hidden={!isNewUser && r.id === studentRole.id}>
+                                {t(`roles.${r.name}`)}
+                            </option>
+                        ))}
                 </Select>
 
                 <hr className='col-span-2 my-3 border-cs-neutral' />
