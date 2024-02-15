@@ -8,6 +8,12 @@ import './index.css'
 
 const queryClient = new QueryClient()
 
+const path = location.hash.slice(1)
+if (path) {
+    location.hash = ''
+    history.replaceState({}, '', path)
+}
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
