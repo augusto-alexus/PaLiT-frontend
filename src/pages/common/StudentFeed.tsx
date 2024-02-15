@@ -15,7 +15,7 @@ import {
     Tabs,
 } from '~/components'
 import { useAllStages, useCurrentUser, useMyProject } from '~/hooks'
-import { DocumentFeedItem } from '~/pages/components'
+import { DocumentFeedItem, ThemeUpdateForm } from '~/pages/components'
 import { useFeedStore } from '~/store'
 
 export function StudentFeed() {
@@ -107,6 +107,8 @@ export function StudentFeed() {
                     <FileUpload />
                 </div>
             )}
+            <h2>xyi</h2>
+            <ThemeUpdateForm studentId={studentId} />
         </div>
     )
 }

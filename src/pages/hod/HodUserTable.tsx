@@ -36,8 +36,7 @@ export function HodUserTable() {
                     </Link>
                 ),
                 deleteUserBtn: (
-                    <a
-                        href='#'
+                    <button
                         onClick={() => {
                             if (
                                 confirm(
@@ -48,9 +47,10 @@ export function HodUserTable() {
                             )
                                 deleteUser({ userId: u.userId.toString() })
                         }}
+                        className='border-0 p-0 hover:border-0 focus:border-0'
                     >
                         <i className='ri-delete-bin-2-fill text-cs-warning' />
-                    </a>
+                    </button>
                 ),
             } as ITeamTableRow)
     )
@@ -109,4 +109,5 @@ interface ITeamTableRow {
     email: string
     fullName: string
     openUserBtn: JSX.Element
+    deleteUserBtn: JSX.Element
 }

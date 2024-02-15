@@ -188,6 +188,7 @@
     "studentAlreadyHasTeacher": "Student already has a teacher",
     "unknownError": "Unknown error occurred",
     "checkCsvFormatting": "Check CSV formatting",
-    "credentialsDoNotMatch": "Credentials do not match. Check that you entered the same email you received the invitation from"
+    "credentialsDoNotMatch": "Credentials do not match. Check that you entered the same email you received the invitation from",
+    "userCantBeDelete": "User can't be deleted"
   }
 }

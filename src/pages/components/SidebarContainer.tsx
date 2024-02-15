@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IMyStudent } from '~/models'
-import { useMyProject, useStudent } from '~/hooks'
+import { useGetTheme, useMyProject, useStudent } from '~/hooks'
 import { Loading } from '~/components'
 import { useSearchParams } from 'react-router-dom'
 
@@ -10,24 +10,21 @@ export function SidebarContainer({ children, myStudent }: PropsWithChildren<{ my
         <div className='mx-auto flex w-10/12 flex-row justify-between'>
             <main className='w-full'>{children}</main>
             <div className='w-1/4 max-w-md overflow-hidden border-s border-cs-additional-gray ps-4'>
-                <ProjectInfo
-                    theme={myStudent?.theme}
-                    language={myStudent?.language}
-                    stageName={myStudent?.stage?.name}
-                />
+                <ProjectInfo language={myStudent?.language} stageName={myStudent?.stage?.name} />
             </div>
         </div>
     )
 }
 
-export function ProjectInfo({ language, theme, stageName }: IProjectInfoProps) {
+export function ProjectInfo({ language, stageName }: IProjectInfoProps) {
     const { t } = useTranslation()
     const [searchParams] = useSearchParams()
     const studentId = searchParams.get('studentId')
+    const { data: theme, isInitialLoading: isThemeLoading } = useGetTheme(studentId)
     const { data: student, isInitialLoading: isStudentLoading } = useStudent(studentId)
     const { myProject, isInitialLoading: isMyProjectLoading } = useMyProject()
 
-    if (isMyProjectLoading || isStudentLoading) return <Loading />
+    if (isMyProjectLoading || isStudentLoading || isThemeLoading) return <Loading />
 
     const studentFullName = student ? student.lastName + ' ' + student.firstName : undefined
     const studentDegree = student && student.degree ? t(`degrees.${student.degree}`) : undefined
@@ -41,7 +38,7 @@ export function ProjectInfo({ language, theme, stageName }: IProjectInfoProps) {
             <InfoRow infoKey={t('projectInfo.faculty')} value={student?.faculty} />
             <InfoRow infoKey={t('projectInfo.group')} value={student?.cluster} />
             <InfoRow infoKey={t('projectInfo.language')} value={language || myProject?.language} />
-            <InfoRow infoKey={t('projectInfo.theme')} value={theme || myProject?.theme} />
+            <InfoRow infoKey={t('projectInfo.theme')} value={theme?.theme || myProject?.theme} />
             <InfoRow infoKey={t('projectInfo.stage')} value={stageName || myProject?.stage?.name} />
         </div>
     )
@@ -58,7 +55,6 @@ function InfoRow({ infoKey, value }: { infoKey: string; value?: string }) {
 }
 
 interface IProjectInfoProps {
-    theme?: string
     language?: string
     stageName?: string
 }

@@ -113,7 +113,11 @@ export function useDeleteUser(onSuccess?: () => void) {
         },
         onError: (error: AxiosError | never) => {
             if (error instanceof AxiosError) {
-                toast(`${t('error.unknownError')}! ${error.message}`)
+                if (error?.response?.status === 403) {
+                    toast(`${t('error.userCantBeDelete')}!`)
+                } else {
+                    toast(`${t('error.unknownError')}! ${error.message}`)
+                }
             } else {
                 toast(`${t('error.unknownError')}!`)
             }

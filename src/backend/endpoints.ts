@@ -15,6 +15,10 @@ export default Object.freeze({
     approveRequest: (requestId: number) => `request/${requestId}`,
     currentAdvisor: 'student/current-adviser',
     currentStudents: 'teacher/current-student',
+    theme: Object.freeze({
+        getTheme: (studentId: string) => `student/theme/${studentId}`,
+        updateTheme: (studentId: string) => `theme/${studentId}`,
+    }),
     role: Object.freeze({
         getAll: 'role/all',
     }),
