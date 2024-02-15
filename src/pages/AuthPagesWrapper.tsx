@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { Navigate, Outlet, useNavigate } from 'react-router-dom'
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { getCurrentUser, JWTExpiredError, updateAxiosInstanceToken } from '~/backend'
 import { DisplayError, Header, Loading, toast } from '~/components'
 import { getCurrentUserFromDTO } from '~/models'
@@ -32,8 +32,12 @@ export function AuthPagesWrapper() {
             return null
         },
     })
+    const location = useLocation()
 
-    if (!authStore.accessToken) return <Navigate to={routes.signIn} />
+    if (!authStore.accessToken) {
+        if (location.pathname.startsWith('/sign-up')) return <Navigate to={location.pathname} />
+        return <Navigate to={routes.signIn} />
+    }
     if (isLoading || !authStore.currentUser) return <Loading />
     if (error) return <DisplayError error={error} />
 
