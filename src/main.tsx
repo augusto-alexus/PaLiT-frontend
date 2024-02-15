@@ -11,7 +11,7 @@ const queryClient = new QueryClient()
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
-            <BrowserRouter basename='/PaLiT-frontend/'>
+            <BrowserRouter basename='/PaLiT-frontend'>
                 <App />
             </BrowserRouter>
             <ReactQueryDevtools initialIsOpen={true} />
