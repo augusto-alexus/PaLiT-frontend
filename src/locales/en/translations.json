@@ -193,6 +193,7 @@
     "checkCsvFormatting": "Check CSV formatting",
     "credentialsDoNotMatch": "Credentials do not match. Check that you entered the same email you received the invitation from",
     "userCantBeDelete": "User can't be deleted",
-    "youCantUpdateTheme": "You can't update this theme"
+    "youCantUpdateTheme": "You can't update this theme",
+    "fileTooLarge": "File is too large"
   }
 }

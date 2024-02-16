@@ -6,14 +6,19 @@ import { toast } from '~/components/index.ts'
 import { useAccessToken, useCurrentUser } from '~/hooks'
 import { getReadableFileSize } from '~/lib'
 
+const maxFileSize = 30 * 1024 * 1024
+
 export function FileUpload() {
     const { t } = useTranslation()
     const accessToken = useAccessToken()
     const currentUser = useCurrentUser()
     const queryClient = useQueryClient()
     const mutation = useMutation({
-        mutationFn: async ({ studentId, file }: { studentId: number; file: File }) =>
-            uploadDocument(accessToken, studentId, file),
+        mutationFn: async ({ studentId, file }: { studentId: number; file: File }) => {
+            if (file.size > maxFileSize)
+                throw Error(t('error.fileTooLarge') + `! Max ${getReadableFileSize(maxFileSize)}`)
+            return uploadDocument(accessToken, studentId, file)
+        },
         onSuccess: async (data) => {
             if ('status' in data) {
                 if (data.status === 409) toast(`${t('error.previousFileNotReviewed')}!`)
@@ -24,8 +29,15 @@ export function FileUpload() {
             setFile(null)
             toast(`${t('fileUploadedSuccessfully')}!`)
         },
+        onError: (error: Error) => {
+            toast(error.message)
+            setFile(null)
+        },
     })
     const [file, setFile] = useState<File | null>(null)
+    const fileSize: string = file ? getReadableFileSize(file.size) : '0'
+
+    console.log(file?.size)
 
     return (
         <div className='flex flex-col place-items-center gap-16'>
@@ -60,7 +72,7 @@ export function FileUpload() {
             {!!file && (
                 <div className='max-w-lg text-cs-text-dark'>
                     <i className='font-mono'>{file.name}</i>
-                    <b> ({getReadableFileSize(file.size)})</b>
+                    <b> ({fileSize})</b>
                 </div>
             )}
         </div>
