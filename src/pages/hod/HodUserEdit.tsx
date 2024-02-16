@@ -99,8 +99,8 @@ export function HodUserEdit() {
                         <span className='inline-flex place-items-center font-semibold'>{t('password')}:</span>
                         <Password
                             required
+                            autoComplete='new-password'
                             name='password'
-                            type='password'
                             value={form.password}
                             onChange={onFieldChange}
                         />
@@ -108,8 +108,8 @@ export function HodUserEdit() {
                         <span className='inline-flex place-items-center font-semibold'>{t('passwordConfirm')}:</span>
                         <Password
                             required
+                            autoComplete='new-password'
                             name='confirmPassword'
-                            type='password'
                             value={form.confirmPassword}
                             onChange={onFieldChange}
                         />

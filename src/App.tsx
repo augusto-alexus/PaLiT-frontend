@@ -30,7 +30,7 @@ import {
     CommonStudentFeedWrapper,
 } from '~/pages'
 import './i18.ts'
-import { HodStudents } from '~/pages/hod/HodStudents.tsx'
+import { HodProjects } from '~/pages/hod/HodProjects.tsx'
 import { PsRoot } from '~/pages/ps'
 
 function App() {
@@ -46,7 +46,7 @@ function App() {
                     <Route index path='*' element={<AuthRedirect />} />
 
                     <Route path={routes.hod.root} element={<HodRoot />}>
-                        <Route path={routes.hod.students} element={<HodStudents />} />
+                        <Route path={routes.hod.projects} element={<HodProjects />} />
                         <Route path={routes.hod.stageApproval} element={<HodStageApproval />} />
                         <Route path={routes.hod.teams} element={<HodTeams />} />
                         <Route path={routes.hod.users.root}>
@@ -57,7 +57,7 @@ function App() {
                     </Route>
 
                     <Route path={routes.ps.root} element={<PsRoot />}>
-                        <Route path={routes.ps.students} element={<HodStudents />} />
+                        <Route path={routes.ps.students} element={<HodProjects />} />
                     </Route>
 
                     <Route path={routes.teacher.root} element={<TeacherRoot />}>

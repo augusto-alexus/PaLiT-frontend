@@ -42,8 +42,8 @@ export const routes = {
     }),
     hod: Object.freeze({
         root: 'hod',
-        students: 'students',
-        aStudents: '/hod/students',
+        projects: 'works',
+        aProjects: '/hod/works',
         stageApproval: 'stage-approval',
         aStageApproval: '/hod/stage-approval',
         teams: 'teams',

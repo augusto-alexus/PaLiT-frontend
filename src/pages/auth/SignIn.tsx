@@ -42,6 +42,7 @@ export function SignIn() {
                         <label className='text-left'>{t('password')}</label>
                         <Password
                             required
+                            autoComplete='current-password'
                             name='password'
                             value={form.password}
                             onChange={onFieldChange}

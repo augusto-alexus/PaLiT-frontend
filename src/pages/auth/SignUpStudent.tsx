@@ -76,6 +76,7 @@ export function SignUpStudent() {
                 <label className='text-left'>{t('password')}</label>
                 <Password
                     required
+                    autoComplete='new-password'
                     name='password'
                     type='password'
                     value={form.password}
@@ -87,6 +88,7 @@ export function SignUpStudent() {
                 <label className='text-left'>{t('passwordConfirm')}</label>
                 <Password
                     required
+                    autoComplete='new-password'
                     name='confirmPassword'
                     type='password'
                     value={form.confirmPassword}

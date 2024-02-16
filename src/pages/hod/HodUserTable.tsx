@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next'
-import { Button, ITableHeader, Loading, Table, toast } from '~/components'
+import { Button, IconButton, ITableHeader, Loading, Table, toast } from '~/components'
 import { useAccessToken, useAllUsers, useDeleteUser } from '~/hooks'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { routes } from '~/pages'
 import { useState } from 'react'
 import { uploadUserInvitationCsv } from '~/backend'
 
 export function HodUserTable() {
     const accessToken = useAccessToken()
+    const navigate = useNavigate()
     const { t } = useTranslation()
     const { users, isLoading } = useAllUsers()
     const { mutate: deleteUser } = useDeleteUser(() => toast(t('dashboard.userDeleted')))
@@ -21,8 +22,8 @@ export function HodUserTable() {
     const tableCols: ITableHeader[] = [
         { key: 'fullName', label: t('fullName') },
         { key: 'email', label: t('email') },
-        { key: 'openUserBtn', label: '', style: 'w-12' },
-        { key: 'deleteUserBtn', label: '', style: 'w-12' },
+        { key: 'openUserBtn', label: '', style: 'w-8' },
+        { key: 'deleteUserBtn', label: '', style: 'w-8' },
     ]
 
     const tableRows = users.map(
@@ -31,12 +32,12 @@ export function HodUserTable() {
                 email: u.email,
                 fullName: `${u.lastName}, ${u.firstName}`,
                 openUserBtn: (
-                    <Link to={routes.hod.users.user(u.userId.toString())}>
+                    <IconButton onClick={() => navigate(routes.hod.users.user(u.userId.toString()))}>
                         <i className='ri-pencil-fill' />
-                    </Link>
+                    </IconButton>
                 ),
                 deleteUserBtn: (
-                    <button
+                    <IconButton
                         onClick={() => {
                             if (
                                 confirm(
@@ -47,17 +48,16 @@ export function HodUserTable() {
                             )
                                 deleteUser({ userId: u.userId.toString() })
                         }}
-                        className='border-0 p-0 hover:border-0 focus:border-0'
                     >
                         <i className='ri-delete-bin-2-fill text-cs-warning' />
-                    </button>
+                    </IconButton>
                 ),
             } as ITeamTableRow)
     )
 
     return (
         <div className='flex w-full flex-col gap-12'>
-            <div className='mx-auto flex w-4/12 flex-col gap-4'>
+            <div className='mx-auto flex w-1/2 flex-col gap-4'>
                 <Table<ITeamTableRow>
                     cols={tableCols}
                     rows={tableRows}

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { routes } from '~/pages'
 import { Link, useNavigate } from 'react-router-dom'
 
-export function HodStudents() {
+export function HodProjects() {
     const { t } = useTranslation()
     const { allowedStageIds } = useCurrentUser()
     const navigate = useNavigate()
@@ -12,7 +12,7 @@ export function HodStudents() {
 
     if (isInitialLoading) return <Loading />
     if (!data?.length)
-        return <h2 className='w-full text-center text-2xl text-cs-text-dark'>{t('dashboard.noUsers')}</h2>
+        return <h2 className='w-full text-center text-2xl text-cs-text-dark'>{t('dashboard.noProjects')}</h2>
 
     const tableCols: ITableHeader[] = [
         { key: 'studentFullName', label: t('dashboard.student') },

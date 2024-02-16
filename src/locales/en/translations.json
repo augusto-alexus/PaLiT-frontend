@@ -74,7 +74,8 @@
     "invites": "Invites",
     "stageApproval": "Stage approval",
     "teams": "Teams",
-    "usersControl": "Users control"
+    "usersControl": "Users control",
+    "projects": "Projects"
   },
   "dashboard": {
     "teams": "Teams",
@@ -106,6 +107,7 @@
     "noTeachers": "No teachers in the system",
     "noUsersWithRole": "No users with role <{{roleName}}>",
     "noUsers": "No users in the system",
+    "noProjects": "No projects in the system",
     "backToUsersTable": "Go to users table",
     "addUser": "Add user",
     "userCreated": "User created",
