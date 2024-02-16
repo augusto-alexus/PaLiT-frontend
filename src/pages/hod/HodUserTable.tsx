@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Button, IconButton, ITableHeader, Loading, Table, toast } from '~/components'
-import { useAccessToken, useAllUsers, useDeleteUser } from '~/hooks'
+import { useAccessToken, useAllUsers } from '~/hooks'
 import { Link, useNavigate } from 'react-router-dom'
 import { routes } from '~/pages'
 import { useState } from 'react'
@@ -11,7 +11,7 @@ export function HodUserTable() {
     const navigate = useNavigate()
     const { t } = useTranslation()
     const { users, isLoading } = useAllUsers()
-    const { mutate: deleteUser } = useDeleteUser(() => toast(t('dashboard.userDeleted')))
+    // const { mutate: deleteUser } = useDeleteUser(() => toast(t('dashboard.userDeleted')))
     const [csvFile, setCsvFile] = useState<File | null>(null)
 
     if (isLoading) return <Loading />
@@ -23,7 +23,7 @@ export function HodUserTable() {
         { key: 'fullName', label: t('fullName') },
         { key: 'email', label: t('email') },
         { key: 'openUserBtn', label: '', style: 'w-8' },
-        { key: 'deleteUserBtn', label: '', style: 'w-8' },
+        // { key: 'deleteUserBtn', label: '', style: 'w-8' },
     ]
 
     const tableRows = users.map(
@@ -36,22 +36,22 @@ export function HodUserTable() {
                         <i className='ri-pencil-fill' />
                     </IconButton>
                 ),
-                deleteUserBtn: (
-                    <IconButton
-                        onClick={() => {
-                            if (
-                                confirm(
-                                    t('dashboard.areYouSureYouWantToDeleteUser', {
-                                        fullName: u.lastName + ' ' + u.firstName,
-                                    }) + '?'
-                                )
-                            )
-                                deleteUser({ userId: u.userId.toString() })
-                        }}
-                    >
-                        <i className='ri-delete-bin-2-fill text-cs-warning' />
-                    </IconButton>
-                ),
+                // deleteUserBtn: (
+                //     <IconButton
+                //         onClick={() => {
+                //             if (
+                //                 confirm(
+                //                     t('dashboard.areYouSureYouWantToDeleteUser', {
+                //                         fullName: u.lastName + ' ' + u.firstName,
+                //                     }) + '?'
+                //                 )
+                //             )
+                //                 deleteUser({ userId: u.userId.toString() })
+                //         }}
+                //     >
+                //         <i className='ri-delete-bin-2-fill text-cs-warning' />
+                //     </IconButton>
+                // ),
             } as ITeamTableRow)
     )
 
@@ -109,5 +109,5 @@ interface ITeamTableRow {
     email: string
     fullName: string
     openUserBtn: JSX.Element
-    deleteUserBtn: JSX.Element
+    // deleteUserBtn: JSX.Element
 }
