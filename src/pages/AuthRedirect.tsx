@@ -7,5 +7,5 @@ export function AuthRedirect() {
     if (role === 'student') return <Navigate to={routes.student.aMyProject} />
     else if (role === 'teacher') return <Navigate to={routes.teacher.aMyStudents} />
     else if (role === 'PS') return <Navigate to={routes.ps.aStudents} />
-    return <Navigate to={routes.hod.aStudents} />
+    return <Navigate to={routes.hod.aProjects} />
 }
