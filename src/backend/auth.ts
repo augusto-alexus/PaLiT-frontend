@@ -2,7 +2,7 @@ import { AxiosError } from 'axios'
 import { Role } from '~/models'
 import endpoints from './endpoints'
 import { IFullUserInfoDTO } from './user.ts'
-import axios, { updateAxiosInstanceToken } from './base.ts'
+import axios, { axiosTokenlessInstance, updateAxiosInstanceToken } from './base.ts'
 
 export class JWTExpiredError extends Error {}
 
@@ -21,7 +21,7 @@ export async function getCurrentUser(accessToken: string) {
 }
 
 export async function signIn(form: ISignInDTO) {
-    const response = await axios.post(endpoints.signIn, form)
+    const response = await axiosTokenlessInstance.post(endpoints.signIn, form)
     updateAxiosInstanceToken(response.data.accessToken)
     return response.data as { accessToken: string }
 }
