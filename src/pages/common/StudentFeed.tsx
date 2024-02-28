@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { getStudentDocuments, IDocumentDTO, IStageDTO } from '~/backend'
 import {
     DisplayError,
@@ -9,6 +9,7 @@ import {
     FeedIconApprove,
     FeedIconReject,
     FileUpload,
+    GoBack,
     IFeedElement,
     ITab,
     Loading,
@@ -83,9 +84,7 @@ export function StudentFeed() {
 
     return (
         <div className='mx-auto my-4 flex w-10/12 flex-col gap-4'>
-            <Link to={-1 as any} className='left-1/6 absolute top-36 text-sm'>
-                <i className='ri-arrow-go-back-line' /> {t('navigation.goBack')}
-            </Link>
+            <GoBack />
             <Tabs items={stageTabs} setItem={(id) => setSelectedStage(id)} />
             {role !== 'student' && !canViewStage ? (
                 <div className='mt-8 text-center text-2xl font-semibold text-cs-text-dark'>

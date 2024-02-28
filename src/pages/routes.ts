@@ -48,6 +48,8 @@ export const routes = {
         aStageApproval: '/hod/stage-approval',
         teams: 'teams',
         aTeams: '/hod/teams',
+        newTeam: 'teams/new',
+        aNewTeam: '/hod/teams/new',
         users: Object.freeze({
             root: 'users',
             aRoot: '/hod/users',

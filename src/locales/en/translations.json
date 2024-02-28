@@ -25,6 +25,8 @@
   "graduationYear": "Graduation year",
   "enterGraduationYear": "Enter your graduation year",
   "degree": "Degree",
+  "selectUser": "Select user",
+  "selectTheme": "Select theme",
   "selectYourDegree": "Select your degree",
   "rememberMe": "Remember me",
   "notRegisteredYet": "Not registered yet",
@@ -115,7 +117,8 @@
     "userUpdated": "User info updated",
     "areYouSureYouWantToDeleteUser": "Are you sure you want to delete user {{fullName}}",
     "userDeleted": "User deleted",
-    "inviteUsersCsv": "Invite users with CSV"
+    "inviteUsersCsv": "Invite users with CSV",
+    "createNewTeam": "Create new team"
   },
   "workStatus": "Work status",
   "workStatuses": {
@@ -181,6 +184,7 @@
     "my": "My invites"
   },
   "error": {
+    "nothingFound": "Nothing found",
     "sessionExpiredAuthAgain": "Session expired. Authorize again",
     "wrongCredentials": "Wrong email or password",
     "userWithEmailExists": "User with this email already exists",

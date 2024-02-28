@@ -28,6 +28,7 @@ import {
     TeacherInviteStudents,
     StudentRoot,
     CommonStudentFeedWrapper,
+    HodNewTeam,
 } from '~/pages'
 import './i18.ts'
 import { HodProjects } from '~/pages/hod/HodProjects.tsx'
@@ -49,6 +50,7 @@ function App() {
                         <Route path={routes.hod.projects} element={<HodProjects />} />
                         <Route path={routes.hod.stageApproval} element={<HodStageApproval />} />
                         <Route path={routes.hod.teams} element={<HodTeams />} />
+                        <Route path={routes.hod.newTeam} element={<HodNewTeam />} />
                         <Route path={routes.hod.users.root}>
                             <Route index element={<HodUserTable />} />
                             <Route path={routes.hod.users.user()} element={<HodUser />} />

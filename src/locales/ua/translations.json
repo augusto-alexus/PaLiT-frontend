@@ -25,6 +25,8 @@
   "graduationYear": "Рік випуску",
   "enterGraduationYear": "Введіть Ваш рік випуску",
   "degree": "Освітній ступінь",
+  "selectUser": "Оберіть користувача",
+  "selectTheme": "Оберіть тему",
   "selectYourDegree": "Виберіть Ваш освітній ступінь",
   "rememberMe": "Запам'ятати мене",
   "notRegisteredYet": "Ще не зареєстровані",
@@ -115,7 +117,8 @@
     "userUpdated": "Інформація про користувача оновлена",
     "areYouSureYouWantToDeleteUser": "Ви впевнені що хочете видалити користувача {{fullName}}",
     "userDeleted": "Користувача видалено",
-    "inviteUsersCsv": "Надіслати запрошення користувачам через CSV"
+    "inviteUsersCsv": "Надіслати запрошення користувачам через CSV",
+    "createNewTeam": "Створити нову команду"
   },
   "workStatus": "Статус роботи",
   "workStatuses": {
@@ -181,6 +184,7 @@
     "my": "Мої запрошення"
   },
   "error": {
+    "nothingFound": "Нічого не знайдено",
     "sessionExpiredAuthAgain": "Час сесії вийшов. Авторизуйтеся знову",
     "wrongCredentials": "Неправильна пошта або пароль",
     "userWithEmailExists": "Користувач з такою поштою вже існує",

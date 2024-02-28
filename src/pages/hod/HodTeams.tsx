@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { ITableHeader, Loading, Table } from '~/components'
 import { useAllHoDRequests, useAllStudents, useAllTeachers } from '~/hooks'
+import { Link } from 'react-router-dom'
+import { routes } from '~/pages'
 
 export function HodTeams() {
     const { t } = useTranslation()
@@ -56,6 +58,9 @@ export function HodTeams() {
                     }}
                 />
             </div>
+            <Link to={routes.hod.aNewTeam} className='text-center'>
+                {t('dashboard.createNewTeam')}
+            </Link>
         </div>
     )
 }
