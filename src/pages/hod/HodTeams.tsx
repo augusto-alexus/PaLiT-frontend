@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next'
-import { ITableHeader, Loading, Table } from '~/components'
+import { Button, ITableHeader, Loading, Table } from '~/components'
 import { useAllHoDRequests, useAllStudents, useAllTeachers } from '~/hooks'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { routes } from '~/pages'
 
 export function HodTeams() {
+    const navigate = useNavigate()
     const { t } = useTranslation()
     const { data: allRequests, isLoading: isLoadingRequests } = useAllHoDRequests()
     const { data: allStudents, isLoading: isLoadingStudents } = useAllStudents()
@@ -44,12 +45,24 @@ export function HodTeams() {
 
     return (
         <div className='flex w-full flex-col gap-12'>
-            <h2 className='text-center text-2xl font-semibold'>{t('dashboard.teams')}</h2>
             <div className='mx-auto flex w-7/12 flex-col gap-4'>
                 <Table<ITeamTableRow>
                     cols={tableCols}
                     rows={tableRows}
+                    tooltipExtensions={[
+                        <Button
+                            key='1'
+                            className='bg-cs-secondary text-center hover:bg-cs-secondary/70'
+                            onClick={() => navigate(routes.hod.aNewTeam)}
+                        >
+                            {t('dashboard.createNewTeam')}
+                        </Button>,
+                    ]}
                     options={{
+                        searchFn: (a, q) =>
+                            a.studentName.replace(',', '').toLowerCase().includes(q.toLowerCase()) ||
+                            a.teacherName.replace(',', '').toLowerCase().includes(q.toLowerCase()) ||
+                            a.theme.toLowerCase().includes(q.toLowerCase()),
                         sortFn: (a, b) => {
                             const t = a.teacherName.localeCompare(b.teacherName)
                             if (t !== 0) return t
@@ -58,9 +71,6 @@ export function HodTeams() {
                     }}
                 />
             </div>
-            <Link to={routes.hod.aNewTeam} className='text-center'>
-                {t('dashboard.createNewTeam')}
-            </Link>
         </div>
     )
 }

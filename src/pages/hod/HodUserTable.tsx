@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Button, IconButton, ITableHeader, Loading, Table, toast } from '~/components'
 import { useAccessToken, useAllUsers } from '~/hooks'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { routes } from '~/pages'
 import { useState } from 'react'
 import { uploadUserInvitationCsv } from '~/backend'
@@ -22,38 +22,53 @@ export function HodUserTable() {
     const tableCols: ITableHeader[] = [
         { key: 'fullName', label: t('fullName') },
         { key: 'email', label: t('email') },
+        { key: 'role', label: t('role') },
         { key: 'openUserBtn', label: '', style: 'w-8' },
         // { key: 'deleteUserBtn', label: '', style: 'w-8' },
     ]
 
-    const tableRows = users.map(
-        (u) =>
-            ({
-                email: u.email,
-                fullName: `${u.lastName}, ${u.firstName}`,
-                openUserBtn: (
-                    <IconButton onClick={() => navigate(routes.hod.users.user(u.userId.toString()))}>
-                        <i className='ri-pencil-fill' />
-                    </IconButton>
-                ),
-                // deleteUserBtn: (
-                //     <IconButton
-                //         onClick={() => {
-                //             if (
-                //                 confirm(
-                //                     t('dashboard.areYouSureYouWantToDeleteUser', {
-                //                         fullName: u.lastName + ' ' + u.firstName,
-                //                     }) + '?'
-                //                 )
-                //             )
-                //                 deleteUser({ userId: u.userId.toString() })
-                //         }}
-                //     >
-                //         <i className='ri-delete-bin-2-fill text-cs-warning' />
-                //     </IconButton>
-                // ),
-            } as ITeamTableRow)
-    )
+    const tableRows = users.map((u) => {
+        const roleBadeStyles: string =
+            u.role.name === 'HoD'
+                ? 'bg-red-500/20 text-red-900'
+                : u.role.name === 'PS'
+                ? 'bg-amber-500/20 text-amber-900'
+                : u.role.name === 'teacher'
+                ? 'bg-cyan-500/20 text-cyan-900'
+                : 'bg-green-500/20 text-green-900'
+        return {
+            email: u.email,
+            fullName: `${u.lastName}, ${u.firstName}`,
+            role: (
+                <div
+                    className={`relative grid w-fit select-none items-center whitespace-nowrap rounded-md px-2 py-1 font-sans text-xs font-bold uppercase ${roleBadeStyles}`}
+                >
+                    <span>{t(`roles.${u.role.name}`)}</span>
+                </div>
+            ),
+            openUserBtn: (
+                <IconButton onClick={() => navigate(routes.hod.users.user(u.userId.toString()))}>
+                    <i className='ri-pencil-fill' />
+                </IconButton>
+            ),
+            // deleteUserBtn: (
+            //     <IconButton
+            //         onClick={() => {
+            //             if (
+            //                 confirm(
+            //                     t('dashboard.areYouSureYouWantToDeleteUser', {
+            //                         fullName: u.lastName + ' ' + u.firstName,
+            //                     }) + '?'
+            //                 )
+            //             )
+            //                 deleteUser({ userId: u.userId.toString() })
+            //         }}
+            //     >
+            //         <i className='ri-delete-bin-2-fill text-cs-warning' />
+            //     </IconButton>
+            // ),
+        } as ITeamTableRow
+    })
 
     return (
         <div className='flex w-full flex-col gap-12'>
@@ -61,45 +76,51 @@ export function HodUserTable() {
                 <Table<ITeamTableRow>
                     cols={tableCols}
                     rows={tableRows}
+                    tooltipExtensions={[
+                        <Button
+                            key='1'
+                            className='bg-cs-secondary text-center text-sm hover:bg-cs-secondary/70'
+                            onClick={() => navigate(routes.hod.users.aUserEdit)}
+                        >
+                            {'+ ' + t('dashboard.addUser')}
+                        </Button>,
+                        <div className='flex flex-col gap-4' key='2'>
+                            <label
+                                htmlFor='upload-csv'
+                                className={`cursor-pointer rounded-lg border border-cs-primary bg-cs-primary px-4 py-2 text-sm text-white hover:bg-cs-accent-blue focus:bg-cs-accent-blue ${
+                                    csvFile ? 'text-cs-secondary' : 'text-cs-link'
+                                }`}
+                            >
+                                {t('dashboard.inviteUsersCsv')}
+                            </label>
+                            <input
+                                id='upload-csv'
+                                key={csvFile?.name}
+                                type='file'
+                                disabled={!!csvFile}
+                                accept='.csv'
+                                className='hidden'
+                                onChange={(e) => {
+                                    if (e.target.files === null) return
+                                    const file = e.target.files[0]
+                                    if (confirm(t('dashboard.areYouSureInviteCsv'))) {
+                                        void uploadUserInvitationCsv(accessToken, file)
+                                        setTimeout(() => {
+                                            toast(t('fileUploadedSuccessfully'))
+                                            setCsvFile(null)
+                                        })
+                                    }
+                                }}
+                            />
+                        </div>,
+                    ]}
                     options={{
+                        searchFn: (a, q) =>
+                            a.fullName.replace(',', '').toLowerCase().includes(q.toLowerCase()) ||
+                            a.email.toLowerCase().includes(q.toLowerCase()),
                         sortFn: (a, b) => a.fullName.localeCompare(b.fullName),
                     }}
                 />
-            </div>
-            <Link to={routes.hod.users.aUserEdit} className='mx-auto font-normal'>
-                {'+ ' + t('dashboard.addUser')}
-            </Link>
-            <div className='mx-auto flex flex-col gap-4'>
-                <label
-                    htmlFor='upload-csv'
-                    className={`cursor-pointer ${csvFile ? 'text-cs-secondary' : 'text-cs-link'}`}
-                    onClick={() => {
-                        if (csvFile) {
-                            void uploadUserInvitationCsv(accessToken, csvFile)
-                            setTimeout(() => {
-                                toast(t('fileUploadedSuccessfully'))
-                                setCsvFile(null)
-                            }, 700)
-                        }
-                    }}
-                >
-                    {csvFile ? t('confirmUploadWork') : t('dashboard.inviteUsersCsv')}
-                </label>
-                <input
-                    id='upload-csv'
-                    key={csvFile?.name}
-                    type='file'
-                    disabled={!!csvFile}
-                    accept='.csv'
-                    className='hidden'
-                    onChange={(e) => {
-                        if (e.target.files === null) return
-                        setCsvFile(e.target.files[0])
-                    }}
-                />
-                <Button preset='text' hidden={!csvFile} className='text-cs-warning' onClick={() => setCsvFile(null)}>
-                    {t('cancel')}
-                </Button>
             </div>
         </div>
     )
@@ -108,6 +129,7 @@ export function HodUserTable() {
 interface ITeamTableRow {
     email: string
     fullName: string
+    role: JSX.Element
     openUserBtn: JSX.Element
     // deleteUserBtn: JSX.Element
 }

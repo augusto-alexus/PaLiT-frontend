@@ -40,7 +40,16 @@ export function ProjectInfo({ language, stageName }: IProjectInfoProps) {
             <InfoRow infoKey={t('projectInfo.faculty')} value={student?.faculty} />
             <InfoRow infoKey={t('projectInfo.group')} value={student?.cluster} />
             <InfoRow infoKey={t('projectInfo.language')} value={language || myProject?.language} />
-            <InfoRow infoKey={t('projectInfo.stage')} value={stageName || myProject?.stage?.name} />
+            <InfoRow
+                infoKey={t('projectInfo.stage')}
+                value={
+                    stageName
+                        ? t(`stages.${stageName}`)
+                        : myProject?.stage?.name
+                        ? t(`stages.${myProject?.stage?.name}`)
+                        : undefined
+                }
+            />
             {studentId && <ThemeUpdateForm studentId={studentId} />}
         </div>
     )

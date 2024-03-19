@@ -39,6 +39,7 @@ export async function deleteUser(userId: string) {
 
 export interface IUser {
     userId: number
+    role: IRoleDTO
     email: string
     firstName: string
     lastName: string

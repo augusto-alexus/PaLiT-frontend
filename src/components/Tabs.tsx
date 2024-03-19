@@ -4,13 +4,7 @@ export interface ITab {
     id: number
 }
 
-export function Tabs({
-    items,
-    setItem,
-}: {
-    items: ITab[]
-    setItem: (id: number) => void
-}) {
+export function Tabs({ items, setItem }: { items: ITab[]; setItem: (id: number) => void }) {
     return (
         <div className='flex w-full flex-row justify-center gap-6'>
             {items.map((tab) => (

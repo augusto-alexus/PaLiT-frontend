@@ -58,6 +58,7 @@
   "multipleStudentMaster": "more master students",
   "theme": "Theme",
   "language": "Language",
+  "search": "Search",
   "degrees": {
     "bachelor": "Bachelor",
     "master": "Master"
@@ -65,6 +66,12 @@
   "languages": {
     "UA": "Ukrainian",
     "ENG": "English"
+  },
+  "stages": {
+    "s1": "Teacher admission",
+    "s2": "Head of department admission",
+    "s3": "Regulatory clearance",
+    "s4": "Plagiarism check"
   },
   "navigation": {
     "goBack": "Go back",
@@ -117,7 +124,8 @@
     "userUpdated": "User info updated",
     "areYouSureYouWantToDeleteUser": "Are you sure you want to delete user {{fullName}}",
     "userDeleted": "User deleted",
-    "inviteUsersCsv": "Invite users with CSV",
+    "inviteUsersCsv": "Invite users",
+    "areYouSureInviteCsv": "Are you sure you want to invite those users?",
     "createNewTeam": "Create new team"
   },
   "workStatus": "Work status",

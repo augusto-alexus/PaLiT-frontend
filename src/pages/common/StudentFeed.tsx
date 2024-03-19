@@ -52,7 +52,7 @@ export function StudentFeed() {
 
     const stageTabs = stages.map<ITab>((s) => ({
         id: s.serialOrder,
-        label: s.name,
+        label: t(`stages.${s.name}`),
         isActive: s.serialOrder === selectedStage,
     }))
 

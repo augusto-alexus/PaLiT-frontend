@@ -4,7 +4,6 @@ import { useAllHoDRequests, useAllStudents, useAllTeachers } from '~/hooks'
 import { Combobox, IComboboxOption } from '~/components/Combobox.tsx'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { routes } from '~/pages'
 
 export function HodNewTeam() {
     const { t } = useTranslation()
@@ -35,6 +34,7 @@ export function HodNewTeam() {
             } as IComboboxOption)
     )
 
+    // @ts-ignore
     return (
         <main className='w-full'>
             <GoBack />
@@ -72,6 +72,9 @@ export function HodNewTeam() {
                 </div>
                 <hr className='border-cs-disabled' />
                 <div className='flex flex-row place-items-center justify-end gap-4'>
+                    {/* Oink */}
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/*@ts-ignore*/}
                     <Link to={-1} className='text-cs-warning'>
                         {t('cancel')}
                     </Link>

@@ -24,12 +24,8 @@ export function HodStageApproval() {
 
     return (
         <div className='flex w-full flex-col gap-12'>
-            {teachers?.length ? (
-                <h2 className='text-center text-2xl font-semibold'>{t('dashboard.stage2TeacherMapping')}</h2>
-            ) : (
-                <h2 className='text-center text-2xl font-semibold'>{t('dashboard.noTeachers')}</h2>
-            )}
-            {teachers?.length && (
+            {!teachers?.length && <h2 className='text-center text-2xl font-semibold'>{t('dashboard.noTeachers')}</h2>}
+            {!!teachers?.length && (
                 <div className='flex flex-col flex-nowrap gap-16'>
                     {teacherRole && (
                         <TeacherStageTable roleDTO={teacherRole} allTeachers={teachers} showStages={true} />
@@ -61,7 +57,7 @@ function TableHeader({
                 <td className='font-bold'>{showTooltip ? '' : t(`roles.${roleDTO.name}`)}</td>
                 {allStages?.map((s) => (
                     <td key={s.stageId} className='text-center font-bold'>
-                        {showStages && `№ ${s.serialOrder}: ${s.name}`}
+                        {showStages && `${t(`stages.${s.name}`)}`}
                     </td>
                 ))}
             </tr>
