@@ -48,6 +48,10 @@
     "theRestForTeacher": "invitation from one to start evaluating theses",
     "theRestForStudent": "invitation from one to start working on your thesis"
   },
+  "selectLanguage": "Select language",
+  "selectYourTheme": "Select your theme",
+  "invitationSent": "Invitation sent",
+  "teamCreatedSuccessfully": "Team created successfully",
   "yourStudents": "Your students",
   "bachelorStudentLimit": "Bachelor student limit",
   "masterStudentLimit": "Master student limit",
@@ -206,6 +210,7 @@
     "credentialsDoNotMatch": "Credentials do not match. Check that you entered the same email you received the invitation from",
     "userCantBeDelete": "User can't be deleted",
     "youCantUpdateTheme": "You can't update this theme",
-    "fileTooLarge": "File is too large"
+    "fileTooLarge": "File is too large",
+    "languageCantBeEmpty": "Language can't be empty"
   }
 }

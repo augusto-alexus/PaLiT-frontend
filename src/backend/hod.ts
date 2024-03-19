@@ -7,11 +7,12 @@ export async function getAllRequests(): Promise<IHoDRequest[]> {
     return (response.data as IHoDRequestDTO[]).map(parseHoDRequestDTO)
 }
 
-export async function updateRequest(requestId: number, approved: boolean): Promise<[boolean, boolean]> {
-    const formData = new FormData()
-    formData.append('approved', String(approved))
-    const response = await axios.put(endpoints.hod.updateRequest(requestId), formData)
-    return [response.status === 200, approved]
+export function createTeam(studentId: string, teacherId: string, theme: string, language: Language) {
+    return axios.post(endpoints.hod.createTeam(teacherId, studentId), {
+        theme,
+        language,
+        approveDirection: 'TEACHER',
+    })
 }
 
 export interface IHoDRequestDTO {

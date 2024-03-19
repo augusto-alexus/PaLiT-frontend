@@ -1,23 +1,48 @@
 import { useTranslation } from 'react-i18next'
-import { Button, GoBack, Input, Loading } from '~/components'
-import { useAllHoDRequests, useAllStudents, useAllTeachers } from '~/hooks'
-import { Combobox, IComboboxOption } from '~/components/Combobox.tsx'
+import { Button, Combobox, GoBack, IComboboxOption, Input, LanguageSelect, Loading, toast } from '~/components'
+import { useAllHoDRequests, useAllStudents, useAllTeachers, useCreateTeam } from '~/hooks'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Language } from '~/models'
+
+interface ITeamEdit {
+    studentId: string
+    teacherId: string
+    theme: string
+    language: Language
+}
 
 export function HodNewTeam() {
+    const { t } = useTranslation()
+    const { mutate: createNewTeam } = useCreateTeam(
+        () => toast(t('teamCreatedSuccessfully')),
+        (err) => alert(err)
+    )
+    return <TeamEditForm onSubmit={createNewTeam} />
+}
+
+export function HodTeamEdit() {
+    // TODO
+}
+
+function TeamEditForm({ initialState, onSubmit }: { initialState?: ITeamEdit; onSubmit: (form: ITeamEdit) => void }) {
     const { t } = useTranslation()
     const { data: requests, isInitialLoading: requestsLoading } = useAllHoDRequests()
     const { data: students, isInitialLoading: studentsLoading } = useAllStudents()
     const { data: teachers, isInitialLoading: teachersLoading } = useAllTeachers()
-    const [studentId, setStudentId] = useState<string>('')
-    const [teacherId, setTeacherId] = useState<string>('')
-    const [theme, setTheme] = useState<string>('')
+    const [form, setForm] = useState<ITeamEdit>(
+        initialState ?? {
+            studentId: '',
+            teacherId: '',
+            theme: '',
+            language: 'UA',
+        }
+    )
 
     if (studentsLoading || teachersLoading || requestsLoading) return <Loading />
 
     const studentOptions = students
-        ?.filter((s) => !!requests?.every((r) => r.studentId !== s.studentId))
+        ?.filter((s) => !!requests?.every((r) => !r.teamApproved || r.studentId !== s.studentId))
         ?.map(
             (s) =>
                 ({
@@ -34,7 +59,6 @@ export function HodNewTeam() {
             } as IComboboxOption)
     )
 
-    // @ts-ignore
     return (
         <main className='w-full'>
             <GoBack />
@@ -42,20 +66,20 @@ export function HodNewTeam() {
                 className='mx-auto flex w-1/3 flex-col gap-4'
                 onSubmit={(e) => {
                     e.preventDefault()
-                    alert(JSON.stringify({ studentId, teacherId, theme }))
+                    onSubmit(form)
                 }}
             >
                 <Combobox
                     options={studentOptions}
-                    value={studentId}
-                    setValue={(v) => setStudentId(v)}
+                    value={form.studentId}
+                    setValue={(v) => setForm((f) => ({ ...f, studentId: v }))}
                     label={t('roles.student') + ':'}
                     placeholder={t('selectUser')}
                 />
                 <Combobox
                     options={teacherOptions}
-                    value={teacherId}
-                    setValue={(v) => setTeacherId(v)}
+                    value={form.teacherId}
+                    setValue={(v) => setForm((f) => ({ ...f, teacherId: v }))}
                     label={t('roles.teacher') + ':'}
                     placeholder={t('selectUser')}
                 />
@@ -65,10 +89,24 @@ export function HodNewTeam() {
                         required
                         type='text'
                         placeholder={t('selectTheme')}
-                        value={theme}
-                        onChange={(e) => setTheme(e.target.value)}
+                        value={form.theme}
+                        onChange={(e) => setForm((f) => ({ ...f, theme: e.target.value }))}
                         className='col-span-2'
                     />
+                </div>
+                <div className='grid grid-cols-3 place-content-center gap-2'>
+                    <label className='inline-flex place-items-center font-semibold'>{t('language')}:</label>
+                    <div className='col-span-2'>
+                        <LanguageSelect
+                            value={form.language}
+                            onChange={(e) =>
+                                setForm((f) => ({
+                                    ...f,
+                                    language: e.target.value as Language,
+                                }))
+                            }
+                        />
+                    </div>
                 </div>
                 <hr className='border-cs-disabled' />
                 <div className='flex flex-row place-items-center justify-end gap-4'>

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { IRequestDTO, makeRequest } from '~/backend'
-import { Button, Input, Select, toast } from '~/components'
+import { Button, Input, LanguageSelect, toast } from '~/components'
 import { useCurrentUser, useForm } from '~/hooks'
 import { Language } from '~/models'
 
@@ -19,7 +19,7 @@ export function RequestForm({ userId }: { userId: number }) {
         mutationFn: async (requestDTO: IRequestDTO) => makeRequest(currentUser.role, requestDTO),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['requests'])
-            toast('Запрошення відправлено!')
+            toast(`${t('invitationSent')}!`)
         },
         onError: (error) => {
             if (error instanceof AxiosError) {
@@ -41,7 +41,7 @@ export function RequestForm({ userId }: { userId: number }) {
         },
         (form) => {
             if (form.language === '') {
-                toast('Мова не може бути порожньою')
+                toast(t('languageCantBeEmpty'))
                 return
             }
             mutate({
@@ -62,19 +62,13 @@ export function RequestForm({ userId }: { userId: number }) {
                     type='text'
                     value={form.theme}
                     onChange={onFieldChange}
-                    placeholder='Введіть Вашу тему'
+                    placeholder={t('selectYourTheme')}
                 />
             </div>
             <div className='flex flex-col'>
-                <Select required name='language' value={form.language} onChange={onFieldChange}>
-                    <option disabled hidden value=''>
-                        Виберіть мову
-                    </option>
-                    <option value='UA'>Українська</option>
-                    <option value='ENG'>English</option>
-                </Select>
+                <LanguageSelect value={form.language} onChange={onFieldChange} />
             </div>
-            <Button>Відправити запит</Button>
+            <Button>{t('send')}</Button>
         </form>
     )
 }
