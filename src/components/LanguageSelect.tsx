@@ -10,7 +10,7 @@ export function LanguageSelect({
 }: {
     value: Language | ''
     onChange: (e: ChangeEvent<HTMLSelectElement>) => void
-    disabled: boolean
+    disabled?: boolean
 }) {
     const { t } = useTranslation()
     return (
