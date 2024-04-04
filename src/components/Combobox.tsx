@@ -8,20 +8,27 @@ export function Combobox({
     placeholder,
     value,
     setValue,
+    disabled,
 }: {
     options?: IComboboxOption[]
     label?: string
     placeholder?: string
     value: string
     setValue: (v: string) => void
+    disabled?: boolean
 }) {
     const { t } = useTranslation()
 
     const [query, setQuery] = useState<string>('')
-    const [uiValue, setUiValue] = useState<IComboboxOption>({ id: value, label: '' })
+    const [uiValue, setUiValue] = useState<IComboboxOption>({
+        id: value,
+        label: options?.find((o) => o.id === value)?.label || '',
+    })
 
     const filteredOptions =
-        query === '' ? options : options?.filter((o) => o.label.toLowerCase().includes(query.toLowerCase()))
+        query === ''
+            ? options
+            : options?.filter((o) => o.label.toLowerCase().includes(query.toLowerCase()) || o.id === value)
 
     return (
         <HuiCombobox
@@ -31,6 +38,7 @@ export function Combobox({
                 setValue(o.id)
                 setUiValue(o)
             }}
+            disabled={disabled}
         >
             <div className='grid grid-cols-3 place-content-center justify-between gap-2'>
                 {label && <Label className='inline-flex place-items-center font-semibold'>{label}</Label>}

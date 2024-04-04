@@ -50,6 +50,8 @@ export const routes = {
         aTeams: '/hod/teams',
         newTeam: 'teams/new',
         aNewTeam: '/hod/teams/new',
+        editTeam: (teamId?: string) => `teams/${teamId ? teamId : ':teamId'}`,
+        aEditTeam: (teamId?: string) => `/hod/teams/${teamId ? teamId : ':teamId'}`,
         users: Object.freeze({
             root: 'users',
             aRoot: '/hod/users',

@@ -46,6 +46,7 @@ export default Object.freeze({
     hod: Object.freeze({
         getAllRequests: 'request/head-department/all',
         createTeam: (teacherId: string, studentId: string) => `request/hod/${teacherId}/${studentId}`,
+        editTeam: (teacherId: string, studentId: string) => `request/hod/${teacherId}/${studentId}`,
     }),
     user: Object.freeze({
         createStudent: 'user/student',

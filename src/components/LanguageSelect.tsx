@@ -6,13 +6,15 @@ import { ChangeEvent } from 'react'
 export function LanguageSelect({
     value,
     onChange,
+    disabled,
 }: {
     value: Language | ''
     onChange: (e: ChangeEvent<HTMLSelectElement>) => void
+    disabled: boolean
 }) {
     const { t } = useTranslation()
     return (
-        <Select required name='language' value={value} onChange={onChange}>
+        <Select required disabled={disabled} name='language' value={value} onChange={onChange}>
             <option disabled hidden value=''>
                 {t('selectLanguage')}
             </option>

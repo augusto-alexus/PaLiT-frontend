@@ -52,6 +52,7 @@
   "selectYourTheme": "Select your theme",
   "invitationSent": "Invitation sent",
   "teamCreatedSuccessfully": "Team created successfully",
+  "teamUpdatedSuccessfully": "Team updated successfully",
   "yourStudents": "Your students",
   "bachelorStudentLimit": "Bachelor student limit",
   "masterStudentLimit": "Master student limit",
@@ -130,7 +131,8 @@
     "userDeleted": "User deleted",
     "inviteUsersCsv": "Invite users",
     "areYouSureInviteCsv": "Are you sure you want to invite those users?",
-    "createNewTeam": "Create new team"
+    "createNewTeam": "Create new team",
+    "editTeam": "Edit team"
   },
   "workStatus": "Work status",
   "workStatuses": {

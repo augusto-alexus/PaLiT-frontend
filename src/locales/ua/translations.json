@@ -52,6 +52,7 @@
   "selectYourTheme": "Виберіть Вашу тему",
   "invitationSent": "Запрошення було відправлено",
   "teamCreatedSuccessfully": "Команду створено успішно",
+  "teamUpdatedSuccessfully": "Команду оновлено успішно",
   "yourStudents": "Ваші студенти",
   "bachelorStudentLimit": "Ліміт студентів бакалаврів",
   "masterStudentLimit": "Ліміт студентів магістрів",
@@ -130,7 +131,8 @@
     "userDeleted": "Користувача видалено",
     "inviteUsersCsv": "Запросити користувачів",
     "areYouSureInviteCsv": "Ви впевнені. що хочете запросити цих користувачів?",
-    "createNewTeam": "Створити нову команду"
+    "createNewTeam": "Створити нову команду",
+    "editTeam": "Редагувати команду"
   },
   "workStatus": "Статус роботи",
   "workStatuses": {

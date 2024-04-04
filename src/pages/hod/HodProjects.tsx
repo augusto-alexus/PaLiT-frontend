@@ -3,7 +3,6 @@ import { ITableHeader, Loading, Table, toast } from '~/components'
 import { useTranslation } from 'react-i18next'
 import { routes } from '~/pages'
 import { Link, useNavigate } from 'react-router-dom'
-import { IHodStudentInfo } from '~/backend'
 
 export function HodProjects() {
     const { t } = useTranslation()
@@ -22,37 +21,6 @@ export function HodProjects() {
         { key: 'openLastWorkBtn', label: '', style: 'w-8' },
         { key: 'openHistoryBtn', label: '', style: 'w-8' },
     ]
-
-    // const tmp = [3, 4, 5, 6, 7, 8].map(
-    //     (i) =>
-    //         ({
-    //             studentDTO: {
-    //                 studentId: (Math.random() * 1000).toString(),
-    //                 cluster: 'ІКНІ',
-    //                 degree: 'BACHELOR',
-    //                 faculty: 'КН',
-    //                 graduateDate: new Date().toString(),
-    //             },
-    //             documentDTO: {
-    //                 documentId: (Math.random() * 1000).toString(),
-    //                 approvedDate: Math.random() > 0.5 ? 'oink' : null,
-    //                 approved: Math.random() > 0.5 ? 'false' : 'true',
-    //                 createdDate: new Date().toString(),
-    //                 originalName: 'blah blah',
-    //                 stageDTO: {
-    //                     stageId: ((i ** 2 + 47) % 4) + 1,
-    //                     name: `s${((i ** 2 + 47) % 4) + 1}`,
-    //                     serialOrder: ((i ** 2 + 47) % 4) + 1,
-    //                 },
-    //             },
-    //             userDTO: {
-    //                 userId: (Math.random() * 1000).toString(),
-    //                 firstName: `Test ${i}`,
-    //                 lastName: 'Student',
-    //                 email: `st${i}@gmail.com`,
-    //             },
-    //         } as IHodStudentInfo)
-    // )
 
     const tableRows: ITableRow[] = data.map((s) => {
         const workStatus: 'rejected' | 'toReview' | 'accepted' =

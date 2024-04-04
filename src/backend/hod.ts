@@ -7,12 +7,16 @@ export async function getAllRequests(): Promise<IHoDRequest[]> {
     return (response.data as IHoDRequestDTO[]).map(parseHoDRequestDTO)
 }
 
-export function createTeam(studentId: string, teacherId: string, theme: string, language: Language) {
+export function createTeam(teacherId: string, studentId: string, theme: string, language: Language) {
     return axios.post(endpoints.hod.createTeam(teacherId, studentId), {
         theme,
         language,
         approveDirection: 'TEACHER',
     })
+}
+
+export function editTeam(teacherId: string, studentId: string) {
+    return axios.put(endpoints.hod.editTeam(teacherId, studentId))
 }
 
 export interface IHoDRequestDTO {

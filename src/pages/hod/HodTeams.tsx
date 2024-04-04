@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Button, ITableHeader, Loading, Table } from '~/components'
 import { useAllHoDRequests, useAllStudents, useAllTeachers } from '~/hooks'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { routes } from '~/pages'
 
 export function HodTeams() {
@@ -29,6 +29,7 @@ export function HodTeams() {
         { key: 'teacherName', label: t('dashboard.teacher') },
         { key: 'studentName', label: t('dashboard.student') },
         { key: 'theme', label: t('dashboard.theme') },
+        { key: 'editTeam', label: '', style: 'w-8' },
     ]
 
     const tableRows = suitableRequests.reduce((res, r) => {
@@ -39,6 +40,11 @@ export function HodTeams() {
                 teacherName: `${teacher.lastName}, ${teacher.firstName}`,
                 studentName: `${student.lastName}, ${student.firstName}`,
                 theme: r.theme,
+                editTeam: (
+                    <Link to={routes.hod.aEditTeam(r.id.toString())} title={t('dashboard.editTeam')}>
+                        <i className='ri-history-line' />
+                    </Link>
+                ),
             })
         return res
     }, [] as ITeamTableRow[])
@@ -79,4 +85,5 @@ interface ITeamTableRow {
     teacherName: string
     studentName: string
     theme: string
+    editTeam: JSX.Element
 }

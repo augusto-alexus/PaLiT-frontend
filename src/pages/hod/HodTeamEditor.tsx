@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next'
 import { Button, Combobox, GoBack, IComboboxOption, Input, LanguageSelect, Loading, toast } from '~/components'
-import { useAllHoDRequests, useAllStudents, useAllTeachers, useCreateTeam } from '~/hooks'
+import { useAllHoDRequests, useAllStudents, useAllTeachers, useCreateTeam, useEditTeam } from '~/hooks'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { Language } from '~/models'
+import { routes } from '~/pages'
 
 interface ITeamEdit {
     studentId: string
@@ -14,18 +15,53 @@ interface ITeamEdit {
 
 export function HodNewTeam() {
     const { t } = useTranslation()
+    const navigate = useNavigate()
     const { mutate: createNewTeam } = useCreateTeam(
-        () => toast(t('teamCreatedSuccessfully')),
+        () => {
+            toast(t('teamCreatedSuccessfully'))
+            navigate(routes.hod.aTeams)
+        },
         (err) => alert(err)
     )
-    return <TeamEditForm onSubmit={createNewTeam} />
+    return <TeamEditForm onSubmit={createNewTeam} editingExistingTeam={false} />
 }
 
 export function HodTeamEdit() {
-    // TODO
+    const { t } = useTranslation()
+    const { teamId } = useParams()
+    const navigate = useNavigate()
+    const { mutate: editTeam } = useEditTeam(() => {
+        toast(t('teamUpdatedSuccessfully'))
+        navigate(routes.hod.aTeams)
+    })
+    const { data: allRequests, isLoading: isLoadingRequests } = useAllHoDRequests()
+    if (!teamId) return <Navigate to={routes.hod.teams} />
+    if (isLoadingRequests) return <Loading />
+    const thisTeam = allRequests?.find((r) => r.id.toString() === teamId)
+    if (!thisTeam) return <Navigate to={routes.hod.teams} />
+    return (
+        <TeamEditForm
+            initialState={{
+                studentId: thisTeam.studentId.toString(),
+                teacherId: thisTeam.teacherId.toString(),
+                theme: thisTeam.theme,
+                language: thisTeam.language,
+            }}
+            onSubmit={editTeam}
+            editingExistingTeam={true}
+        />
+    )
 }
 
-function TeamEditForm({ initialState, onSubmit }: { initialState?: ITeamEdit; onSubmit: (form: ITeamEdit) => void }) {
+function TeamEditForm({
+    initialState,
+    onSubmit,
+    editingExistingTeam,
+}: {
+    initialState?: ITeamEdit
+    onSubmit: (form: ITeamEdit) => void
+    editingExistingTeam: boolean
+}) {
     const { t } = useTranslation()
     const { data: requests, isInitialLoading: requestsLoading } = useAllHoDRequests()
     const { data: students, isInitialLoading: studentsLoading } = useAllStudents()
@@ -42,7 +78,15 @@ function TeamEditForm({ initialState, onSubmit }: { initialState?: ITeamEdit; on
     if (studentsLoading || teachersLoading || requestsLoading) return <Loading />
 
     const studentOptions = students
-        ?.filter((s) => !!requests?.every((r) => !r.teamApproved || r.studentId !== s.studentId))
+        ?.filter(
+            (s) =>
+                !!requests?.every(
+                    (r) =>
+                        !r.teamApproved ||
+                        r.studentId !== s.studentId ||
+                        (editingExistingTeam && r.studentId.toString() === initialState?.studentId)
+                )
+        )
         ?.map(
             (s) =>
                 ({
@@ -75,6 +119,7 @@ function TeamEditForm({ initialState, onSubmit }: { initialState?: ITeamEdit; on
                     setValue={(v) => setForm((f) => ({ ...f, studentId: v }))}
                     label={t('roles.student') + ':'}
                     placeholder={t('selectUser')}
+                    disabled={editingExistingTeam}
                 />
                 <Combobox
                     options={teacherOptions}
@@ -87,6 +132,7 @@ function TeamEditForm({ initialState, onSubmit }: { initialState?: ITeamEdit; on
                     <label className='inline-flex place-items-center font-semibold'>{t('theme')}:</label>
                     <Input
                         required
+                        disabled={editingExistingTeam}
                         type='text'
                         placeholder={t('selectTheme')}
                         value={form.theme}
@@ -105,6 +151,7 @@ function TeamEditForm({ initialState, onSubmit }: { initialState?: ITeamEdit; on
                                     language: e.target.value as Language,
                                 }))
                             }
+                            disabled={editingExistingTeam}
                         />
                     </div>
                 </div>
