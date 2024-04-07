@@ -13,7 +13,7 @@ import {
 import { ITeacher } from '~/models'
 import { IRoleDTO } from '~/backend'
 
-export function HodStageApproval() {
+export function HodIndividualStageApproval() {
     const { t } = useTranslation()
     const { data: teachers } = useAllTeachers()
     const { data: roles } = useAllRoles()

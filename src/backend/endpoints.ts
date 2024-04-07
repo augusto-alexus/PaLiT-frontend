@@ -38,6 +38,9 @@ export default Object.freeze({
         getTeachersStages: (teacherId: number) => `teacher-stage-approve/teacher/${teacherId}`,
         approveStageForAllInRole: (stageId: number, roleId: string) => `teacher-stage-approve/${stageId}/${roleId}`,
         teacherStageApprove: 'teacher-stage-approve',
+        getAllRolesApproval: 'approve/all',
+        createRoleApproval: (roleId: string, stageId: string) => `approve/${roleId}/${stageId}`,
+        deleteRoleApproval: (roleId: string, stageId: string) => `approve/${roleId}/${stageId}`,
     }),
     comments: Object.freeze({
         postComment: (documentId: string, userId: string) => `comment/${documentId}/${userId}`,

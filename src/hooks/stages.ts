@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next'
 import {
     approveStageForAllInRole,
     approveStageForTeacher,
+    createRoleStageApproval,
+    deleteRoleStageApproval,
+    getAllRoleStageApprovals,
     getAllStages,
     getTeachersStages,
     moveDocumentToStage,
@@ -17,6 +20,47 @@ export function useAllStages() {
     return useQuery({
         queryKey: ['stages'],
         queryFn: () => getAllStages(),
+    })
+}
+
+export function useAllRoleStageApprovals() {
+    return useQuery({
+        queryKey: ['role-stages'],
+        queryFn: () => getAllRoleStageApprovals(),
+    })
+}
+
+export function useCreateRoleStageApproval() {
+    const { t } = useTranslation()
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async ({ roleId, stageId }: { roleId: string; stageId: string }) =>
+            createRoleStageApproval(roleId, stageId),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries(['role-stages'])
+            toast(t('dashboard.stageApproved'))
+        },
+        onError: () => {
+            toast(`${t('error.unknownError')}!`)
+        },
+    })
+}
+
+export function useDeleteRoleStageApproval() {
+    const { t } = useTranslation()
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async ({ roleId, stageId }: { roleId: string; stageId: string }) =>
+            deleteRoleStageApproval(roleId, stageId),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries(['role-stages'])
+            toast(t('dashboard.stageRestricted'))
+        },
+        onError: () => {
+            toast(`${t('error.unknownError')}!`)
+        },
     })
 }
 

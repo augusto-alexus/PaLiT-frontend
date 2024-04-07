@@ -1,4 +1,5 @@
-export * from './HodStageApproval.tsx'
+export * from './HodIndividualStageApproval.tsx'
+export * from './HodRoleStageApproval.tsx'
 export * from './HodTeams.tsx'
 export * from './HodUserTable.tsx'
 export * from './HodRoot.tsx'

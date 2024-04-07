@@ -6,7 +6,6 @@ import '~/App.css'
 import {
     AuthPagesWrapper,
     AuthRedirect,
-    HodStageApproval,
     HodTeams,
     Invitations,
     StudentMyProject,
@@ -30,6 +29,7 @@ import {
     CommonStudentFeedWrapper,
     HodNewTeam,
     HodTeamEdit,
+    HodRoleStageApproval,
 } from '~/pages'
 import './i18.ts'
 import { HodProjects } from '~/pages/hod/HodProjects.tsx'
@@ -49,7 +49,7 @@ function App() {
 
                     <Route path={routes.hod.root} element={<HodRoot />}>
                         <Route path={routes.hod.projects} element={<HodProjects />} />
-                        <Route path={routes.hod.stageApproval} element={<HodStageApproval />} />
+                        <Route path={routes.hod.stageApproval} element={<HodRoleStageApproval />} />
                         <Route path={routes.hod.teams} element={<HodTeams />} />
                         <Route path={routes.hod.newTeam} element={<HodNewTeam />} />
                         <Route path={routes.hod.editTeam()} element={<HodTeamEdit />} />
