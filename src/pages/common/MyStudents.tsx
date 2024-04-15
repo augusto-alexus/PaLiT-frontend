@@ -4,7 +4,7 @@ import { useCurrentUser, useMyStudents } from '~/hooks'
 import { IMyStudent } from '~/models'
 import { routes } from '~/pages'
 
-export function TeacherStudents() {
+export function MyStudents() {
     const { t } = useTranslation()
     const { bachelorStudentsLimit, masterStudentsLimit } = useCurrentUser()
     const { data } = useMyStudents()
@@ -14,7 +14,7 @@ export function TeacherStudents() {
             <div className='flex w-full flex-col gap-8'>
                 <div className='text-center text-2xl font-semibold text-cs-text-dark'>{t('workNotStarted.title')}</div>
                 <div className='mx-auto max-w-md text-center text-xl text-cs-text-dark'>
-                    <Link to={routes.teacher.aStudents}>{t('workNotStarted.invite')}</Link>{' '}
+                    <Link to={routes.common.aInviteStudents}>{t('workNotStarted.invite')}</Link>{' '}
                     {t('workNotStarted.studentOr')}
                     <Link to={routes.common.aInvitations}> {t('workNotStarted.accept')}</Link>{' '}
                     {t('workNotStarted.theRestForTeacher')}

@@ -10,7 +10,7 @@ import {
     Invitations,
     StudentMyProject,
     TeacherStudent,
-    TeacherStudents,
+    MyStudents,
     routes,
     SignIn,
     SignUpStudent,
@@ -24,7 +24,7 @@ import {
     SignUpRoot,
     SignUpTeacher,
     TeacherRoot,
-    TeacherInviteStudents,
+    InviteStudents,
     StudentRoot,
     CommonStudentFeedWrapper,
     HodNewTeam,
@@ -65,8 +65,6 @@ function App() {
                     </Route>
 
                     <Route path={routes.teacher.root} element={<TeacherRoot />}>
-                        <Route path={routes.teacher.students} element={<TeacherInviteStudents />} />
-                        <Route path={routes.teacher.myStudents} element={<TeacherStudents />} />
                         <Route path={routes.teacher.myStudent()} element={<TeacherStudent />}>
                             <Route index element={<StudentFeed />} />
                         </Route>
@@ -81,6 +79,8 @@ function App() {
                     <Route path={routes.common.invitations} element={<Invitations />} />
                     <Route path={routes.common.workReview()} element={<StudentWorkReview />} />
                     <Route path={routes.common.studentFeed()} element={<CommonStudentFeedWrapper />} />
+                    <Route path={routes.common.myStudents} element={<MyStudents />} />
+                    <Route path={routes.common.inviteStudents} element={<InviteStudents />} />
                 </Route>
             </Routes>
             <ToastContainer theme='dark' />

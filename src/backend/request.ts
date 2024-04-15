@@ -18,7 +18,7 @@ async function getRequestsStudent() {
 }
 
 export async function makeRequest(role: Role, { userId, requestBody }: IRequestDTO) {
-    const endpoint = role === 'teacher' ? endpoints.teacher2StudentRequest : endpoints.student2TeacherRequest
+    const endpoint = role === 'student' ? endpoints.student2TeacherRequest : endpoints.teacher2StudentRequest
     const response = await axios.post(endpoint(userId), requestBody)
     return response.data as object
 }

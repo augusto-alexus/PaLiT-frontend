@@ -24,7 +24,7 @@ export function Invitations() {
         .filter(
             (request) =>
                 (request.direction == 'STUDENT' && role == 'student') ||
-                (request.direction == 'TEACHER' && role == 'teacher')
+                (request.direction == 'TEACHER' && role != 'student')
         )
         .filter((r) => !r.approved)
 
@@ -33,7 +33,7 @@ export function Invitations() {
             (request) =>
                 !(
                     (request.direction == 'STUDENT' && role == 'student') ||
-                    (request.direction == 'TEACHER' && role == 'teacher')
+                    (request.direction == 'TEACHER' && role != 'student')
                 )
         )
         .filter((r) => !r.approved)
@@ -84,7 +84,7 @@ function Request({
     const { t } = useTranslation()
     const { role } = useCurrentUser()
     const canAccept =
-        (request.direction == 'STUDENT' && role == 'student') || (request.direction == 'TEACHER' && role == 'teacher')
+        (request.direction == 'STUDENT' && role == 'student') || (request.direction == 'TEACHER' && role != 'student')
     return (
         <div
             className={`grid grid-cols-3 gap-4 rounded-xl border-b p-2 px-6 pb-4 ${

@@ -15,12 +15,16 @@ export function HodRoleStageApproval() {
     const { data: roleStageApprovals, isInitialLoading: roleStageApprovalsLoading } = useAllRoleStageApprovals()
     if (rolesLoading || roleStageApprovalsLoading) return <Loading />
 
+    const teacherRoles = roles?.filter((r) => r.name === 'HoD' || r.name === 'PS' || r.name === 'teacher')
+
     return (
         <div className='flex w-full flex-col gap-12'>
-            {!roles?.length && <h2 className='text-center text-2xl font-semibold'>{t('dashboard.noTeachers')}</h2>}
-            {!!roles?.length && (
+            {!teacherRoles?.length && (
+                <h2 className='text-center text-2xl font-semibold'>{t('dashboard.noTeachers')}</h2>
+            )}
+            {!!teacherRoles?.length && (
                 <div className='flex flex-col flex-nowrap gap-16'>
-                    <RoleStageTable roles={roles} roleStageApprovals={roleStageApprovals} />
+                    <RoleStageTable roles={teacherRoles} roleStageApprovals={roleStageApprovals} />
                 </div>
             )}
         </div>

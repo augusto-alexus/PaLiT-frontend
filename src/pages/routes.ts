@@ -9,10 +9,6 @@ export const routes = {
     aAuthRedirect: '/auth-redirect',
     teacher: {
         root: 'teacher',
-        students: 'students',
-        aStudents: '/teacher/students',
-        myStudents: 'my-students',
-        aMyStudents: '/teacher/my-students',
         invitations: 'invitations',
         aInvitations: '/teacher/invitations',
         myStudent: (studentId?: string) => buildUrlWithSearchParams('my-student', { studentId }),
@@ -21,6 +17,10 @@ export const routes = {
     common: {
         invitations: 'invitations',
         aInvitations: '/invitations',
+        myStudents: 'my-students',
+        aMyStudents: '/my-students',
+        inviteStudents: 'students',
+        aInviteStudents: '/students',
         workReview: (studentId?: string, documentId?: string) =>
             buildUrlWithSearchParams('work-review', { studentId, documentId }),
         aWorkReview: (studentId?: string, documentId?: string) =>

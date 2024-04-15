@@ -11,17 +11,15 @@ export function StudentTeachers() {
 
     const { data: requests } = useInvitations()
 
-    const { isLoading, error, data: allTeachers } = useAllTeachers()
+    const { data: allTeachers, isInitialLoading, error } = useAllTeachers()
 
     const { myProjectStarted } = useMyProject()
 
-    if (isLoading) return <Loading />
+    if (isInitialLoading) return <Loading />
     if (error) return <DisplayError error={error} />
     if (!allTeachers?.length)
         return <h2 className='text-center text-2xl font-semibold'>{t('noTeachersInTheSystem')}</h2>
-    const data = allTeachers.filter(
-        (t) => requests?.every((r) => r.user.id !== t.teacherId) && t.roleDTO.name === 'teacher'
-    )
+    const data = allTeachers.filter((t) => requests?.every((r) => r.user.id !== t.teacherId))
     if (!data?.length)
         return <h2 className='text-center text-2xl font-semibold'>{t('everyTeacherReceivedInvitation')}</h2>
 

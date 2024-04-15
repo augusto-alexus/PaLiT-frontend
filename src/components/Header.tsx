@@ -44,14 +44,15 @@ function getStudentHeaderNavs(myProjectStarted: boolean): INavItem[] {
 
 function getTeacherHeaderNavs(): INavItem[] {
     return [
-        { to: routes.teacher.aMyStudents, tLabel: 'navigation.myStudents' },
-        { to: routes.teacher.aStudents, tLabel: 'navigation.students' },
+        { to: routes.common.aMyStudents, tLabel: 'navigation.myStudents' },
+        { to: routes.common.aInviteStudents, tLabel: 'navigation.students' },
         { to: routes.common.aInvitations, tLabel: 'navigation.invites' },
     ]
 }
 
 function getHodHeaderNavs(): INavItem[] {
     return [
+        ...getTeacherHeaderNavs(),
         { to: routes.hod.aProjects, tLabel: 'navigation.projects' },
         { to: routes.hod.aStageApproval, tLabel: 'navigation.stageApproval' },
         { to: routes.hod.aTeams, tLabel: 'navigation.teams' },
@@ -60,7 +61,7 @@ function getHodHeaderNavs(): INavItem[] {
 }
 
 function getPsHeaderNavs(): INavItem[] {
-    return [{ to: routes.ps.aStudents, tLabel: 'navigation.students' }]
+    return [...getTeacherHeaderNavs(), { to: routes.ps.aStudents, tLabel: 'navigation.students' }]
 }
 
 function HeaderNav({ navItems }: { navItems: INavItem[] }) {

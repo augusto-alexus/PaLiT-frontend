@@ -5,7 +5,7 @@ import { useAllStudents, useInvitations } from '~/hooks'
 import { RequestForm } from '~/pages/components'
 import { IStudent } from '~/models'
 
-export function TeacherInviteStudents() {
+export function InviteStudents() {
     const { t } = useTranslation()
     const [showRequestFormFor, setShowRequestFormFor] = useState<number | null>(null)
     const { data: invites } = useInvitations()
