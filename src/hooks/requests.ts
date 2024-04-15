@@ -6,9 +6,7 @@ import { toast } from '~/components'
 import { useCurrentUser } from '~/hooks'
 
 export function useAllHoDRequests() {
-    const { role } = useCurrentUser()
     return useQuery({
-        enabled: role === 'HoD',
         queryKey: ['allHoDRequests'],
         queryFn: () => getAllRequests(),
     })

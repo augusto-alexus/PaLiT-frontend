@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { Button, toast } from '~/components'
-import { useAcceptInvitation, useCurrentUser, useInvitations, useRejectInvitation } from '~/hooks'
+import { Button, MainContentLoading, toast } from '~/components'
+import { useAcceptInvitation, useCurrentUser, useGetAllTeams, useInvitations, useRejectInvitation } from '~/hooks'
 import { routes } from '~/pages'
 import { IRequest } from '~/backend'
 import { getHumanReadableDuration } from '~/lib'
@@ -15,12 +15,24 @@ export function Invitations() {
         toast(`${t('request.approved')}!`)
         navigate(routes.aAuthRedirect)
     })
-    const { data } = useInvitations()
+    const { data: invitations, isInitialLoading: invitationsLoading } = useInvitations()
+    const { teams, teamsLoading } = useGetAllTeams()
 
-    if (!data?.filter((r) => !r.approved)?.length)
+    if (invitationsLoading || teamsLoading) return <MainContentLoading />
+
+    const relevantInvitations = invitations?.filter(
+        (inv) =>
+            !teams?.some(
+                (t) =>
+                    (role === 'student' && inv.user.id == t.teacher.teacherId) ||
+                    (role !== 'student' && inv.user.id == t.student.studentId)
+            )
+    )
+
+    if (!relevantInvitations?.filter((r) => !r.approved)?.length)
         return <h2 className='text-center text-2xl font-semibold'>{t('request.empty')}</h2>
 
-    const othersRequests = data
+    const othersRequests = relevantInvitations
         .filter(
             (request) =>
                 (request.direction == 'STUDENT' && role == 'student') ||
@@ -28,7 +40,7 @@ export function Invitations() {
         )
         .filter((r) => !r.approved)
 
-    const myRequests = data
+    const myRequests = relevantInvitations
         .filter(
             (request) =>
                 !(

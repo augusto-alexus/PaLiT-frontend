@@ -1,4 +1,4 @@
-/** @type {import("tailwindcss").Config} */
+/** @type {import('tailwindcss').Config} */
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     theme: {
@@ -19,6 +19,9 @@ export default {
                 'cs-additional-gray': '#9BA5A2',
                 'cs-additional-green': '#A4C716',
                 'cs-link': '#747BFF',
+            },
+            animation: {
+                'spin-slow': 'spin 1.5s linear infinite',
             },
         },
     },

@@ -1,29 +1,17 @@
 import { useTranslation } from 'react-i18next'
-import { Button, ITableHeader, Loading, Table } from '~/components'
-import { useAllHoDRequests, useAllStudents, useAllTeachers } from '~/hooks'
+import { Button, ITableHeader, MainContentLoading, Table } from '~/components'
+import { useGetAllTeams } from '~/hooks'
 import { Link, useNavigate } from 'react-router-dom'
 import { routes } from '~/pages'
 
 export function HodTeams() {
     const navigate = useNavigate()
     const { t } = useTranslation()
-    const { data: allRequests, isLoading: isLoadingRequests } = useAllHoDRequests()
-    const { data: allStudents, isLoading: isLoadingStudents } = useAllStudents()
-    const { data: allTeachers, isLoading: isLoadingTeachers } = useAllTeachers()
+    const { teams, teamsLoading } = useGetAllTeams()
 
-    const suitableRequests = allRequests?.filter((r) => r.teamApproved)
+    if (teamsLoading) return <MainContentLoading />
 
-    if (isLoadingRequests || isLoadingStudents || isLoadingTeachers) return <Loading />
-
-    if (
-        !suitableRequests ||
-        suitableRequests?.length === 0 ||
-        !allStudents ||
-        allStudents?.length === 0 ||
-        !allTeachers ||
-        allTeachers?.length === 0
-    )
-        return <h2 className='w-full text-center text-2xl font-semibold'>{t('dashboard.noTeams')}</h2>
+    if (!teams?.length) return <h2 className='w-full text-center text-2xl font-semibold'>{t('dashboard.noTeams')}</h2>
 
     const tableCols: ITableHeader[] = [
         { key: 'teacherName', label: t('dashboard.teacher') },
@@ -32,22 +20,16 @@ export function HodTeams() {
         { key: 'editTeam', label: '', style: 'w-8' },
     ]
 
-    const tableRows = suitableRequests.reduce((res, r) => {
-        const teacher = allTeachers.find((t) => t.teacherId === r.teacherId)
-        const student = allStudents.find((s) => s.studentId === r.studentId)
-        if (teacher && student)
-            res.push({
-                teacherName: `${teacher.lastName}, ${teacher.firstName}`,
-                studentName: `${student.lastName}, ${student.firstName}`,
-                theme: r.theme,
-                editTeam: (
-                    <Link to={routes.hod.aEditTeam(r.id.toString())} title={t('dashboard.editTeam')}>
-                        <i className='ri-history-line' />
-                    </Link>
-                ),
-            })
-        return res
-    }, [] as ITeamTableRow[])
+    const tableRows = teams.map((team) => ({
+        teacherName: `${team.teacher.lastName}, ${team.teacher.firstName}`,
+        studentName: `${team.student.lastName}, ${team.student.firstName}`,
+        theme: team.projectInfo.theme,
+        editTeam: (
+            <Link to={routes.hod.aEditTeam(team.projectInfo.id)} title={t('dashboard.editTeam')}>
+                <i className='ri-history-line' />
+            </Link>
+        ),
+    }))
 
     return (
         <div className='flex w-full flex-col gap-12'>

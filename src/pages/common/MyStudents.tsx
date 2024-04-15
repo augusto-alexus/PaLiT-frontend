@@ -3,12 +3,16 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCurrentUser, useMyStudents } from '~/hooks'
 import { IMyStudent } from '~/models'
 import { routes } from '~/pages'
+import { MainContentLoading } from '~/components'
 
 export function MyStudents() {
     const { t } = useTranslation()
     const { bachelorStudentsLimit, masterStudentsLimit } = useCurrentUser()
-    const { data } = useMyStudents()
-    const anyStudents = !!data?.length
+    const { data: myStudents, isInitialLoading: myStudentsLoading } = useMyStudents()
+
+    if (myStudentsLoading) return <MainContentLoading />
+
+    const anyStudents = !!myStudents?.length
     if (!anyStudents)
         return (
             <div className='flex w-full flex-col gap-8'>
@@ -22,17 +26,17 @@ export function MyStudents() {
             </div>
         )
 
-    const bachelorStudentCount = data.filter((s) => s.student.degree === 'bachelor').length
+    const bachelorStudentCount = myStudents.filter((s) => s.student.degree === 'bachelor').length
     const additionalBachelors = bachelorStudentsLimit ? Math.max(0, bachelorStudentsLimit - bachelorStudentCount) : 0
-    const masterStudentCount = data.filter((s) => s.student.degree === 'master').length
+    const masterStudentCount = myStudents.filter((s) => s.student.degree === 'master').length
     const additionalMasters = masterStudentsLimit ? Math.max(0, masterStudentsLimit - masterStudentCount) : 0
 
     return (
         <div className='flex w-full flex-col gap-12'>
             <h2 className='text-center text-2xl font-semibold'>{t('yourStudents')}</h2>
             <div className='flex flex-col place-items-center gap-8'>
-                {data.map((myStudent) => (
-                    <MyStudentInfoRow key={myStudent.student.studentId} myStudent={myStudent} />
+                {myStudents.map((s) => (
+                    <MyStudentInfoRow key={s.student.studentId} myStudent={s} />
                 ))}
             </div>
             {additionalBachelors > 0 && (

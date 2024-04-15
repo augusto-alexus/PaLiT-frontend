@@ -1,22 +1,26 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, DisplayError, Loading } from '~/components'
-import { useAllStudents, useInvitations } from '~/hooks'
+import { Button, DisplayError, MainContentLoading } from '~/components'
+import { useGetAllTeams } from '~/hooks'
 import { RequestForm } from '~/pages/components'
 import { IStudent } from '~/models'
 
 export function InviteStudents() {
     const { t } = useTranslation()
     const [showRequestFormFor, setShowRequestFormFor] = useState<number | null>(null)
-    const { data: invites } = useInvitations()
-    const { isLoading, error, data: allStudents } = useAllStudents()
+    const {
+        studentsQuery: { data: allStudents },
+        teams,
+        teamsLoading,
+        teamsQueryError,
+    } = useGetAllTeams()
 
-    if (isLoading) return <Loading />
-    if (error) return <DisplayError error={error} />
+    if (teamsLoading) return <MainContentLoading />
+    if (teamsQueryError) return <DisplayError error={teamsQueryError} />
     if (!allStudents?.length)
         return <h2 className='text-center text-2xl font-semibold'>{t('noStudentsInTheSystem')}</h2>
 
-    const data = allStudents.filter((t) => invites?.every((r) => r.user.id !== t.studentId))
+    const data = allStudents.filter(({ studentId }) => !teams?.some((t) => t.student.studentId !== studentId))
     if (!data?.length)
         return <h2 className='text-center text-2xl font-semibold'>{t('everyStudentReceivedInvitation')}</h2>
 
