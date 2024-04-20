@@ -1,15 +1,17 @@
 import { useAllStudentsWithInfo, useCurrentUser } from '~/hooks'
 import { ITableHeader, Loading, Table, toast } from '~/components'
 import { useTranslation } from 'react-i18next'
-import { routes } from '~/pages'
-import { Link, useNavigate } from 'react-router-dom'
+import { routes } from '~/pages/index.ts'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 
-export function HodProjects() {
+export function Projects() {
+    const { role } = useCurrentUser()
     const { t } = useTranslation()
     const { allowedStageIds } = useCurrentUser()
     const navigate = useNavigate()
     const { data, isInitialLoading } = useAllStudentsWithInfo()
 
+    if (role !== 'HoD' && role !== 'PS') return <Navigate to={routes.authRedirect} />
     if (isInitialLoading) return <Loading />
     if (!data?.length)
         return <h2 className='w-full text-center text-2xl text-cs-text-dark'>{t('dashboard.noProjects')}</h2>
@@ -46,7 +48,7 @@ export function HodProjects() {
                     className='w-fit px-0.5 py-0 text-cs-primary'
                     onClick={() => {
                         if (allowedStageIds?.includes(s.documentDTO.stageDTO.stageId))
-                            navigate(routes.common.aWorkReview(s.studentDTO.studentId, s.documentDTO.documentId))
+                            navigate(routes.aWorkReview(s.studentDTO.studentId, s.documentDTO.documentId))
                         else toast(t('feed.cantViewStage'))
                     }}
                     title={t('feed.viewLastDocument')}
@@ -55,7 +57,7 @@ export function HodProjects() {
                 </button>
             ),
             openHistoryBtn: (
-                <Link to={routes.common.aStudentFeed(s.studentDTO.studentId)} title={t('feed.checkHistory')}>
+                <Link to={routes.aStudentFeed(s.studentDTO.studentId)} title={t('feed.checkHistory')}>
                     <i className='ri-history-line' />
                 </Link>
             ),

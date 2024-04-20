@@ -28,9 +28,9 @@ export function useStudent(studentId: string | null | undefined) {
 }
 
 export function useMyProject(): IUseMyProject {
-    const currentUser = useCurrentUser()
+    const { role } = useCurrentUser()
     const { data: myProject, isInitialLoading } = useQuery({
-        enabled: currentUser.role === 'student',
+        enabled: role === 'student',
         queryKey: ['myProject'],
         queryFn: () => getMyProject(),
     })

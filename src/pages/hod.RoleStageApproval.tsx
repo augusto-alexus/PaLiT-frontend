@@ -1,19 +1,25 @@
 import { useTranslation } from 'react-i18next'
-import { Button, Loading } from '~/components'
+import { Button, MainContentLoading } from '~/components'
 import {
     useAllRoles,
     useAllRoleStageApprovals,
     useAllStages,
     useCreateRoleStageApproval,
+    useCurrentUser,
     useDeleteRoleStageApproval,
 } from '~/hooks'
 import { IRoleDTO, IRoleStageApprovalDTO } from '~/backend'
+import { Navigate } from 'react-router-dom'
+import { routes } from '~/pages/index.ts'
 
-export function HodRoleStageApproval() {
+export function RoleStageApproval() {
+    const { role } = useCurrentUser()
     const { t } = useTranslation()
     const { data: roles, isInitialLoading: rolesLoading } = useAllRoles()
     const { data: roleStageApprovals, isInitialLoading: roleStageApprovalsLoading } = useAllRoleStageApprovals()
-    if (rolesLoading || roleStageApprovalsLoading) return <Loading />
+
+    if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
+    if (rolesLoading || roleStageApprovalsLoading) return <MainContentLoading />
 
     const teacherRoles = roles?.filter((r) => r.name === 'HoD' || r.name === 'PS' || r.name === 'teacher')
 

@@ -1,19 +1,20 @@
 import { useTranslation } from 'react-i18next'
 import { Button, IconButton, ITableHeader, Loading, Table, toast } from '~/components'
-import { useAccessToken, useAllUsers } from '~/hooks'
-import { useNavigate } from 'react-router-dom'
-import { routes } from '~/pages'
+import { useAccessToken, useAllUsers, useCurrentUser } from '~/hooks'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { routes } from '~/pages/index.ts'
 import { useState } from 'react'
 import { uploadUserInvitationCsv } from '~/backend'
 
-export function HodUserTable() {
+export function Users() {
+    const { role } = useCurrentUser()
     const accessToken = useAccessToken()
     const navigate = useNavigate()
     const { t } = useTranslation()
     const { users, isLoading } = useAllUsers()
-    // const { mutate: deleteUser } = useDeleteUser(() => toast(t('dashboard.userDeleted')))
     const [csvFile, setCsvFile] = useState<File | null>(null)
 
+    if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
     if (isLoading) return <Loading />
 
     if (!users || !users?.length)
@@ -24,7 +25,6 @@ export function HodUserTable() {
         { key: 'email', label: t('email') },
         { key: 'role', label: t('role') },
         { key: 'openUserBtn', label: '', style: 'w-8' },
-        // { key: 'deleteUserBtn', label: '', style: 'w-8' },
     ]
 
     const tableRows = users.map((u) => {
@@ -47,26 +47,10 @@ export function HodUserTable() {
                 </div>
             ),
             openUserBtn: (
-                <IconButton onClick={() => navigate(routes.hod.users.user(u.userId.toString()))}>
+                <IconButton onClick={() => navigate(routes.user(u.userId.toString()))}>
                     <i className='ri-pencil-fill' />
                 </IconButton>
             ),
-            // deleteUserBtn: (
-            //     <IconButton
-            //         onClick={() => {
-            //             if (
-            //                 confirm(
-            //                     t('dashboard.areYouSureYouWantToDeleteUser', {
-            //                         fullName: u.lastName + ' ' + u.firstName,
-            //                     }) + '?'
-            //                 )
-            //             )
-            //                 deleteUser({ userId: u.userId.toString() })
-            //         }}
-            //     >
-            //         <i className='ri-delete-bin-2-fill text-cs-warning' />
-            //     </IconButton>
-            // ),
         } as ITeamTableRow
     })
 
@@ -80,7 +64,7 @@ export function HodUserTable() {
                         <Button
                             key='1'
                             className='bg-cs-secondary text-center text-sm hover:bg-cs-secondary/70'
-                            onClick={() => navigate(routes.hod.users.aUserEdit)}
+                            onClick={() => navigate(routes.aUserEdit)}
                         >
                             {'+ ' + t('dashboard.addUser')}
                         </Button>,
@@ -131,5 +115,4 @@ interface ITeamTableRow {
     fullName: string
     role: JSX.Element
     openUserBtn: JSX.Element
-    // deleteUserBtn: JSX.Element
 }

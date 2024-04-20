@@ -4,83 +4,59 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import '~/App.css'
 import {
-    AuthPagesWrapper,
+    AuthRoot,
     AuthRedirect,
-    HodTeams,
+    Teams,
     Invitations,
-    StudentMyProject,
-    TeacherStudent,
     MyStudents,
     routes,
-    SignIn,
-    SignUpStudent,
+    SignInPage,
     StudentWorkReview,
-    StudentFeed,
-    StudentTeachers,
-    HodUserTable,
-    HodRoot,
-    HodUser,
-    HodUserEdit,
+    Users,
+    User,
+    UserEdit,
     SignUpRoot,
-    SignUpTeacher,
-    TeacherRoot,
     InviteStudents,
-    StudentRoot,
-    CommonStudentFeedWrapper,
-    HodNewTeam,
-    HodTeamEdit,
-    HodRoleStageApproval,
+    NewTeam,
+    EditTeam,
+    RoleStageApproval,
+    SignUpStudentPage,
+    SignUpTeacherPage,
+    InviteTeachers,
+    StudentFeedWrapper,
 } from '~/pages'
 import './i18.ts'
-import { HodProjects } from '~/pages/hod/HodProjects.tsx'
-import { PsRoot } from '~/pages/ps'
+import { Projects } from '~/pages/teacher.Projects.tsx'
 
 function App() {
     return (
         <>
             <Routes>
-                <Route path={routes.signIn} element={<SignIn />} />
+                <Route path={routes.signIn} element={<SignInPage />} />
                 <Route path={routes.signUp.root} element={<SignUpRoot />}>
-                    <Route path={routes.signUp.student} element={<SignUpStudent />} />
-                    <Route path={routes.signUp.teacher} element={<SignUpTeacher />} />
+                    <Route path={routes.signUp.student} element={<SignUpStudentPage />} />
+                    <Route path={routes.signUp.teacher} element={<SignUpTeacherPage />} />
                 </Route>
-                <Route path='*' element={<AuthPagesWrapper />}>
+                <Route path='*' element={<AuthRoot />}>
                     <Route index path='*' element={<AuthRedirect />} />
 
-                    <Route path={routes.hod.root} element={<HodRoot />}>
-                        <Route path={routes.hod.projects} element={<HodProjects />} />
-                        <Route path={routes.hod.stageApproval} element={<HodRoleStageApproval />} />
-                        <Route path={routes.hod.teams} element={<HodTeams />} />
-                        <Route path={routes.hod.newTeam} element={<HodNewTeam />} />
-                        <Route path={routes.hod.editTeam()} element={<HodTeamEdit />} />
-                        <Route path={routes.hod.users.root}>
-                            <Route index element={<HodUserTable />} />
-                            <Route path={routes.hod.users.user()} element={<HodUser />} />
-                            <Route path={routes.hod.users.userEdit} element={<HodUserEdit />} />
-                        </Route>
-                    </Route>
+                    <Route path={routes.roleStageApproval} element={<RoleStageApproval />} />
+                    <Route path={routes.teams} element={<Teams />} />
+                    <Route path={routes.newTeam} element={<NewTeam />} />
+                    <Route path={routes.editTeam()} element={<EditTeam />} />
+                    <Route path={routes.users} element={<Users />} />
+                    <Route path={routes.user()} element={<User />} />
+                    <Route path={routes.userEdit} element={<UserEdit />} />
 
-                    <Route path={routes.ps.root} element={<PsRoot />}>
-                        <Route path={routes.ps.students} element={<HodProjects />} />
-                    </Route>
+                    <Route path={routes.myStudents} element={<MyStudents />} />
+                    <Route path={routes.projects} element={<Projects />} />
 
-                    <Route path={routes.teacher.root} element={<TeacherRoot />}>
-                        <Route path={routes.teacher.myStudent()} element={<TeacherStudent />}>
-                            <Route index element={<StudentFeed />} />
-                        </Route>
-                        <Route path={routes.teacher.invitations} element={<Invitations />} />
-                    </Route>
+                    <Route path={routes.inviteTeachers} element={<InviteTeachers />} />
+                    <Route path={routes.inviteStudents} element={<InviteStudents />} />
+                    <Route path={routes.invitations} element={<Invitations />} />
 
-                    <Route path={routes.student.root} element={<StudentRoot />}>
-                        <Route path={routes.student.teachers} element={<StudentTeachers />} />
-                        <Route path={routes.student.myProject} element={<StudentMyProject />} />
-                    </Route>
-
-                    <Route path={routes.common.invitations} element={<Invitations />} />
-                    <Route path={routes.common.workReview()} element={<StudentWorkReview />} />
-                    <Route path={routes.common.studentFeed()} element={<CommonStudentFeedWrapper />} />
-                    <Route path={routes.common.myStudents} element={<MyStudents />} />
-                    <Route path={routes.common.inviteStudents} element={<InviteStudents />} />
+                    <Route path={routes.studentFeed()} element={<StudentFeedWrapper />} />
+                    <Route path={routes.workReview()} element={<StudentWorkReview />} />
                 </Route>
             </Routes>
             <ToastContainer theme='dark' />

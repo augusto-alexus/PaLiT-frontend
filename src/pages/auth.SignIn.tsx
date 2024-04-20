@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Button, Input, Password, ProjectLogo, WithNulpBg } from '~/components'
 import { useForm, useSignIn } from '~/hooks'
-import { routes } from '~/pages'
+import { routes } from '~/pages/index.ts'
 
-export function SignIn() {
+export function SignInPage() {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const { mutate: signIn } = useSignIn(() => navigate(`/${routes.authRedirect}`))

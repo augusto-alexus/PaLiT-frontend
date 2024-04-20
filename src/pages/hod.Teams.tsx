@@ -1,14 +1,16 @@
 import { useTranslation } from 'react-i18next'
 import { Button, ITableHeader, MainContentLoading, Table } from '~/components'
-import { useGetAllTeams } from '~/hooks'
-import { Link, useNavigate } from 'react-router-dom'
-import { routes } from '~/pages'
+import { useCurrentUser, useGetAllTeams } from '~/hooks'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { routes } from '~/pages/index.ts'
 
-export function HodTeams() {
+export function Teams() {
+    const { role } = useCurrentUser()
     const navigate = useNavigate()
     const { t } = useTranslation()
     const { teams, teamsLoading } = useGetAllTeams()
 
+    if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
     if (teamsLoading) return <MainContentLoading />
 
     if (!teams?.length) return <h2 className='w-full text-center text-2xl font-semibold'>{t('dashboard.noTeams')}</h2>
@@ -25,7 +27,7 @@ export function HodTeams() {
         studentName: `${team.student.lastName}, ${team.student.firstName}`,
         theme: team.projectInfo.theme,
         editTeam: (
-            <Link to={routes.hod.aEditTeam(team.projectInfo.id)} title={t('dashboard.editTeam')}>
+            <Link to={routes.aEditTeam(team.projectInfo.id)} title={t('dashboard.editTeam')}>
                 <i className='ri-history-line' />
             </Link>
         ),
@@ -41,7 +43,7 @@ export function HodTeams() {
                         <Button
                             key='1'
                             className='bg-cs-secondary text-center hover:bg-cs-secondary/70'
-                            onClick={() => navigate(routes.hod.aNewTeam)}
+                            onClick={() => navigate(routes.aNewTeam)}
                         >
                             {t('dashboard.createNewTeam')}
                         </Button>,

@@ -1,15 +1,17 @@
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useCurrentUser, useMyStudents } from '~/hooks'
 import { IMyStudent } from '~/models'
-import { routes } from '~/pages'
+import { routes } from '~/pages/index.ts'
 import { MainContentLoading } from '~/components'
 
 export function MyStudents() {
+    const { role } = useCurrentUser()
     const { t } = useTranslation()
     const { bachelorStudentsLimit, masterStudentsLimit } = useCurrentUser()
     const { data: myStudents, isInitialLoading: myStudentsLoading } = useMyStudents()
 
+    if (role === 'student') return <Navigate to={routes.aAuthRedirect} />
     if (myStudentsLoading) return <MainContentLoading />
 
     const anyStudents = !!myStudents?.length
@@ -18,9 +20,9 @@ export function MyStudents() {
             <div className='flex w-full flex-col gap-8'>
                 <div className='text-center text-2xl font-semibold text-cs-text-dark'>{t('workNotStarted.title')}</div>
                 <div className='mx-auto max-w-md text-center text-xl text-cs-text-dark'>
-                    <Link to={routes.common.aInviteStudents}>{t('workNotStarted.invite')}</Link>{' '}
+                    <Link to={routes.aInviteStudents}>{t('workNotStarted.invite')}</Link>{' '}
                     {t('workNotStarted.studentOr')}
-                    <Link to={routes.common.aInvitations}> {t('workNotStarted.accept')}</Link>{' '}
+                    <Link to={routes.aInvitations}> {t('workNotStarted.accept')}</Link>{' '}
                     {t('workNotStarted.theRestForTeacher')}
                 </div>
             </div>
@@ -61,7 +63,7 @@ function MyStudentInfoRow({ myStudent }: { myStudent: IMyStudent }) {
     const { student } = myStudent
     return (
         <div
-            onClick={() => navigate(routes.teacher.aMyStudent(student.studentId.toString()))}
+            onClick={() => navigate(routes.aStudentFeed(student.studentId.toString()))}
             className='flex w-full max-w-sm flex-col rounded-t-3xl border-b border-b-cs-additional-gray p-4 pb-4 hover:cursor-pointer hover:bg-cs-bg-neutral'
         >
             <div className='my-1 grid grid-cols-5 gap-2'>

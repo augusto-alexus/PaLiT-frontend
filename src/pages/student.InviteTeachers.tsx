@@ -1,24 +1,27 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, DisplayError, Loading } from '~/components'
-import { useAllTeachers, useInvitations, useMyProject } from '~/hooks'
+import { useAllTeachers, useCurrentUser, useInvitations, useMyProject } from '~/hooks'
 import { ITeacher } from '~/models'
 import { RequestForm } from '~/pages/components'
+import { Navigate } from 'react-router-dom'
+import { routes } from '~/pages/routes.ts'
 
-export function StudentTeachers() {
+export function InviteTeachers() {
+    const { role } = useCurrentUser()
     const { t } = useTranslation()
     const [showRequestFormFor, setShowRequestFormFor] = useState<number | null>(null)
-
     const { data: requests } = useInvitations()
-
     const { data: allTeachers, isInitialLoading, error } = useAllTeachers()
-
     const { myProjectStarted } = useMyProject()
 
+    if (role !== 'student') return <Navigate to={routes.aAuthRedirect} />
     if (isInitialLoading) return <Loading />
     if (error) return <DisplayError error={error} />
-    if (!allTeachers?.length)
+    if (!allTeachers?.length) {
         return <h2 className='text-center text-2xl font-semibold'>{t('noTeachersInTheSystem')}</h2>
+    }
+
     const data = allTeachers.filter((t) => requests?.every((r) => r.user.id !== t.teacherId))
     if (!data?.length)
         return <h2 className='text-center text-2xl font-semibold'>{t('everyTeacherReceivedInvitation')}</h2>

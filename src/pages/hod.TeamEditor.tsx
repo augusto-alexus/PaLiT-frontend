@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next'
 import { Button, Combobox, GoBack, IComboboxOption, Input, LanguageSelect, Loading, toast } from '~/components'
-import { useAllHoDRequests, useAllStudents, useAllTeachers, useCreateTeam, useEditTeam } from '~/hooks'
+import { useAllHoDRequests, useAllStudents, useAllTeachers, useCreateTeam, useCurrentUser, useEditTeam } from '~/hooks'
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { Language } from '~/models'
-import { routes } from '~/pages'
+import { routes } from '~/pages/index.ts'
 
 interface ITeamEdit {
     studentId: string
@@ -13,34 +13,38 @@ interface ITeamEdit {
     language: Language
 }
 
-export function HodNewTeam() {
+export function NewTeam() {
+    const { role } = useCurrentUser()
     const { t } = useTranslation()
     const navigate = useNavigate()
     const { mutate: createNewTeam } = useCreateTeam(
         () => {
             toast(t('teamCreatedSuccessfully'))
-            navigate(routes.hod.aTeams)
+            navigate(routes.aTeams)
         },
         (err) => alert(err)
     )
-    return <TeamEditForm onSubmit={createNewTeam} editingExistingTeam={false} />
+    if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
+    return <EditTeamForm onSubmit={createNewTeam} editingExistingTeam={false} />
 }
 
-export function HodTeamEdit() {
+export function EditTeam() {
+    const { role } = useCurrentUser()
     const { t } = useTranslation()
     const { teamId } = useParams()
     const navigate = useNavigate()
     const { mutate: editTeam } = useEditTeam(() => {
         toast(t('teamUpdatedSuccessfully'))
-        navigate(routes.hod.aTeams)
+        navigate(routes.aTeams)
     })
     const { data: allRequests, isLoading: isLoadingRequests } = useAllHoDRequests()
-    if (!teamId) return <Navigate to={routes.hod.teams} />
+    if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
+    if (!teamId) return <Navigate to={routes.aTeams} />
     if (isLoadingRequests) return <Loading />
     const thisTeam = allRequests?.find((r) => r.id.toString() === teamId)
-    if (!thisTeam) return <Navigate to={routes.hod.teams} />
+    if (!thisTeam) return <Navigate to={routes.aTeams} />
     return (
-        <TeamEditForm
+        <EditTeamForm
             initialState={{
                 studentId: thisTeam.studentId.toString(),
                 teacherId: thisTeam.teacherId.toString(),
@@ -53,7 +57,7 @@ export function HodTeamEdit() {
     )
 }
 
-function TeamEditForm({
+function EditTeamForm({
     initialState,
     onSubmit,
     editingExistingTeam,

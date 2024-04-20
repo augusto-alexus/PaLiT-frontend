@@ -7,7 +7,7 @@ import { getCurrentUserFromDTO } from '~/models'
 import { routes } from '~/pages'
 import { useAuthStore } from '~/store'
 
-export function AuthPagesWrapper() {
+export function AuthRoot() {
     const { t } = useTranslation()
     const authStore = useAuthStore()
     if (authStore.accessToken) updateAxiosInstanceToken(authStore.accessToken)
@@ -40,7 +40,9 @@ export function AuthPagesWrapper() {
     return (
         <>
             <Header />
-            <Outlet />
+            <main className='mx-auto flex w-10/12 gap-24 pb-12'>
+                <Outlet />
+            </main>
         </>
     )
 }

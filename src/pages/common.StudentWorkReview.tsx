@@ -10,7 +10,7 @@ import {
     RejectDocumentButton,
 } from '~/pages/components'
 import { useTranslation } from 'react-i18next'
-import { routes } from '~/pages'
+import { routes } from '~/pages/index.ts'
 
 export function StudentWorkReview() {
     const navigate = useNavigate()
@@ -31,7 +31,7 @@ export function StudentWorkReview() {
 
     if (!stageAllowed) {
         toast(t('feed.cantViewStage'))
-        return <Navigate to={-1 as any} />
+        return <Navigate to={-1 as never} />
     }
 
     comments?.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
@@ -44,7 +44,7 @@ export function StudentWorkReview() {
             </div>
             <div className='row-span-2 flex flex-col justify-between'>
                 <div>
-                    <a onClick={() => navigate(routes.common.aStudentFeed(studentId))}>
+                    <a onClick={() => navigate(routes.aStudentFeed(studentId))}>
                         <i className='ri-history-line' /> {t('feed.checkHistory')}
                     </a>
                     <h3 className='mb-4 mt-4 text-xl font-bold text-cs-text-dark'>{t('feed.review')}</h3>

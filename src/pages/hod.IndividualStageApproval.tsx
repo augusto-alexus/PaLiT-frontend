@@ -6,17 +6,23 @@ import {
     useAllTeachers,
     useApproveStageForAll,
     useApproveStageForTeacher,
+    useCurrentUser,
     useGetTeacherStages,
     useRestrictStageForAll,
     useRestrictStageForTeacher,
 } from '~/hooks'
 import { ITeacher } from '~/models'
 import { IRoleDTO } from '~/backend'
+import { Navigate } from 'react-router-dom'
+import { routes } from '~/pages/index.ts'
 
-export function HodIndividualStageApproval() {
+export function IndividualStageApproval() {
+    const { role } = useCurrentUser()
     const { t } = useTranslation()
     const { data: teachers } = useAllTeachers()
     const { data: roles } = useAllRoles()
+
+    if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
 
     const teacherRole = roles?.find((r) => r.name === 'teacher')
     const hodRole = roles?.find((r) => r.name === 'HoD')

@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, DisplayError, MainContentLoading } from '~/components'
-import { useGetAllTeams } from '~/hooks'
+import { useCurrentUser, useGetAllTeams } from '~/hooks'
 import { RequestForm } from '~/pages/components'
 import { IStudent } from '~/models'
+import { Navigate } from 'react-router-dom'
+import { routes } from '~/pages/routes.ts'
 
 export function InviteStudents() {
+    const { role } = useCurrentUser()
     const { t } = useTranslation()
     const [showRequestFormFor, setShowRequestFormFor] = useState<number | null>(null)
     const {
@@ -15,6 +18,7 @@ export function InviteStudents() {
         teamsQueryError,
     } = useGetAllTeams()
 
+    if (role === 'student') return <Navigate to={routes.aAuthRedirect} />
     if (teamsLoading) return <MainContentLoading />
     if (teamsQueryError) return <DisplayError error={teamsQueryError} />
     if (!allStudents?.length)

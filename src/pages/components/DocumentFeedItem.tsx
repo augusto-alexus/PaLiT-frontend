@@ -33,7 +33,7 @@ export function DocumentFeedItem({
             <div className='flex flex-row place-items-start items-center gap-2'>
                 <IconButton
                     className='text-cs-text-neutral hover:text-cs-secondary'
-                    onClick={() => navigate(routes.common.aWorkReview(studentId, document.documentId.toString()))}
+                    onClick={() => navigate(routes.aWorkReview(studentId, document.documentId.toString()))}
                 >
                     <i className='ri-eye-line' />
                 </IconButton>

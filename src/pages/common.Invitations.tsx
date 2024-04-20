@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Button, MainContentLoading, toast } from '~/components'
 import { useAcceptInvitation, useCurrentUser, useGetAllTeams, useInvitations, useRejectInvitation } from '~/hooks'
-import { routes } from '~/pages'
+import { routes } from '~/pages/index.ts'
 import { IRequest } from '~/backend'
 import { getHumanReadableDuration } from '~/lib'
 

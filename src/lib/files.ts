@@ -4,7 +4,7 @@ function getNextSizeUnit(unit: sizeUnit) {
     if (unit === 'Bi') return 'KiB'
     if (unit === 'KiB') return 'MiB'
     if (unit === 'MiB') return 'GiB'
-    throw new Error(`No size unit larger then '${unit}' is defined.`)
+    throw new Error(`No size unit larger than '${unit}' is defined.`)
 }
 
 export function getReadableFileSize(size: number, unit: sizeUnit = 'Bi') {

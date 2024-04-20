@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import {
     useAllRoles,
+    useCurrentUser,
     useForm,
     useStudentCreate,
     useStudentUpdate,
@@ -9,8 +10,8 @@ import {
     useTeacherUpdate,
     useUserById,
 } from '~/hooks'
-import { routes } from '~/pages'
-import { Button, DisplayError, Input, Loading, Password, Select, toast } from '~/components'
+import { routes } from '~/pages/index.ts'
+import { Button, DisplayError, Input, MainContentLoading, Password, Select, toast } from '~/components'
 import { IUserUpdateForm } from '~/models'
 import { useEffect } from 'react'
 import {
@@ -21,7 +22,8 @@ import {
     ITeacherUpdateDTO,
 } from '~/backend'
 
-export function HodUserEdit() {
+export function UserEdit() {
+    const { role } = useCurrentUser()
     const navigate = useNavigate()
     const { t } = useTranslation()
     const [searchParams] = useSearchParams()
@@ -32,17 +34,16 @@ export function HodUserEdit() {
     const onSubmitSuccess = () => {
         if (userId) {
             toast(t('dashboard.userUpdated'))
-            navigate(routes.hod.users.aUser(userId))
+            navigate(routes.aUser(userId))
         } else {
             toast(t('dashboard.userCreated'))
-            navigate(routes.hod.users.aRoot)
+            navigate(routes.users)
         }
     }
     const { mutate: createStudent } = useStudentCreate(onSubmitSuccess)
     const { mutate: createTeacher } = useTeacherCreate(onSubmitSuccess)
     const { mutate: updateStudent } = useStudentUpdate(onSubmitSuccess)
     const { mutate: updateTeacher } = useTeacherUpdate(onSubmitSuccess)
-
     const studentRole = roles?.find((r) => r.name === 'student')
 
     const { form, setForm, onFieldChange, onSubmit } = useForm<IUserUpdateForm>(getFormStateFromUser(user), (form) => {
@@ -76,7 +77,8 @@ export function HodUserEdit() {
         setForm(getFormStateFromUser(user))
     }, [setForm, user])
 
-    if (isLoadingRoles || (isLoadingUser && isFetchingUser)) return <Loading />
+    if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
+    if (isLoadingRoles || (isLoadingUser && isFetchingUser)) return <MainContentLoading />
     if (rolesError) return <DisplayError error={rolesError} />
     if (userError) return <DisplayError error={userError} />
     if (!roles) return <DisplayError error={Error('No roles in the system.')} />
@@ -188,10 +190,7 @@ export function HodUserEdit() {
                 )}
             </div>
             <div className='flex flex-row place-items-center justify-end gap-4'>
-                <Link
-                    to={isNewUser ? routes.hod.users.aRoot : routes.hod.users.aUser(userId)}
-                    className='text-cs-warning'
-                >
+                <Link to={isNewUser ? routes.aUsers : routes.aUser(userId)} className='text-cs-warning'>
                     {t('cancel')}
                 </Link>
                 <Button>{t('submit')}</Button>

@@ -1,21 +1,23 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { routes } from '~/pages'
-import { useUserById } from '~/hooks'
+import { routes } from '~/pages/index.ts'
+import { useCurrentUser, useUserById } from '~/hooks'
 import { DisplayError, Loading } from '~/components'
 import { useTranslation } from 'react-i18next'
 
-export function HodUser() {
+export function User() {
+    const { role } = useCurrentUser()
     const { t } = useTranslation()
     const { userId } = useParams()
     const { user, isLoading, error } = useUserById(userId)
 
-    if (!userId) return <Navigate to={routes.hod.users.aRoot} />
+    if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
+    if (!userId) return <Navigate to={routes.aUsers} />
     if (isLoading) return <Loading />
     if (!user) return <DisplayError error={error} />
 
     return (
         <div className='mx-auto flex flex-col gap-4'>
-            <Link to={routes.hod.users.aRoot} className='mb-10 font-normal'>
+            <Link to={routes.aUsers} className='mb-10 font-normal'>
                 {t('dashboard.backToUsersTable')}
             </Link>
             <h2 className='text-2xl font-bold text-cs-text-dark'>
@@ -57,7 +59,7 @@ export function HodUser() {
                     </>
                 )}
             </div>
-            <Link to={routes.hod.users.aUserEdit + `?user=${userId}`} className='mt-10 font-normal'>
+            <Link to={routes.aUserEdit + `?user=${userId}`} className='mt-10 font-normal'>
                 {t('dashboard.editUser')}
             </Link>
         </div>

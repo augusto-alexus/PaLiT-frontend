@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { getAllTeachers, getMyStudents } from '~/backend'
+import { useCurrentUser } from '~/hooks/auth.ts'
 
 export function useAllTeachers() {
     return useQuery({
@@ -26,7 +27,9 @@ export function useMyStudents() {
 }
 
 export function useMyStudent(studentId?: string | null) {
+    const { role } = useCurrentUser()
     return useQuery({
+        enabled: role !== 'student',
         queryKey: ['myStudents', studentId],
         queryFn: async () => {
             const myStudents = await getMyStudents()
