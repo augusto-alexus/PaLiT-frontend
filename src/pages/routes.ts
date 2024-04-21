@@ -1,5 +1,6 @@
 export const routes = {
     signIn: 'sign-in',
+    aSignIn: '/sign-in',
     signUp: {
         root: 'sign-up',
         student: 'student',

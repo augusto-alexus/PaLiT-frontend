@@ -1,5 +1,6 @@
 export * from './auth'
 export * from './base'
+export * from './error.ts'
 export * from './student'
 export * from './teacher'
 export * from './request'

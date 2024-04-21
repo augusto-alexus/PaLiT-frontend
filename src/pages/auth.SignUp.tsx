@@ -1,9 +1,9 @@
 import { Link, Outlet, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Button, DisplayError, Input, Password, ProjectLogo, Select, toast, WithNulpBg } from '~/components'
-import { routes } from '~/pages/index.ts'
 import { useForm, useStudentSignUp, useTeacherSignUp } from '~/hooks'
 import { ISignUpStudentForm, ISignUpTeacherForm } from '~/models'
+import { routes } from '~/pages'
 
 export function SignUpRoot() {
     const { t } = useTranslation()
@@ -36,7 +36,7 @@ export function SignUpStudentPage() {
     const token = searchParams.get('token')
     const { mutate: signUp } = useStudentSignUp(() => {
         toast(`${t('signUpSuccessful')}!`)
-        navigate(`/${routes.signIn}`)
+        navigate(routes.aSignIn)
     })
     const { form, onFieldChange, onSubmit } = useForm<ISignUpStudentForm>(
         {

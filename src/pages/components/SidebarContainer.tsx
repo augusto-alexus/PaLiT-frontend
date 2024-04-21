@@ -1,10 +1,9 @@
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IMyStudent } from '~/models'
-import { useCurrentUser, useMyProject, useStudent } from '~/hooks'
-import { Loading } from '~/components'
+import { useCurrentUser, useGetTheme, useMyProject, useStudent, useThemeUpdate } from '~/hooks'
+import { Button, Input, Loading } from '~/components'
 import { useSearchParams } from 'react-router-dom'
-import { ThemeUpdateForm } from '~/pages/components/ThemeUpdateForm.tsx'
 
 export function SidebarContainer({ children, myStudent }: PropsWithChildren<{ myStudent?: IMyStudent }>) {
     return (
@@ -61,6 +60,42 @@ export function InfoRow({ infoKey, value }: { infoKey: string; value?: string })
         <div className='flex flex-row justify-between gap-4 bg-white py-2 align-baseline text-cs-text-dark'>
             <div className='basis-4/12 font-mono'>{infoKey}</div>
             <div className='flex flex-row text-right'>{value}</div>
+        </div>
+    )
+}
+
+function ThemeUpdateForm({ studentId }: { studentId: string }) {
+    const { t } = useTranslation()
+    const { data: currentTheme } = useGetTheme(studentId)
+    const { mutate: updateTheme } = useThemeUpdate(() => setUpdateMode(false))
+    const [updateMode, setUpdateMode] = useState<boolean>(false)
+    const [newTheme, setNewTheme] = useState<string>('')
+    useEffect(() => {
+        setNewTheme(currentTheme?.theme ?? '')
+    }, [currentTheme, updateMode])
+    if (updateMode)
+        return (
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    updateTheme({ studentId, newTheme })
+                }}
+            >
+                <hr className='my-4 border-t border-cs-additional-gray' />
+                <p className='mb-4'>{t('theme')}</p>
+                <Input value={newTheme} onChange={(e) => setNewTheme(e.target.value)} />
+                <div className='mt-4 flex flex-row justify-end gap-4'>
+                    <Button type='submit'>{t('submit')}</Button>
+                    <Button className='bg-cs-additional-gray' onClick={() => setUpdateMode(false)}>
+                        {t('cancel')}
+                    </Button>
+                </div>
+            </form>
+        )
+    return (
+        <div className='flex flex-col gap-4'>
+            <InfoRow infoKey={t('projectInfo.theme')} value={currentTheme?.theme} />
+            <Button onClick={() => setUpdateMode(true)}>{t('changeTheme')}</Button>
         </div>
     )
 }

@@ -3,6 +3,12 @@ import { Role } from '~/models'
 import endpoints from './endpoints'
 import { IFullUserInfoDTO } from './user.ts'
 import axios, { axiosTokenlessInstance, updateAxiosInstanceToken } from './base.ts'
+import {
+    EmailAlreadyExistsError,
+    PasswordsDoNotMatchError,
+    UnknownError,
+    WrongCredentialsError,
+} from '~/backend/error.ts'
 
 export class JWTExpiredError extends Error {}
 
@@ -21,21 +27,46 @@ export async function getCurrentUser(accessToken: string) {
 }
 
 export async function signIn(form: ISignInDTO) {
-    const response = await axiosTokenlessInstance.post(endpoints.signIn, form)
-    updateAxiosInstanceToken(response.data.accessToken)
-    return response.data as { accessToken: string }
+    return axiosTokenlessInstance
+        .post(endpoints.signIn, form)
+        .then(({ data }) => {
+            const accessToken = (data as { accessToken: string }).accessToken
+            updateAxiosInstanceToken(accessToken)
+            return { accessToken }
+        })
+        .catch((error) => {
+            if (error instanceof AxiosError) {
+                if (error.response?.status === 403) throw new WrongCredentialsError()
+                else throw new UnknownError(error.message)
+            }
+            throw new UnknownError()
+        })
 }
 
 export function logOut() {
     axios.defaults.headers.common = {}
 }
 
-export function signUpStudent(dto: IStudentSignUpDTO) {
-    return axios.post(endpoints.signUpStudent, dto)
+export async function signUpStudent(dto: IStudentSignUpDTO) {
+    return axios.post(endpoints.signUpStudent, dto).catch((error) => {
+        if (error instanceof AxiosError) {
+            if (error.response?.status === 409) throw new EmailAlreadyExistsError()
+            else if (error.response?.status === 400) throw new PasswordsDoNotMatchError()
+            else throw new UnknownError(error.message)
+        }
+        throw new UnknownError()
+    })
 }
 
-export function signUpTeacher(dto: ITeacherSignUpDTO) {
-    return axios.post(endpoints.signUpTeacher, dto)
+export async function signUpTeacher(dto: ITeacherSignUpDTO) {
+    return axios.post(endpoints.signUpTeacher, dto).catch((error) => {
+        if (error instanceof AxiosError) {
+            if (error.response?.status === 409) throw new EmailAlreadyExistsError()
+            else if (error.response?.status === 400) throw new PasswordsDoNotMatchError()
+            else throw new UnknownError(error.message)
+        }
+        throw new UnknownError()
+    })
 }
 
 export async function getAllRoles() {

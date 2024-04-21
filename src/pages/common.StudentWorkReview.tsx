@@ -1,16 +1,17 @@
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
-import { DisplayError, Loading, toast } from '~/components'
-import { useCurrentUser, useGetComments, useStudentDocument } from '~/hooks'
+import { Button, DisplayError, Loading, toast } from '~/components'
 import {
-    ApproveDocumentButton,
-    CommentInput,
-    DocumentCommentsFeed,
-    FilePreview,
-    ProjectInfo,
-    RejectDocumentButton,
-} from '~/pages/components'
+    useAllStages,
+    useCheckIfStageMoveAllowed,
+    useCurrentUser,
+    useDocumentReview,
+    useGetComments,
+    useStudentDocument,
+} from '~/hooks'
+import { CommentInput, DocumentCommentsFeed, FilePreview, ProjectInfo } from '~/pages/components'
 import { useTranslation } from 'react-i18next'
 import { routes } from '~/pages/index.ts'
+import { IDocumentDTO } from '~/backend'
 
 export function StudentWorkReview() {
     const navigate = useNavigate()
@@ -79,5 +80,59 @@ export function StudentWorkReview() {
                 </div>
             </div>
         </div>
+    )
+}
+
+function ApproveDocumentButton({ studentId, document }: { studentId: string; document: IDocumentDTO }) {
+    const { t } = useTranslation()
+    const { data: stages, isInitialLoading } = useAllStages()
+    const { mutate: reviewDocument } = useDocumentReview()
+    const isStageMoveAllowed = useCheckIfStageMoveAllowed()
+
+    if (isInitialLoading) return <Loading />
+
+    const nextStage = stages?.find((s) => s.serialOrder - 1 === document.stageDTO.serialOrder)
+
+    if (!isStageMoveAllowed(document.stageDTO.stageId, document.approvedDate)) return <></>
+
+    return (
+        <Button
+            className='bg-cs-accent-green hover:bg-cs-secondary'
+            title={t('feed.approveDocument')}
+            onClick={() =>
+                reviewDocument({
+                    documentId: document.documentId.toString(),
+                    studentId,
+                    verdict: 'approved',
+                    nextStageId: nextStage?.stageId,
+                })
+            }
+        >
+            {t('feed.approveDocument')}
+        </Button>
+    )
+}
+
+function RejectDocumentButton({ studentId, document }: { studentId: string; document: IDocumentDTO }) {
+    const { t } = useTranslation()
+    const { mutate: reviewDocument } = useDocumentReview()
+    const isStageMoveAllowed = useCheckIfStageMoveAllowed()
+
+    if (!isStageMoveAllowed(document.stageDTO.stageId, document.approvedDate)) return <></>
+
+    return (
+        <Button
+            className='bg-cs-warning hover:bg-cs-secondary'
+            title={t('feed.rejectDocument')}
+            onClick={() =>
+                reviewDocument({
+                    documentId: document.documentId.toString(),
+                    studentId,
+                    verdict: 'rejected',
+                })
+            }
+        >
+            {t('feed.rejectDocument')}
+        </Button>
     )
 }

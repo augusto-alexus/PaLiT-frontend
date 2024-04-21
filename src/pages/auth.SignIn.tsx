@@ -1,13 +1,13 @@
-import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Button, Input, Password, ProjectLogo, WithNulpBg } from '~/components'
 import { useForm, useSignIn } from '~/hooks'
-import { routes } from '~/pages/index.ts'
+import { routes } from '~/pages'
 
 export function SignInPage() {
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const { mutate: signIn } = useSignIn(() => navigate(`/${routes.authRedirect}`))
+    const { mutate: signIn } = useSignIn(() => navigate(routes.aAuthRedirect))
     const { form, onFieldChange, onSubmit } = useForm<ISignInForm>(
         {
             email: '',
