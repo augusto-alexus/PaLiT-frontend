@@ -9,10 +9,9 @@ import {
     FeedIconApprove,
     FeedIconReject,
     FileUpload,
-    GoBack,
     IFeedElement,
     ITab,
-    Loading,
+    MainContentLoading,
     Tabs,
 } from '~/components'
 import { useAllStages, useCurrentUser, useMyProject } from '~/hooks'
@@ -43,7 +42,7 @@ export function StudentFeed() {
     })
 
     if (!studentId) return <DisplayError error={Error('studentId required to view feed')} />
-    if (isLoadingDocuments || isLoadingStages) return <Loading />
+    if (isLoadingDocuments || isLoadingStages) return <MainContentLoading />
     if (errorDocuments) return <DisplayError error={errorDocuments} />
     if (errorStage) return <DisplayError error={errorStage} />
     if (!stages || !stages?.length) return <DisplayError error={new Error('No stages returned from the server')} />
@@ -83,8 +82,7 @@ export function StudentFeed() {
         (!!lastDocument?.approved !== !!lastDocument?.approvedDate || !lastDocument)
 
     return (
-        <div className='mx-auto my-4 flex w-10/12 flex-col gap-4'>
-            <GoBack />
+        <div className='my-4 mr-12 flex flex-col gap-4'>
             <Tabs items={stageTabs} setItem={(id) => setSelectedStage(id)} />
             {role !== 'student' && !canViewStage ? (
                 <div className='mt-8 text-center text-2xl font-semibold text-cs-text-dark'>

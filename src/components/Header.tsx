@@ -9,12 +9,12 @@ import { logOut } from '~/backend'
 
 export function Header() {
     const { role } = useCurrentUser()
-    const { myProjectStarted } = useMyProject()
+    const { myProjectStarted, isInitialLoading } = useMyProject()
     const navItems = getHeaderNavs(role, myProjectStarted)
     return (
-        <header className='sticky left-0 top-0 z-10 mx-auto mb-8 flex h-fit w-10/12 flex-row place-content-around place-items-center border-b border-cs-additional-gray bg-cs-bg-white p-4 pb-8 pt-6'>
+        <header className='sticky left-0 top-0 z-10 mx-auto mb-8 flex h-fit flex-row place-content-between place-items-center border-b border-cs-additional-gray bg-cs-bg-white px-24 pb-8 pt-6'>
             <ProjectLogo />
-            <HeaderNav navItems={navItems} />
+            {!isInitialLoading && <HeaderNav navItems={navItems} />}
             <HeaderTools />
         </header>
     )
@@ -66,8 +66,9 @@ function getPsHeaderNavs(): INavItem[] {
 
 function HeaderNav({ navItems }: { navItems: INavItem[] }) {
     const { t } = useTranslation()
+    if (navItems.length <= 1) return <></>
     return (
-        <nav className='flex flex-row place-items-center justify-center gap-8'>
+        <nav className='flex flex-row place-items-center justify-center gap-8 text-xl font-semibold'>
             {navItems.map((navItem, idx) => (
                 <NavLink
                     key={idx}
@@ -91,7 +92,7 @@ function HeaderTools() {
     const currentUser = useCurrentUser()
     return (
         <div className='flex flex-row place-items-center gap-4'>
-            <Avatar firstName={currentUser.firstName} lastName={currentUser.lastName} bgColor={'bg-cs-primary'} />
+            <Avatar big firstName={currentUser.firstName} lastName={currentUser.lastName} bgColor={'bg-cs-primary'} />
             <Button
                 preset='icon'
                 title={t('changeLanguage')}
@@ -99,7 +100,7 @@ function HeaderTools() {
                     if (i18n.language === 'en') void i18n.changeLanguage('ua')
                     else void i18n.changeLanguage('en')
                 }}
-                className='-mr-8 text-cs-text-dark focus:text-cs-primary focus:outline-none'
+                className='-ml-4 -mr-10 text-xl text-cs-text-dark focus:text-cs-primary focus:outline-none'
                 icon={<i className='ri-global-line hover:text-cs-primary'></i>}
             />
             <Button
@@ -109,7 +110,7 @@ function HeaderTools() {
                     logOut()
                     authStore.reset()
                 }}
-                className='text-cs-text-dark focus:text-cs-warning focus:outline-none'
+                className='text-xl text-cs-text-dark focus:text-cs-warning focus:outline-none'
                 icon={<i className='ri-logout-box-line hover:text-cs-warning' />}
             />
         </div>

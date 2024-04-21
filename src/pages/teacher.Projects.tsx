@@ -1,5 +1,5 @@
 import { useAllStudentsWithInfo, useCurrentUser } from '~/hooks'
-import { ITableHeader, Loading, Table, toast } from '~/components'
+import { ITableHeader, MainContentLoading, Table, toast } from '~/components'
 import { useTranslation } from 'react-i18next'
 import { routes } from '~/pages/index.ts'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
@@ -12,7 +12,7 @@ export function Projects() {
     const { data, isInitialLoading } = useAllStudentsWithInfo()
 
     if (role !== 'HoD' && role !== 'PS') return <Navigate to={routes.aAuthRedirect} />
-    if (isInitialLoading) return <Loading />
+    if (isInitialLoading) return <MainContentLoading />
     if (!data?.length)
         return <h2 className='w-full text-center text-2xl text-cs-text-dark'>{t('dashboard.noProjects')}</h2>
 

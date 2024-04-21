@@ -10,11 +10,11 @@ export function StudentFeedWrapper() {
     const { t } = useTranslation()
     const [searchParams] = useSearchParams()
     const studentId = searchParams.get('studentId')
-    const { data: myStudent, isInitialLoading } = useMyStudent(studentId)
-    const { myProjectStarted } = useMyProject()
+    const { data: myStudent, isInitialLoading: loadingMyStudent } = useMyStudent(studentId)
+    const { myProjectStarted, isInitialLoading: loadingMyProject } = useMyProject()
 
     if (!studentId && role !== 'student') return <DisplayError error={Error("No 'studentId' present")} />
-    if (isInitialLoading) return <MainContentLoading />
+    if (loadingMyStudent || loadingMyProject) return <MainContentLoading />
 
     if (role === 'student' && !myProjectStarted)
         return (

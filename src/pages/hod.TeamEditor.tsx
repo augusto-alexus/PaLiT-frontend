@@ -1,5 +1,14 @@
 import { useTranslation } from 'react-i18next'
-import { Button, Combobox, GoBack, IComboboxOption, Input, LanguageSelect, Loading, toast } from '~/components'
+import {
+    Button,
+    Combobox,
+    GoBack,
+    IComboboxOption,
+    Input,
+    LanguageSelect,
+    MainContentLoading,
+    toast,
+} from '~/components'
 import { useAllHoDRequests, useAllStudents, useAllTeachers, useCreateTeam, useCurrentUser, useEditTeam } from '~/hooks'
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -40,7 +49,7 @@ export function EditTeam() {
     const { data: allRequests, isLoading: isLoadingRequests } = useAllHoDRequests()
     if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
     if (!teamId) return <Navigate to={routes.aTeams} />
-    if (isLoadingRequests) return <Loading />
+    if (isLoadingRequests) return <MainContentLoading />
     const thisTeam = allRequests?.find((r) => r.id.toString() === teamId)
     if (!thisTeam) return <Navigate to={routes.aTeams} />
     return (
@@ -79,7 +88,7 @@ function EditTeamForm({
         }
     )
 
-    if (studentsLoading || teachersLoading || requestsLoading) return <Loading />
+    if (studentsLoading || teachersLoading || requestsLoading) return <MainContentLoading />
 
     const studentOptions = students
         ?.filter(
@@ -108,7 +117,7 @@ function EditTeamForm({
     )
 
     return (
-        <main className='w-full'>
+        <div className='w-full'>
             <GoBack />
             <form
                 className='mx-auto flex w-1/3 flex-col gap-4'
@@ -170,6 +179,6 @@ function EditTeamForm({
                     <Button>{t('submit')}</Button>
                 </div>
             </form>
-        </main>
+        </div>
     )
 }

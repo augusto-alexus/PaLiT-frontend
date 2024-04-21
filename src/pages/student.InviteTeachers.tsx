@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, DisplayError, Loading } from '~/components'
+import { Button, DisplayError, MainContentLoading } from '~/components'
 import { useAllTeachers, useCurrentUser, useInvitations, useMyProject } from '~/hooks'
 import { ITeacher } from '~/models'
 import { RequestForm } from '~/pages/components'
@@ -16,7 +16,7 @@ export function InviteTeachers() {
     const { myProjectStarted } = useMyProject()
 
     if (role !== 'student') return <Navigate to={routes.aAuthRedirect} />
-    if (isInitialLoading) return <Loading />
+    if (isInitialLoading) return <MainContentLoading />
     if (error) return <DisplayError error={error} />
     if (!allTeachers?.length) {
         return <h2 className='text-center text-2xl font-semibold'>{t('noTeachersInTheSystem')}</h2>

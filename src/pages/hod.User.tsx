@@ -1,7 +1,7 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { routes } from '~/pages/index.ts'
 import { useCurrentUser, useUserById } from '~/hooks'
-import { DisplayError, Loading } from '~/components'
+import { DisplayError, MainContentLoading } from '~/components'
 import { useTranslation } from 'react-i18next'
 
 export function User() {
@@ -12,7 +12,7 @@ export function User() {
 
     if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
     if (!userId) return <Navigate to={routes.aUsers} />
-    if (isLoading) return <Loading />
+    if (isLoading) return <MainContentLoading />
     if (!user) return <DisplayError error={error} />
 
     return (

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Button, IconButton, ITableHeader, Loading, Table, toast } from '~/components'
+import { Button, IconButton, ITableHeader, MainContentLoading, Table, toast } from '~/components'
 import { useAccessToken, useAllUsers, useCurrentUser } from '~/hooks'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { routes } from '~/pages/index.ts'
@@ -15,7 +15,7 @@ export function Users() {
     const [csvFile, setCsvFile] = useState<File | null>(null)
 
     if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
-    if (isLoading) return <Loading />
+    if (isLoading) return <MainContentLoading />
 
     if (!users || !users?.length)
         return <h2 className='w-full text-center text-2xl font-semibold'>{t('dashboard.noUsers')}</h2>

@@ -7,8 +7,8 @@ import { useSearchParams } from 'react-router-dom'
 
 export function SidebarContainer({ children, myStudent }: PropsWithChildren<{ myStudent?: IMyStudent }>) {
     return (
-        <div className='mx-auto flex w-10/12 flex-row justify-between'>
-            <main className='w-full'>{children}</main>
+        <div className='flex w-full flex-row justify-between'>
+            <div className='w-full'>{children}</div>
             <div className='w-1/4 max-w-md overflow-hidden border-s border-cs-additional-gray ps-4'>
                 <ProjectInfo language={myStudent?.language} stageName={myStudent?.stage?.name} />
             </div>

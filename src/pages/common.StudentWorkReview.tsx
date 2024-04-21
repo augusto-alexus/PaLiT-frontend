@@ -1,5 +1,5 @@
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
-import { Button, DisplayError, Loading, toast } from '~/components'
+import { Button, DisplayError, Loading, MainContentLoading, toast } from '~/components'
 import {
     useAllStages,
     useCheckIfStageMoveAllowed,
@@ -25,7 +25,7 @@ export function StudentWorkReview() {
 
     if (!studentId) return <DisplayError error={Error('Missing required search param: `studentId`')} />
     if (!documentId) return <DisplayError error={Error('Missing required search param: `documentId`')} />
-    if (isDocumentLoading) return <Loading />
+    if (isDocumentLoading) return <MainContentLoading />
     if (!doc) return <DisplayError error={Error(`Couldn't get data on document ${documentId}`)} />
 
     const stageAllowed = role === 'student' || (allowedStageIds?.includes(doc.stageDTO.stageId) ?? false)

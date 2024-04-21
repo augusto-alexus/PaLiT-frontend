@@ -10,10 +10,10 @@ export function Loading() {
 
 export function MainContentLoading() {
     return (
-        <main className='flex h-1/2 w-full items-center justify-center'>
+        <div className='flex h-1/2 w-full items-center justify-center'>
             <div className='h-fit w-fit animate-spin-slow'>
                 <i className='ri-loader-2-line text-9xl'></i>
             </div>
-        </main>
+        </div>
     )
 }
