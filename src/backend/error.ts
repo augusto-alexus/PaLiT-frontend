@@ -1,3 +1,20 @@
+import { AxiosError } from 'axios'
+
+export interface IErrorData {
+    status: number
+}
+
+export const handleError = (customHandler?: (_: IErrorData) => void) => (error: unknown) => {
+    if (error instanceof AxiosError) {
+        const status = error.response?.status
+        if (status) customHandler?.({ status })
+        throw new UnknownError(error.message)
+    } else if (error instanceof Error) {
+        throw new UnknownError(error.message)
+    }
+    throw new UnknownError()
+}
+
 export class BaseError extends Error {
     i18nMessage: string
     backendMessage?: string
@@ -32,5 +49,11 @@ export class PasswordsDoNotMatchError extends BaseError {
 export class WrongCredentialsError extends BaseError {
     constructor() {
         super('error.wrongCredentials')
+    }
+}
+
+export class JWTExpiredError extends BaseError {
+    constructor() {
+        super('error.sessionExpiredAuthAgain')
     }
 }

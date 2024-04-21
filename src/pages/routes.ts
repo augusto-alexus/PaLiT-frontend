@@ -19,8 +19,8 @@ export const routes = {
     aEditTeam: (teamId?: string) => `/teams/${teamId ? teamId : ':teamId'}`,
     users: 'users',
     aUsers: '/users',
-    user: (userId?: string) => `${userId ? userId : ':userId'}`,
-    aUser: (userId?: string) => `/hod/users/${userId ? userId : ':userId'}`,
+    user: (userId?: string) => `users/${userId ? userId : ':userId'}`,
+    aUser: (userId?: string) => `/users/${userId ? userId : ':userId'}`,
     userEdit: 'edit',
     aUserEdit: '/users/edit',
 

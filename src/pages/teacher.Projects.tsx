@@ -11,7 +11,7 @@ export function Projects() {
     const navigate = useNavigate()
     const { data, isInitialLoading } = useAllStudentsWithInfo()
 
-    if (role !== 'HoD' && role !== 'PS') return <Navigate to={routes.authRedirect} />
+    if (role !== 'HoD' && role !== 'PS') return <Navigate to={routes.aAuthRedirect} />
     if (isInitialLoading) return <Loading />
     if (!data?.length)
         return <h2 className='w-full text-center text-2xl text-cs-text-dark'>{t('dashboard.noProjects')}</h2>

@@ -40,7 +40,7 @@ export function AuthRoot() {
     return (
         <>
             <Header />
-            <main className='mx-auto flex w-10/12 gap-24 pb-12'>
+            <main className='mx-auto flex w-10/12 justify-center gap-24 pb-12'>
                 <Outlet />
             </main>
         </>

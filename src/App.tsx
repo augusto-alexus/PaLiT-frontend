@@ -24,9 +24,9 @@ import {
     SignUpTeacherPage,
     InviteTeachers,
     StudentFeedWrapper,
+    Projects,
 } from '~/pages'
 import './i18.ts'
-import { Projects } from '~/pages/teacher.Projects.tsx'
 
 function App() {
     return (
@@ -38,7 +38,7 @@ function App() {
                     <Route path={routes.signUp.teacher} element={<SignUpTeacherPage />} />
                 </Route>
                 <Route path='*' element={<AuthRoot />}>
-                    <Route index path='*' element={<AuthRedirect />} />
+                    <Route path={'*'} element={<AuthRedirect />} />
 
                     <Route path={routes.roleStageApproval} element={<RoleStageApproval />} />
                     <Route path={routes.teams} element={<Teams />} />
