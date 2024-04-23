@@ -1,11 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getTheme, updateTheme } from '~/backend'
-import { AxiosError } from 'axios'
-import { toast } from '~/components'
-import { useTranslation } from 'react-i18next'
+import { useErrorHandler } from '~/hooks/error.ts'
 
 export function useThemeUpdate(onEnd?: () => void) {
-    const { t } = useTranslation()
+    const errorHandler = useErrorHandler()
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: ({ studentId, newTheme }: { studentId: string; newTheme: string }) =>
@@ -13,25 +11,19 @@ export function useThemeUpdate(onEnd?: () => void) {
         onSuccess: async ({ studentId }) => {
             await queryClient.invalidateQueries(['myProject'])
             await queryClient.invalidateQueries(['theme', studentId])
-            onEnd?.()
         },
-        onError: (error: AxiosError | never) => {
-            if (error instanceof AxiosError) {
-                if (error?.response?.status === 403) {
-                    toast(`${t('error.youCantUpdateTheme')}!`)
-                } else toast(`${t('error.unknownError')}! ${error.message}`)
-            } else {
-                toast(`${t('error.unknownError')}!`)
-            }
-            onEnd?.()
-        },
+        onError: errorHandler,
+        onSettled: () => onEnd?.(),
     })
 }
 
 export function useGetTheme(studentId?: string | null) {
-    return useQuery({
+    const errorHandler = useErrorHandler()
+    const query = useQuery({
         enabled: !!studentId,
         queryKey: ['theme', studentId],
         queryFn: () => getTheme(studentId!),
     })
+    if (query.isError) errorHandler(query.error)
+    return query
 }

@@ -89,7 +89,7 @@ export function DocumentFeedItem({
 
 export function DocumentCommentsFeed({ documentId }: { documentId: string }) {
     const { data: comments, isInitialLoading: isInitLoadingComments } = useGetComments(documentId)
-    const { users, isInitialLoading: isInitLoadingUsers } = useAllUsers()
+    const { data: users, isInitialLoading: isInitLoadingUsers } = useAllUsers()
     if (isInitLoadingComments || isInitLoadingUsers) return <Loading />
 
     const feedElements = comments?.map((c) => {

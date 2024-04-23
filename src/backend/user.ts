@@ -1,40 +1,75 @@
 import endpoints from './endpoints'
 import { IRoleDTO, IStudentSignUpDTO, ITeacherSignUpDTO } from './auth'
 import axios from './base.ts'
+import { EmailAlreadyExistsError, handleError, UserCantBeDeletedError } from '~/backend/error.ts'
 
 export async function getAllUsers() {
-    const response = await axios.get(endpoints.user.getAll)
-    return response.data as IUser[]
+    return axios
+        .get(endpoints.user.getAll)
+        .then(({ data }) => data as IUser[])
+        .catch(handleError())
 }
 
 export async function getUserById(id: string) {
-    const response = await axios.get(endpoints.user.getById(id))
-    return response.data as IFullUserInfoDTO
+    return axios
+        .get(endpoints.user.getById(id))
+        .then(({ data }) => data as IFullUserInfoDTO)
+        .catch(handleError())
 }
 
 export async function createStudent(studentCreate: IStudentSignUpDTO) {
-    const response = await axios.post(endpoints.user.createStudent, studentCreate)
-    return response.data as object
+    return axios
+        .post(endpoints.user.createStudent, studentCreate)
+        .then(({ data }) => data as object)
+        .catch(
+            handleError(({ status }) => {
+                if (status === 409) throw new EmailAlreadyExistsError()
+            })
+        )
 }
 
 export async function createTeacher(teacherCreate: ITeacherSignUpDTO) {
-    const response = await axios.post(endpoints.user.createTeacher, teacherCreate)
-    return response.data as object
+    return axios
+        .post(endpoints.user.createTeacher, teacherCreate)
+        .then(({ data }) => data as object)
+        .catch(
+            handleError(({ status }) => {
+                if (status === 409) throw new EmailAlreadyExistsError()
+            })
+        )
 }
 
 export async function updateStudent(userId: string, studentUpdate: IStudentUpdateDTO) {
-    await axios.put(endpoints.user.updateStudent(userId), studentUpdate)
-    return userId
+    return axios
+        .put(endpoints.user.updateStudent(userId), studentUpdate)
+        .then(() => userId)
+        .catch(
+            handleError(({ status }) => {
+                if (status === 409) throw new EmailAlreadyExistsError()
+            })
+        )
 }
 
 export async function updateTeacher(userId: string, teacherUpdate: ITeacherUpdateDTO) {
-    await axios.put(endpoints.user.updateTeacher(userId), teacherUpdate)
-    return userId
+    return axios
+        .put(endpoints.user.updateTeacher(userId), teacherUpdate)
+        .then(() => userId)
+        .catch(
+            handleError(({ status }) => {
+                if (status === 409) throw new EmailAlreadyExistsError()
+            })
+        )
 }
 
 export async function deleteUser(userId: string) {
-    await axios.delete(endpoints.user.deleteById(userId))
-    return userId
+    return axios
+        .delete(endpoints.user.deleteById(userId))
+        .then(() => userId)
+        .catch(
+            handleError(({ status }) => {
+                if (status === 403) throw new UserCantBeDeletedError()
+            })
+        )
 }
 
 export interface IUser {

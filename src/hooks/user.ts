@@ -12,41 +12,37 @@ import {
     updateStudent,
     updateTeacher,
 } from '~/backend'
-import { AxiosError } from 'axios'
-import { toast } from '~/components'
-import { useTranslation } from 'react-i18next'
+import { useErrorHandler } from '~/hooks/error.ts'
 
 export function useAllUsers() {
-    const { data: users, ...rest } = useQuery({
+    const errorHandler = useErrorHandler()
+    const query = useQuery({
         queryFn: getAllUsers,
         queryKey: ['users'],
     })
-    return { users, ...rest }
+    if (query.isError) errorHandler(query.error)
+    return query
 }
 
 export function useUserById(id: string | null | undefined) {
-    const { data: user, ...rest } = useQuery({
+    const errorHandler = useErrorHandler()
+    const query = useQuery({
         enabled: !!id,
         queryFn: () => {
             if (id) return getUserById(id)
         },
         queryKey: ['user', id],
     })
-    return { user, ...rest }
+    if (query.isError) errorHandler(query.error)
+    return query
 }
 
 function useUserCreate<Args, Out>(mutationFn: MutationFunction<Args, Out>, onSuccess?: () => void) {
-    const { t } = useTranslation()
+    const errorHandler = useErrorHandler()
     return useMutation({
         mutationFn,
         onSuccess: () => onSuccess?.(),
-        onError: (error: AxiosError | never) => {
-            if (error instanceof AxiosError) {
-                toast(`${t('error.unknownError')}! ${error.message}`)
-            } else {
-                toast(`${t('error.unknownError')}!`)
-            }
-        },
+        onError: errorHandler,
     })
 }
 
@@ -65,7 +61,7 @@ export function useTeacherCreate(onSuccess?: () => void) {
 }
 
 function useUserUpdate<Args, Out>(mutationFn: MutationFunction<Out, Args>, onSuccess?: () => void) {
-    const { t } = useTranslation()
+    const errorHandler = useErrorHandler()
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn,
@@ -73,15 +69,7 @@ function useUserUpdate<Args, Out>(mutationFn: MutationFunction<Out, Args>, onSuc
             await queryClient.invalidateQueries(['user', userId])
             onSuccess?.()
         },
-        onError: (error: AxiosError | never) => {
-            if (error instanceof AxiosError) {
-                if (error?.response?.status === 409) {
-                    toast(`${t('error.userWithEmailExists')}!`)
-                } else toast(`${t('error.unknownError')}! ${error.message}`)
-            } else {
-                toast(`${t('error.unknownError')}!`)
-            }
-        },
+        onError: errorHandler,
     })
 }
 
@@ -102,7 +90,7 @@ export function useTeacherUpdate(onSuccess?: () => void) {
 }
 
 export function useDeleteUser(onSuccess?: () => void) {
-    const { t } = useTranslation()
+    const errorHandler = useErrorHandler()
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async ({ userId }: { userId: string }) => deleteUser(userId),
@@ -111,16 +99,6 @@ export function useDeleteUser(onSuccess?: () => void) {
             await queryClient.invalidateQueries(['user', userId])
             onSuccess?.()
         },
-        onError: (error: AxiosError | never) => {
-            if (error instanceof AxiosError) {
-                if (error?.response?.status === 403) {
-                    toast(`${t('error.userCantBeDelete')}!`)
-                } else {
-                    toast(`${t('error.unknownError')}! ${error.message}`)
-                }
-            } else {
-                toast(`${t('error.unknownError')}!`)
-            }
-        },
+        onError: errorHandler,
     })
 }

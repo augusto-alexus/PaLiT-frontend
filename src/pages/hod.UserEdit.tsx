@@ -29,8 +29,8 @@ export function UserEdit() {
     const [searchParams] = useSearchParams()
     const userId = searchParams.get('user')
     const isNewUser = userId === null
-    const { user, isLoading: isLoadingUser, isFetching: isFetchingUser, error: userError } = useUserById(userId)
-    const { data: roles, isLoading: isLoadingRoles, error: rolesError } = useAllRoles()
+    const { data: user, isLoading: isLoadingUser, isFetching: isFetchingUser } = useUserById(userId)
+    const { data: roles, isLoading: isLoadingRoles } = useAllRoles()
     const onSubmitSuccess = () => {
         if (userId) {
             toast(t('dashboard.userUpdated'))
@@ -79,8 +79,6 @@ export function UserEdit() {
 
     if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
     if (isLoadingRoles || (isLoadingUser && isFetchingUser)) return <MainContentLoading />
-    if (rolesError) return <DisplayError error={rolesError} />
-    if (userError) return <DisplayError error={userError} />
     if (!roles) return <DisplayError error={Error('No roles in the system.')} />
     if (!studentRole) return <DisplayError error={Error('No "user" role in the system.')} />
 

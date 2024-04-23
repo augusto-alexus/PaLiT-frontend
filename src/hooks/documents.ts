@@ -1,35 +1,41 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
-import { getStudentDocuments, postComment, reviewDocument } from '~/backend'
+import { getStudentDocuments, postComment, RequiredValueMissingError, reviewDocument } from '~/backend'
 import { toast } from '~/components'
 import { useDocumentNextStage, useErrorHandler } from '~/hooks'
 import { useTranslation } from 'react-i18next'
 
-export function useAllStudentDocuments(studentId: string | undefined) {
-    return useQuery({
+export function useAllStudentDocuments(studentId?: string | null) {
+    const errorHandler = useErrorHandler()
+    const query = useQuery({
         enabled: !!studentId,
         queryKey: ['studentDocuments', studentId],
         queryFn: async () => {
-            if (!studentId) throw new Error('Trying to fetch document while student id is unknown')
-            return getStudentDocuments(studentId)
+            if (!studentId) throw new RequiredValueMissingError('studentId')
+            return await getStudentDocuments(studentId)
         },
     })
+    if (query.isError) errorHandler(query.error)
+    return query
 }
 
 export function useStudentDocument(studentId: string | null | undefined, documentId: string | null | undefined) {
-    return useQuery({
+    const errorHandler = useErrorHandler()
+    const query = useQuery({
         enabled: !!studentId && !!documentId,
         queryKey: ['studentDocuments', studentId, documentId],
         queryFn: async () => {
-            if (!studentId || !documentId) throw new Error('Trying to fetch document while student id is unknown')
+            if (!studentId || !documentId) throw new RequiredValueMissingError('studentId')
             const allDocuments = await getStudentDocuments(studentId)
             return allDocuments.find((d) => d.documentId.toString() === documentId)
         },
     })
+    if (query.isError) errorHandler(query.error)
+    return query
 }
 
 export function useDocumentReview() {
     const { t } = useTranslation()
+    const errorHandler = useErrorHandler()
     const queryClient = useQueryClient()
     const { mutate: moveDocumentToNextStage } = useDocumentNextStage()
     return useMutation({
@@ -52,13 +58,7 @@ export function useDocumentReview() {
                     : toast(t('feed.documentApproved'))
             } else toast(t('feed.documentRejected'))
         },
-        onError: (error: AxiosError | never) => {
-            if (error instanceof AxiosError) {
-                toast(`${t('error.unknownError')}! ${error.message}`)
-            } else {
-                toast(`${t('error.unknownError')}!`)
-            }
-        },
+        onError: errorHandler,
     })
 }
 

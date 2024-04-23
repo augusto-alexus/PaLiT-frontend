@@ -26,13 +26,10 @@ export function NewTeam() {
     const { role } = useCurrentUser()
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const { mutate: createNewTeam } = useCreateTeam(
-        () => {
-            toast(t('teamCreatedSuccessfully'))
-            navigate(routes.aTeams)
-        },
-        (err) => alert(err)
-    )
+    const { mutate: createNewTeam } = useCreateTeam(() => {
+        toast(t('teamCreatedSuccessfully'))
+        navigate(routes.aTeams)
+    })
     if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
     return <EditTeamForm onSubmit={createNewTeam} editingExistingTeam={false} />
 }

@@ -13,5 +13,6 @@ export function useErrorHandler() {
         } else {
             toast(`${t('error.unknownError')}!`)
         }
+        return error
     }
 }

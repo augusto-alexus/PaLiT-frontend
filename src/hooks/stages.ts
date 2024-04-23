@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import {
     approveStageForAllInRole,
@@ -15,22 +14,30 @@ import {
 } from '~/backend'
 import { toast } from '~/components'
 import { useCurrentUser } from '~/hooks/auth.ts'
+import { useErrorHandler } from '~/hooks/error.ts'
 
 export function useAllStages() {
-    return useQuery({
+    const errorHandler = useErrorHandler()
+    const query = useQuery({
         queryKey: ['stages'],
         queryFn: () => getAllStages(),
     })
+    if (query.isError) errorHandler(query.error)
+    return query
 }
 
 export function useAllRoleStageApprovals() {
-    return useQuery({
+    const errorHandler = useErrorHandler()
+    const query = useQuery({
         queryKey: ['role-stages'],
         queryFn: () => getAllRoleStageApprovals(),
     })
+    if (query.isError) errorHandler(query.error)
+    return query
 }
 
 export function useCreateRoleStageApproval() {
+    const errorHandler = useErrorHandler()
     const { t } = useTranslation()
     const queryClient = useQueryClient()
 
@@ -41,13 +48,12 @@ export function useCreateRoleStageApproval() {
             await queryClient.invalidateQueries(['role-stages'])
             toast(t('dashboard.stageApproved'))
         },
-        onError: () => {
-            toast(`${t('error.unknownError')}!`)
-        },
+        onError: errorHandler,
     })
 }
 
 export function useDeleteRoleStageApproval() {
+    const errorHandler = useErrorHandler()
     const { t } = useTranslation()
     const queryClient = useQueryClient()
 
@@ -58,30 +64,22 @@ export function useDeleteRoleStageApproval() {
             await queryClient.invalidateQueries(['role-stages'])
             toast(t('dashboard.stageRestricted'))
         },
-        onError: () => {
-            toast(`${t('error.unknownError')}!`)
-        },
+        onError: errorHandler,
     })
 }
 
 export function useGetTeacherStages(teacherId: number) {
-    return useQuery({
+    const errorHandler = useErrorHandler()
+    const query = useQuery({
         queryKey: ['teacherStages', teacherId],
         queryFn: () => getTeachersStages(teacherId),
     })
-}
-
-export function useCheckIfStageMoveAllowed() {
-    const { role, allowedStageIds } = useCurrentUser()
-    return (docStageId: number, docApprovedDate: string | null | undefined): boolean => {
-        const roleAllowed = role !== 'student'
-        const stageAllowed = allowedStageIds?.includes(docStageId) ?? false
-        const alreadyReviewed = !!docApprovedDate
-        return roleAllowed && stageAllowed && !alreadyReviewed
-    }
+    if (query.isError) errorHandler(query.error)
+    return query
 }
 
 export function useApproveStageForTeacher() {
+    const errorHandler = useErrorHandler()
     const { t } = useTranslation()
     const queryClient = useQueryClient()
 
@@ -93,13 +91,12 @@ export function useApproveStageForTeacher() {
             await queryClient.invalidateQueries(['currentUser'])
             toast(t('dashboard.stageApprovedForTeacher'))
         },
-        onError: () => {
-            toast(`${t('error.unknownError')}!`)
-        },
+        onError: errorHandler,
     })
 }
 
 export function useRestrictStageForTeacher() {
+    const errorHandler = useErrorHandler()
     const { t } = useTranslation()
     const queryClient = useQueryClient()
 
@@ -111,13 +108,12 @@ export function useRestrictStageForTeacher() {
             await queryClient.invalidateQueries(['currentUser'])
             toast(t('dashboard.stageRestrictedForTeacher'))
         },
-        onError: () => {
-            toast(`${t('error.unknownError')}!`)
-        },
+        onError: errorHandler,
     })
 }
 
 export function useApproveStageForAll() {
+    const errorHandler = useErrorHandler()
     const { t } = useTranslation()
     const queryClient = useQueryClient()
 
@@ -129,13 +125,12 @@ export function useApproveStageForAll() {
             await queryClient.invalidateQueries(['currentUser'])
             toast(t('dashboard.stageApprovedForAll'))
         },
-        onError: () => {
-            toast(`${t('error.unknownError')}!`)
-        },
+        onError: errorHandler,
     })
 }
 
 export function useRestrictStageForAll() {
+    const errorHandler = useErrorHandler()
     const { t } = useTranslation()
     const queryClient = useQueryClient()
 
@@ -147,13 +142,12 @@ export function useRestrictStageForAll() {
             await queryClient.invalidateQueries(['currentUser'])
             toast(t('dashboard.stageRestrictedForAll'))
         },
-        onError: () => {
-            toast(`${t('error.unknownError')}!`)
-        },
+        onError: errorHandler,
     })
 }
 
 export function useDocumentNextStage() {
+    const errorHandler = useErrorHandler()
     const { t } = useTranslation()
     const queryClient = useQueryClient()
 
@@ -164,12 +158,16 @@ export function useDocumentNextStage() {
             await queryClient.invalidateQueries(['studentDocuments'])
             toast(t('feed.documentMovedToNextStage'))
         },
-        onError: (error: AxiosError | never) => {
-            if (error instanceof AxiosError) {
-                toast(`${t('error.unknownError')}! ${error.message}`)
-            } else {
-                toast(`${t('error.unknownError')}!`)
-            }
-        },
+        onError: errorHandler,
     })
+}
+
+export function useCheckIfStageMoveAllowed() {
+    const { role, allowedStageIds } = useCurrentUser()
+    return (docStageId: number, docApprovedDate: string | null | undefined): boolean => {
+        const roleAllowed = role !== 'student'
+        const stageAllowed = allowedStageIds?.includes(docStageId) ?? false
+        const alreadyReviewed = !!docApprovedDate
+        return roleAllowed && stageAllowed && !alreadyReviewed
+    }
 }

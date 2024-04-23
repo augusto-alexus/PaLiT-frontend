@@ -65,3 +65,33 @@ export class RequiredValueMissingError extends BaseError {
         this.i18Args = { field }
     }
 }
+
+export class StudentAlreadyHasTeacherError extends BaseError {
+    constructor() {
+        super('error.studentAlreadyHasTeacher')
+    }
+}
+
+export class TeacherInviteLimitError extends BaseError {
+    constructor() {
+        super('error.inviteLimitTeacher')
+    }
+}
+
+export class YourInviteLimitError extends BaseError {
+    constructor() {
+        super('error.inviteLimitYou')
+    }
+}
+
+export class CantUpdateThemeError extends BaseError {
+    constructor() {
+        super('error.youCantUpdateTheme')
+    }
+}
+
+export class UserCantBeDeletedError extends BaseError {
+    constructor() {
+        super('error.userCantBeDelete')
+    }
+}

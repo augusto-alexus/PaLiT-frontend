@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createTeam, editTeam } from '~/backend'
 import { Language } from '~/models'
-import { AxiosError } from 'axios'
-import { toast } from '~/components'
-import { useTranslation } from 'react-i18next'
+import { useErrorHandler } from '~/hooks/error.ts'
 
-export function useCreateTeam(onSuccess?: () => void, onError?: (err?: string) => void) {
+export function useCreateTeam(onSuccess?: () => void) {
+    const errorHandler = useErrorHandler()
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: ({
@@ -23,14 +22,12 @@ export function useCreateTeam(onSuccess?: () => void, onError?: (err?: string) =
             await queryClient.invalidateQueries(['allHoDRequests'])
             onSuccess?.()
         },
-        onError: (error) => {
-            onError?.(error?.toString())
-        },
+        onError: errorHandler,
     })
 }
 
 export function useEditTeam(onSuccess?: () => void) {
-    const { t } = useTranslation()
+    const errorHandler = useErrorHandler()
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: ({ teacherId, studentId }: { teacherId: string; studentId: string }) =>
@@ -39,16 +36,6 @@ export function useEditTeam(onSuccess?: () => void) {
             await queryClient.invalidateQueries(['allHoDRequests'])
             onSuccess?.()
         },
-        onError: (error) => {
-            if (error instanceof AxiosError) {
-                if (error.response?.status === 403) {
-                    toast(`${t('error.inviteLimitTeacher')}!`)
-                } else {
-                    toast(`${t('unknownError')}! ${error.message}`)
-                }
-            } else {
-                toast(`${t('unknownError')}!`)
-            }
-        },
+        onError: errorHandler,
     })
 }

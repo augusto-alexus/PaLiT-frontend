@@ -3,15 +3,20 @@ import endpoints from './endpoints'
 import { IStageDTO } from './stages'
 import { IStudentDTO } from './student.ts'
 import axios from './base.ts'
+import { handleError } from '~/backend/error.ts'
 
 export async function getAllTeachers() {
-    const response = await axios.get(endpoints.getAllTeachers)
-    return response.data as ITeacher[]
+    return axios
+        .get(endpoints.getAllTeachers)
+        .then(({ data }) => data as ITeacher[])
+        .catch(handleError())
 }
 
 export async function getMyStudents() {
-    const response = await axios.get(endpoints.currentStudents)
-    return (response.data as IMyStudentDTO[])?.map(parseMyStudentDTO)
+    return axios
+        .get(endpoints.currentStudents)
+        .then(({ data }) => (data as IMyStudentDTO[])?.map(parseMyStudentDTO))
+        .catch(handleError())
 }
 
 export interface IMyStudentDTO {

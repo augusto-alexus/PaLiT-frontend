@@ -2,20 +2,27 @@ import { Language, parseStudentDTO } from '~/models'
 import endpoints from './endpoints'
 import { IStageDTO } from './stages'
 import axios from './base.ts'
+import { handleError } from '~/backend/error.ts'
 
 export async function getAllStudents() {
-    const response = await axios.get(endpoints.getAllStudents)
-    return (response.data as IStudentDTO[]).map(parseStudentDTO)
+    return axios
+        .get(endpoints.getAllStudents)
+        .then(({ data }) => (data as IStudentDTO[]).map(parseStudentDTO))
+        .catch(handleError())
 }
 
 export async function getMyProject() {
-    const response = await axios.get(endpoints.currentAdvisor)
-    return parseMyProjectDTO(response.data as IMyProjectDTO)
+    return axios
+        .get(endpoints.currentAdvisor)
+        .then(({ data }) => parseMyProjectDTO(data as IMyProjectDTO))
+        .catch(handleError())
 }
 
 export async function getAllStudentsWithInfo() {
-    const response = await axios.get(endpoints.student.getAllStudentsWithStatus)
-    return response.data as IHodStudentInfo[]
+    return axios
+        .get(endpoints.student.getAllStudentsWithStatus)
+        .then(({ data }) => data as IHodStudentInfo[])
+        .catch(handleError())
 }
 
 function parseMyProjectDTO(dto: IMyProjectDTO): IMyProject {

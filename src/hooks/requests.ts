@@ -1,23 +1,27 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
-import { useTranslation } from 'react-i18next'
 import { approveRequest, getAllRequests, getRequests, rejectRequest } from '~/backend'
-import { toast } from '~/components'
-import { useCurrentUser } from '~/hooks'
+import { useCurrentUser, useErrorHandler } from '~/hooks'
 
 export function useAllHoDRequests() {
-    return useQuery({
+    const errorHandler = useErrorHandler()
+    const query = useQuery({
         queryKey: ['allHoDRequests'],
         queryFn: () => getAllRequests(),
     })
+    if (query.isError) errorHandler(query.error)
+    return query
 }
 
 export function useInvitations() {
+    const errorHandler = useErrorHandler()
     const { role } = useCurrentUser()
-    return useQuery(['requests'], () => getRequests(role))
+    const query = useQuery(['requests'], () => getRequests(role))
+    if (query.isError) errorHandler(query.error)
+    return query
 }
 
 export function useRejectInvitation(onSuccess?: () => void) {
+    const errorHandler = useErrorHandler()
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: ({ requestId }: { requestId: number }) => rejectRequest(requestId),
@@ -25,33 +29,21 @@ export function useRejectInvitation(onSuccess?: () => void) {
             await queryClient.invalidateQueries(['requests'])
             onSuccess?.()
         },
+        onError: errorHandler,
     })
 }
 
 export function useAcceptInvitation(onSuccess?: () => void) {
+    const errorHandler = useErrorHandler()
     const { role } = useCurrentUser()
     const queryClient = useQueryClient()
-    const { t } = useTranslation()
     return useMutation({
-        mutationFn: ({ requestId }: { requestId: number }) => approveRequest(requestId),
+        mutationFn: ({ requestId }: { requestId: number }) => approveRequest(requestId, role),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['requests'])
             await queryClient.invalidateQueries(['myProject'])
             onSuccess?.()
         },
-        onError: (error) => {
-            if (error instanceof AxiosError) {
-                if (error.response?.status === 409) {
-                    toast(`${t('error.studentAlreadyHasTeacher')}!`)
-                } else if (error.response?.status === 403) {
-                    if (role === 'student') toast(`${t('error.inviteLimitTeacher')}!`)
-                    else toast(`${t('error.inviteLimitYou')}!`)
-                } else {
-                    toast(`${t('unknownError')}! ${error.message}`)
-                }
-            } else {
-                toast(`${t('unknownError')}!`)
-            }
-        },
+        onError: errorHandler,
     })
 }

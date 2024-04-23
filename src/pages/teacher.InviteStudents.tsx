@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, DisplayError, MainContentLoading } from '~/components'
+import { Button, MainContentLoading } from '~/components'
 import { useCurrentUser, useGetAllTeams } from '~/hooks'
 import { RequestForm } from '~/pages/components'
 import { IStudent } from '~/models'
@@ -15,12 +15,10 @@ export function InviteStudents() {
         studentsQuery: { data: allStudents },
         teams,
         teamsLoading,
-        teamsQueryError,
     } = useGetAllTeams()
 
     if (role === 'student') return <Navigate to={routes.aAuthRedirect} />
     if (teamsLoading) return <MainContentLoading />
-    if (teamsQueryError) return <DisplayError error={teamsQueryError} />
     if (!allStudents?.length)
         return <h2 className='text-center text-2xl font-semibold'>{t('noStudentsInTheSystem')}</h2>
 

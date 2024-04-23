@@ -11,11 +11,11 @@ export function Users() {
     const accessToken = useAccessToken()
     const navigate = useNavigate()
     const { t } = useTranslation()
-    const { users, isLoading } = useAllUsers()
+    const { data: users, isInitialLoading } = useAllUsers()
     const [csvFile, setCsvFile] = useState<File | null>(null)
 
     if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
-    if (isLoading) return <MainContentLoading />
+    if (isInitialLoading) return <MainContentLoading />
 
     if (!users || !users?.length)
         return <h2 className='w-full text-center text-2xl font-semibold'>{t('dashboard.noUsers')}</h2>

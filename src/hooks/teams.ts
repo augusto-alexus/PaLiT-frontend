@@ -36,15 +36,12 @@ export function useGetAllTeams() {
           }, [] as ITeam[])
         : undefined
 
-    const teamsQueryError = requestsQuery.error || studentsQuery.error || teachersQuery.error
-
     return {
         requestsQuery,
         studentsQuery,
         teachersQuery,
         teams,
         teamsLoading,
-        teamsQueryError,
     }
 }
 

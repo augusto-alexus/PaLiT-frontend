@@ -1,8 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
-import { getStudentDocuments, IDocumentDTO, IStageDTO } from '~/backend'
+import { IDocumentDTO, IStageDTO } from '~/backend'
 import {
     DisplayError,
     Feed,
@@ -14,11 +12,37 @@ import {
     MainContentLoading,
     Tabs,
 } from '~/components'
-import { useAllStages, useCurrentUser, useMyProject } from '~/hooks'
+import { useAllStages, useAllStudentDocuments, useCurrentUser, useMyProject } from '~/hooks'
 import { DocumentFeedItem } from '~/pages/components'
 import { useFeedStore } from '~/store'
 
 export function StudentFeed() {
+    function reviewFeedItem(document: IDocumentDTO, movedToNextStage: boolean): IFeedElement {
+        return {
+            date: new Date(document.approvedDate),
+            iconL: document.approved ? <FeedIconApprove /> : <FeedIconReject />,
+            content: (
+                <div>
+                    {document.approved ? t('feed.documentApproved') : t('feed.documentRejected')}
+                    {movedToNextStage && (
+                        <>
+                            <br />
+                            <span className='font-semibold text-cs-primary'>{t('feed.nextStage')}</span>
+                        </>
+                    )}
+                </div>
+            ),
+        }
+    }
+
+    function getDocumentFeedItem(document: IDocumentDTO, studentId: string, stages: IStageDTO[]): IFeedElement {
+        return {
+            date: new Date(document.createdDate),
+            iconL: <i className='ri-file-line' />,
+            content: <DocumentFeedItem document={document} studentId={studentId} stages={stages} />,
+        }
+    }
+
     const { t } = useTranslation()
     const currentUser = useCurrentUser()
     const role = currentUser.role
@@ -32,14 +56,7 @@ export function StudentFeed() {
         isInitialLoading: isLoadingDocuments,
         error: errorDocuments,
         data: documents,
-    } = useQuery({
-        enabled: !!studentId,
-        queryKey: ['studentDocuments', studentId],
-        queryFn: async () => {
-            if (studentId) return getStudentDocuments(studentId)
-            throw new Error("Can't load document list: no authorized user.")
-        },
-    })
+    } = useAllStudentDocuments(studentId)
 
     if (!studentId) return <DisplayError error={Error('studentId required to view feed')} />
     if (isLoadingDocuments || isLoadingStages) return <MainContentLoading />
@@ -62,7 +79,7 @@ export function StudentFeed() {
         ?.forEach((d) => {
             feedElements.push(getDocumentFeedItem(d, studentId, stages))
             if (d.approvedDate) {
-                feedElements.push(reviewFeedItem(d, t, d.approved))
+                feedElements.push(reviewFeedItem(d, d.approved))
             }
         })
 
@@ -106,30 +123,4 @@ export function StudentFeed() {
             )}
         </div>
     )
-}
-
-function getDocumentFeedItem(document: IDocumentDTO, studentId: string, stages: IStageDTO[]): IFeedElement {
-    return {
-        date: new Date(document.createdDate),
-        iconL: <i className='ri-file-line' />,
-        content: <DocumentFeedItem document={document} studentId={studentId} stages={stages} />,
-    }
-}
-
-function reviewFeedItem(document: IDocumentDTO, t: TFunction<never, never>, movedToNextStage: boolean): IFeedElement {
-    return {
-        date: new Date(document.approvedDate),
-        iconL: document.approved ? <FeedIconApprove /> : <FeedIconReject />,
-        content: (
-            <div>
-                {document.approved ? t('feed.documentApproved') : t('feed.documentRejected')}
-                {movedToNextStage && (
-                    <>
-                        <br />
-                        <span className='font-semibold text-cs-primary'>{t('feed.nextStage')}</span>
-                    </>
-                )}
-            </div>
-        ),
-    }
 }

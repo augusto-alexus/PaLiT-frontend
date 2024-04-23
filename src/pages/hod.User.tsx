@@ -1,19 +1,21 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { routes } from '~/pages/index.ts'
-import { useCurrentUser, useUserById } from '~/hooks'
+import { useCurrentUser, useErrorHandler, useUserById } from '~/hooks'
 import { DisplayError, MainContentLoading } from '~/components'
 import { useTranslation } from 'react-i18next'
+import { RequiredValueMissingError } from '~/backend'
 
 export function User() {
+    const errorHandler = useErrorHandler()
     const { role } = useCurrentUser()
     const { t } = useTranslation()
     const { userId } = useParams()
-    const { user, isLoading, error } = useUserById(userId)
+    const { data: user, isInitialLoading } = useUserById(userId)
 
     if (role !== 'HoD') return <Navigate to={routes.aAuthRedirect} />
     if (!userId) return <Navigate to={routes.aUsers} />
-    if (isLoading) return <MainContentLoading />
-    if (!user) return <DisplayError error={error} />
+    if (isInitialLoading) return <MainContentLoading />
+    if (!user) return <DisplayError error={errorHandler(new RequiredValueMissingError('userId'))} />
 
     return (
         <div className='mx-auto flex flex-col gap-4'>

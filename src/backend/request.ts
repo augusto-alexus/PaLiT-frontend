@@ -1,6 +1,7 @@
 import { Language, RequestDirection, Role } from '~/models'
 import endpoints from './endpoints'
 import axios from './base.ts'
+import { handleError, StudentAlreadyHasTeacherError, TeacherInviteLimitError, YourInviteLimitError } from './error.ts'
 
 export function getRequests(role: Role) {
     if (role == 'student') return getRequestsStudent()
@@ -8,31 +9,50 @@ export function getRequests(role: Role) {
 }
 
 async function getRequestsTeacher() {
-    const response = await axios.get(endpoints.getAllRequestsTeacher)
-    return (response.data as IRequestStudent[]).map(parseRequest)
+    return axios
+        .get(endpoints.getAllRequestsTeacher)
+        .then(({ data }) => (data as IRequestStudent[]).map(parseRequest))
+        .catch(handleError())
 }
 
 async function getRequestsStudent() {
-    const response = await axios.get(endpoints.getAllRequestsStudent)
-    return (response.data as IRequestTeacher[]).map(parseRequest)
+    return axios
+        .get(endpoints.getAllRequestsStudent)
+        .then(({ data }) => (data as IRequestTeacher[]).map(parseRequest))
+        .catch(handleError())
 }
 
 export async function makeRequest(role: Role, { userId, requestBody }: IRequestDTO) {
     const endpoint = role === 'student' ? endpoints.student2TeacherRequest : endpoints.teacher2StudentRequest
-    const response = await axios.post(endpoint(userId), requestBody)
-    return response.data as object
+    return axios
+        .post(endpoint(userId), requestBody)
+        .then(({ data }) => data as object)
+        .catch(handleError())
 }
 
 export async function rejectRequest(requestId: number) {
-    const response = await axios.delete(endpoints.rejectRequest(requestId))
-    return response.data as object
+    return axios
+        .delete(endpoints.rejectRequest(requestId))
+        .then(({ data }) => data as object)
+        .catch(handleError())
 }
 
-export async function approveRequest(requestId: number) {
+export async function approveRequest(requestId: number, role: Role) {
     const formData = new FormData()
     formData.append('approved', 'true')
-    const response = await axios.put(endpoints.approveRequest(requestId), formData)
-    return response.data as object
+    return axios
+        .put(endpoints.approveRequest(requestId), formData)
+        .then(({ data }) => data as object)
+        .catch(
+            handleError(({ status }) => {
+                if (status === 409) {
+                    throw new StudentAlreadyHasTeacherError()
+                } else if (status === 403) {
+                    if (role === 'student') throw new TeacherInviteLimitError()
+                    else throw new YourInviteLimitError()
+                }
+            })
+        )
 }
 
 function parseRequest(data: IRequestStudent | IRequestTeacher): IRequest {

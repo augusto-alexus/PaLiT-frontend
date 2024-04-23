@@ -1,11 +1,13 @@
 import endpoints from './endpoints'
 import { IStageDTO } from './stages'
 import axios from './base.ts'
+import { handleError } from '~/backend/error.ts'
 
 export async function getStudentDocuments(studentId: string) {
-    const response = await axios.get(endpoints.files.getStudentDocuments(studentId))
-
-    return response.data as IDocumentDTO[]
+    return axios
+        .get(endpoints.files.getStudentDocuments(studentId))
+        .then(({ data }) => data as IDocumentDTO[])
+        .catch(handleError())
 }
 
 export async function uploadDocument(accessToken: string, studentId: number, document: File) {
@@ -45,19 +47,30 @@ export async function reviewDocument(
     const formData = new FormData()
     formData.append('isApproved', verdict === 'approved' ? 'true' : 'false')
 
-    const response = await axios.put(endpoints.files.reviewDocument(documentId), formData)
-
-    return { ...response.data, documentId, studentId, nextStageId } as {
-        approved: string
-        documentId: string
-        studentId: string
-        nextStageId?: number
-    }
+    return axios
+        .put(endpoints.files.reviewDocument(documentId), formData)
+        .then(
+            ({ data }) =>
+                ({
+                    ...data,
+                    documentId,
+                    studentId,
+                    nextStageId,
+                } as {
+                    approved: string
+                    documentId: string
+                    studentId: string
+                    nextStageId?: number
+                })
+        )
+        .catch(handleError())
 }
 
 export async function moveDocumentToStage(documentId: string, stageId: number) {
-    const response = await axios.put(endpoints.files.moveToNextStage(documentId, stageId))
-    return response.data as object
+    return axios
+        .put(endpoints.files.moveToNextStage(documentId, stageId))
+        .then(({ data }) => data as object)
+        .catch(handleError())
 }
 
 export interface IDocumentDTO {
