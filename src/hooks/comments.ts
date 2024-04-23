@@ -1,13 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
-import { getComments } from '~/backend'
+import { getComments, RequiredValueMissingError } from '~/backend'
+import { useErrorHandler } from '~/hooks/error.ts'
 
 export function useGetComments(documentId?: string) {
-    return useQuery({
+    const errorHandler = useErrorHandler()
+    const query = useQuery({
         enabled: !!documentId,
         queryKey: ['documentComments', documentId],
         queryFn: () => {
             if (documentId) return getComments(documentId)
-            throw new Error("Can't get documents without 'documentId'")
+            throw new RequiredValueMissingError('documentId')
         },
     })
+    if (query.isError) errorHandler(query.error)
+    return query
 }

@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { getStudentDocuments, postComment, reviewDocument } from '~/backend'
 import { toast } from '~/components'
-import { useDocumentNextStage } from '~/hooks'
+import { useDocumentNextStage, useErrorHandler } from '~/hooks'
 import { useTranslation } from 'react-i18next'
 
 export function useAllStudentDocuments(studentId: string | undefined) {
@@ -63,6 +63,7 @@ export function useDocumentReview() {
 }
 
 export function useMakeComment() {
+    const errorHandler = useErrorHandler()
     const { t } = useTranslation()
     const queryClient = useQueryClient()
 
@@ -73,12 +74,6 @@ export function useMakeComment() {
             await queryClient.invalidateQueries(['documentComments', data])
             toast(t('feed.commentSaved'))
         },
-        onError: (error: AxiosError | never) => {
-            if (error instanceof AxiosError) {
-                toast(`${t('error.unknownError')}! ${error.message}`)
-            } else {
-                toast(`${t('error.unknownError')}!`)
-            }
-        },
+        onError: errorHandler,
     })
 }

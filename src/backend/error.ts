@@ -17,6 +17,7 @@ export const handleError = (customHandler?: (_: IErrorData) => void) => (error: 
 
 export class BaseError extends Error {
     i18nMessage: string
+    i18Args?: object
     backendMessage?: string
     toastAutoCloseDelay?: number
 
@@ -55,5 +56,12 @@ export class WrongCredentialsError extends BaseError {
 export class JWTExpiredError extends BaseError {
     constructor() {
         super('error.sessionExpiredAuthAgain')
+    }
+}
+
+export class RequiredValueMissingError extends BaseError {
+    constructor(field: string) {
+        super('error.fieldIsMissing')
+        this.i18Args = { field }
     }
 }

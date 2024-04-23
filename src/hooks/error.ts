@@ -6,7 +6,10 @@ export function useErrorHandler() {
     const { t } = useTranslation()
     return (error: unknown) => {
         if (error instanceof BaseError) {
-            toast(`${t(error.i18nMessage)}! ${error?.backendMessage ?? ''}`, error.toastAutoCloseDelay)
+            toast(
+                `${t(error.i18nMessage, { ...error.i18Args })}! ${error?.backendMessage ?? ''}`,
+                error.toastAutoCloseDelay
+            )
         } else {
             toast(`${t('error.unknownError')}!`)
         }

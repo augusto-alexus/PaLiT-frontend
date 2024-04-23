@@ -216,6 +216,7 @@
     "userCantBeDelete": "Цього користувача видалити неможливо",
     "youCantUpdateTheme": "Ви не можете оновити цю тему",
     "fileTooLarge": "Файл занадто великий",
-    "languageCantBeEmpty": "Мова не може бути порожньою"
+    "languageCantBeEmpty": "Мова не може бути порожньою",
+    "fieldIsMissing": "Відсутнє поле: {{field}}"
   }
 }

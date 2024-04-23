@@ -1,14 +1,19 @@
-import endpoints from './endpoints'
 import axios from './base.ts'
+import endpoints from './endpoints'
+import { handleError } from './error.ts'
 
 export async function postComment(documentId: string, userId: string, comment: string) {
-    await axios.post(endpoints.comments.postComment(documentId, userId), { text: comment })
-    return documentId
+    return axios
+        .post(endpoints.comments.postComment(documentId, userId), { text: comment })
+        .then(() => documentId)
+        .catch(handleError())
 }
 
 export async function getComments(documentId: string) {
-    const response = await axios.get(endpoints.comments.getComments(documentId))
-    return (response.data as ICommentDTO[]).map(getCommentFromDTO)
+    return axios
+        .get(endpoints.comments.getComments(documentId))
+        .then(({ data }) => (data as ICommentDTO[]).map(getCommentFromDTO))
+        .catch(handleError())
 }
 
 function getCommentFromDTO(dto: ICommentDTO): IComment {

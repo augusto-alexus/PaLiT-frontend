@@ -216,6 +216,7 @@
     "userCantBeDelete": "User can't be deleted",
     "youCantUpdateTheme": "You can't update this theme",
     "fileTooLarge": "File is too large",
-    "languageCantBeEmpty": "Language can't be empty"
+    "languageCantBeEmpty": "Language can't be empty",
+    "fieldIsMissing": "Field is missing: {{field}}"
   }
 }
