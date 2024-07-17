@@ -21,12 +21,7 @@ export function Invitations() {
     if (invitationsLoading || teamsLoading) return <MainContentLoading />
 
     const relevantInvitations = invitations?.filter(
-        (inv) =>
-            !teams?.some(
-                (t) =>
-                    (role === 'student' && inv.user.id == t.teacher.teacherId) ||
-                    (role !== 'student' && inv.user.id == t.student.studentId)
-            )
+        (inv) => !teams?.some((t) => role !== 'student' && inv.user.id == t.student.studentId)
     )
 
     if (!relevantInvitations?.filter((r) => !r.approved)?.length)

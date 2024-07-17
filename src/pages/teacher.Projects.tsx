@@ -1,4 +1,4 @@
-import { useAllStudentsWithInfo, useCurrentUser } from '~/hooks'
+import { useAllStudentsWithInfo, useCurrentUser, useMyStudents } from '~/hooks'
 import { ITableHeader, MainContentLoading, Table, toast } from '~/components'
 import { useTranslation } from 'react-i18next'
 import { routes } from '~/pages/index.ts'
@@ -9,10 +9,11 @@ export function Projects() {
     const { t } = useTranslation()
     const { allowedStageIds } = useCurrentUser()
     const navigate = useNavigate()
+    const { data: myStudents, isInitialLoading: myStudentsLoading } = useMyStudents()
     const { data, isInitialLoading } = useAllStudentsWithInfo()
 
     if (role !== 'HoD' && role !== 'PS') return <Navigate to={routes.aAuthRedirect} />
-    if (isInitialLoading) return <MainContentLoading />
+    if (isInitialLoading || myStudentsLoading) return <MainContentLoading />
     if (!data?.length)
         return <h2 className='w-full text-center text-2xl text-cs-text-dark'>{t('dashboard.noProjects')}</h2>
 
@@ -47,7 +48,12 @@ export function Projects() {
                 <button
                     className='w-fit px-0.5 py-0 text-cs-primary'
                     onClick={() => {
-                        if (allowedStageIds?.includes(s.documentDTO.stageDTO.stageId))
+                        console.log(s, myStudents, s.studentDTO.studentId)
+                        if (
+                            allowedStageIds?.includes(s.documentDTO.stageDTO.stageId) ||
+                            (s.documentDTO.stageDTO.serialOrder === 1 &&
+                                myStudents?.some((st) => st.student.studentId.toString() == s.studentDTO.studentId))
+                        )
                             navigate(routes.aWorkReview(s.studentDTO.studentId, s.documentDTO.documentId))
                         else toast(t('feed.cantViewStage'))
                     }}

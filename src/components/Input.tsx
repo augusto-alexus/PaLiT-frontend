@@ -19,17 +19,17 @@ export function TextArea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
 }
 
 export function Password(props: InputHTMLAttributes<HTMLInputElement>) {
-    const [isHidden, setIsHidden] = useState<boolean>(true)
+    // const [isHidden, setIsHidden] = useState<boolean>(true)
     return (
         <div className='relative focus-within:border-cs-secondary focus-within:text-cs-text-dark focus-within:outline-none'>
-            <Input type={isHidden ? 'password' : 'text'} {...props} />
-            <button
-                type='button'
-                onClick={() => setIsHidden((v) => !v)}
-                className='absolute right-4 top-1/2 -translate-y-1/2 border-0 bg-transparent p-0 text-xl text-cs-additional-gray hover:border hover:border-cs-secondary focus:border active:text-cs-text-dark'
-            >
-                {isHidden ? <i className='ri-eye-line'></i> : <i className='ri-eye-off-line'></i>}
-            </button>
+            <Input type={'password'} {...props} />
+            {/*<button*/}
+            {/*    type='button'*/}
+            {/*    onClick={() => setIsHidden((v) => !v)}*/}
+            {/*    className='absolute right-4 top-1/2 -translate-y-1/2 border-0 bg-transparent p-0 text-xl text-cs-additional-gray hover:border hover:border-cs-secondary focus:border active:text-cs-text-dark'*/}
+            {/*>*/}
+            {/*    {isHidden ? <i className='ri-eye-line'></i> : <i className='ri-eye-off-line'></i>}*/}
+            {/*</button>*/}
         </div>
     )
 }

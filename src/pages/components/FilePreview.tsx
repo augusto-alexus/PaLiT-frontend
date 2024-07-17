@@ -24,7 +24,7 @@ export function FilePreview({ studentId, documentId }: { studentId: string; docu
 
     if (doc.originalName.endsWith('.pdf')) {
         return (
-            <object className='mx-auto' data={fileUrl} type='application/pdf' width='100%' height='100%'>
+            <object className='mx-auto' data={fileUrl} type='application/pdf' width='100%' height='1000px'>
                 <p className='text-center text-2xl'>
                     {t('previewNotSupported')}. {t('youCanDownload...')} <a href={fileUrl}>{t('...here')}</a>.
                 </p>

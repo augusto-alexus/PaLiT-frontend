@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, MainContentLoading } from '~/components'
-import { useCurrentUser, useGetAllTeams } from '~/hooks'
+import { useCurrentUser, useGetAllTeams, useInvitations } from '~/hooks'
 import { RequestForm } from '~/pages/components'
 import { IStudent } from '~/models'
 import { Navigate } from 'react-router-dom'
@@ -11,6 +11,7 @@ export function InviteStudents() {
     const { role } = useCurrentUser()
     const { t } = useTranslation()
     const [showRequestFormFor, setShowRequestFormFor] = useState<number | null>(null)
+    const { data: invitations, isInitialLoading: invitationsLoading } = useInvitations()
     const {
         studentsQuery: { data: allStudents },
         teams,
@@ -18,11 +19,15 @@ export function InviteStudents() {
     } = useGetAllTeams()
 
     if (role === 'student') return <Navigate to={routes.aAuthRedirect} />
-    if (teamsLoading) return <MainContentLoading />
+    if (teamsLoading || invitationsLoading) return <MainContentLoading />
     if (!allStudents?.length)
         return <h2 className='text-center text-2xl font-semibold'>{t('noStudentsInTheSystem')}</h2>
 
-    const data = allStudents.filter(({ studentId }) => !teams?.some((t) => t.student.studentId !== studentId))
+    const data = allStudents.filter(
+        ({ studentId }) =>
+            !teams?.some((t) => t.student.studentId === studentId) &&
+            !invitations?.some((r) => r.direction === 'STUDENT' && r.user.id === studentId)
+    )
     if (!data?.length)
         return <h2 className='text-center text-2xl font-semibold'>{t('everyStudentReceivedInvitation')}</h2>
 

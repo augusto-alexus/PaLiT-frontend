@@ -26,7 +26,7 @@ export function getHumanReadableDuration(date: Date) {
     }
     if (deltaMilliseconds < millisecondsInMonth) {
         const deltaDays = Math.floor(deltaMilliseconds / millisecondsInDay)
-        return `${deltaDays} ${deltaDays === 1 ? 'день' : deltaDays < 5 ? 'дні' : 'днів'} тому`
+        return `${deltaDays} ${deltaDays % 10 === 1 ? 'день' : deltaDays % 10 < 5 ? 'дні' : 'днів'} тому`
     }
     if (deltaMilliseconds < millisecondsInYear) {
         const deltaMonths = Math.floor(deltaMilliseconds / millisecondsInMonth)

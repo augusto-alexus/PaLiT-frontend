@@ -9,7 +9,7 @@ export interface ISignUpTeacherForm {
 }
 
 export interface ISignUpStudentForm extends ISignUpTeacherForm {
-    gradDate: string
+    gradYear: string
     gradLevel: string
     group: string
     faculty: string
@@ -33,7 +33,7 @@ export function getStudentSignUpDTO(form: ISignUpStudentForm, token: string): IS
         password: form.password,
         cluster: form.group,
         faculty: form.faculty,
-        graduateDate: form.gradDate,
+        graduateDate: new Date(form.gradYear).toISOString(),
         degree: form.gradLevel,
         token,
     }

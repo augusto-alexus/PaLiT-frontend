@@ -38,6 +38,7 @@ export function SignUpStudentPage() {
         toast(`${t('signUpSuccessful')}!`)
         navigate(routes.aSignIn)
     })
+    const currentYear = new Date().getFullYear()
     const { form, onFieldChange, onSubmit } = useForm<ISignUpStudentForm>(
         {
             firstName: '',
@@ -47,7 +48,7 @@ export function SignUpStudentPage() {
             confirmPassword: '',
             faculty: '',
             group: '',
-            gradDate: '',
+            gradYear: '',
             gradLevel: '',
         },
         (form) => {
@@ -89,6 +90,7 @@ export function SignUpStudentPage() {
                 <label className='text-left'>{t('email')}</label>
                 <Input
                     required
+                    autoComplete='email'
                     name='email'
                     type='email'
                     value={form.email}
@@ -144,14 +146,19 @@ export function SignUpStudentPage() {
             </div>
             <div className='flex flex-col'>
                 <label className='text-left'>{t('graduationYear')}</label>
-                <Input
-                    required
-                    name='gradDate'
-                    type='date'
-                    value={form.gradDate}
-                    onChange={onFieldChange}
-                    placeholder={t('enterGraduationYear')}
-                />
+                <Select required name='gradYear' value={form.gradYear} onChange={onFieldChange}>
+                    <option disabled hidden value=''>
+                        {t('enterGraduationYear')}
+                    </option>
+                    {[...Array(3).keys()].map((yearIdx) => {
+                        const val = (currentYear + yearIdx).toString()
+                        return (
+                            <option key={val} value={val}>
+                                {val}
+                            </option>
+                        )
+                    })}
+                </Select>
             </div>
             <div className='flex flex-col'>
                 <label className='text-left'>{t('degree')}</label>

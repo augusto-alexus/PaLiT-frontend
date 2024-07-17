@@ -68,7 +68,7 @@ function HeaderNav({ navItems }: { navItems: INavItem[] }) {
     const { t } = useTranslation()
     if (navItems.length <= 1) return <></>
     return (
-        <nav className='flex flex-row place-items-center justify-center gap-8 text-xl font-semibold'>
+        <nav className='flex flex-row place-items-center justify-center gap-8 text-lg'>
             {navItems.map((navItem, idx) => (
                 <NavLink
                     key={idx}

@@ -6,6 +6,7 @@ import {
     useCurrentUser,
     useDocumentReview,
     useGetComments,
+    useMyStudents,
     useStudentDocument,
 } from '~/hooks'
 import { CommentInput, DocumentCommentsFeed, FilePreview, ProjectInfo } from '~/pages/components'
@@ -22,13 +23,17 @@ export function StudentWorkReview() {
     const documentId = searchParams.get('documentId')
     const { data: comments, isInitialLoading: isCommentsLoading } = useGetComments(documentId?.toString())
     const { data: doc, isInitialLoading: isDocumentLoading } = useStudentDocument(studentId, documentId)
+    const { data: myStudents, isInitialLoading: myStudentsLoading } = useMyStudents()
 
     if (!studentId) return <DisplayError error={Error('Missing required search param: `studentId`')} />
     if (!documentId) return <DisplayError error={Error('Missing required search param: `documentId`')} />
-    if (isDocumentLoading) return <MainContentLoading />
+    if (isDocumentLoading || myStudentsLoading) return <MainContentLoading />
     if (!doc) return <DisplayError error={Error(`Couldn't get data on document ${documentId}`)} />
 
-    const stageAllowed = role === 'student' || (allowedStageIds?.includes(doc.stageDTO.stageId) ?? false)
+    const stageAllowed =
+        role === 'student' ||
+        (allowedStageIds?.includes(doc.stageDTO.stageId) ?? false) ||
+        (doc.stageDTO.serialOrder === 1 && myStudents?.some((st) => st.student.studentId.toString() === studentId))
 
     if (!stageAllowed) {
         toast(t('feed.cantViewStage'))
@@ -43,8 +48,8 @@ export function StudentWorkReview() {
                 <h2 className='mb-8 text-3xl font-bold'>{doc.originalName}</h2>
                 <FilePreview studentId={studentId} documentId={documentId} />
             </div>
-            <div className='row-span-2 flex flex-col justify-between'>
-                <a onClick={() => navigate(routes.aStudentFeed(studentId))}>
+            <div className='row-span-2 flex flex-col'>
+                <a className='cursor-pointer' onClick={() => navigate(routes.aStudentFeed(studentId))}>
                     <i className='ri-history-line' /> {t('feed.checkHistory')}
                 </a>
                 <Accordion
@@ -77,6 +82,10 @@ export function StudentWorkReview() {
                     >
                         {t('workStatus') + ': ' + t(`workStatuses.${doc.approved ? 'accepted' : 'rejected'}`)}
                     </h2>
+                ) : role === 'student' ? (
+                    <h2 className='mt-4 text-center text-2xl uppercase text-cs-text-dark'>
+                        {t('workStatuses.toReview')}
+                    </h2>
                 ) : (
                     <div className='flex flex-row justify-between space-x-4'>
                         <ApproveDocumentButton studentId={studentId} document={doc} />
@@ -98,7 +107,8 @@ function ApproveDocumentButton({ studentId, document }: { studentId: string; doc
 
     const nextStage = stages?.find((s) => s.serialOrder - 1 === document.stageDTO.serialOrder)
 
-    if (!isStageMoveAllowed(document.stageDTO.stageId, document.approvedDate)) return <></>
+    if (!isStageMoveAllowed(studentId, document.stageDTO.stageId, document.stageDTO.serialOrder, document.approvedDate))
+        return <></>
 
     return (
         <Button
@@ -123,7 +133,8 @@ function RejectDocumentButton({ studentId, document }: { studentId: string; docu
     const { mutate: reviewDocument } = useDocumentReview()
     const isStageMoveAllowed = useCheckIfStageMoveAllowed()
 
-    if (!isStageMoveAllowed(document.stageDTO.stageId, document.approvedDate)) return <></>
+    if (!isStageMoveAllowed(studentId, document.stageDTO.stageId, document.stageDTO.serialOrder, document.approvedDate))
+        return <></>
 
     return (
         <Button

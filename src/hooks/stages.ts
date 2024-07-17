@@ -15,6 +15,7 @@ import {
 import { toast } from '~/components'
 import { useCurrentUser } from '~/hooks/auth.ts'
 import { useErrorHandler } from '~/hooks/error.ts'
+import { useMyStudents } from '~/hooks/teachers.ts'
 
 export function useAllStages() {
     const errorHandler = useErrorHandler()
@@ -46,6 +47,7 @@ export function useCreateRoleStageApproval() {
             createRoleStageApproval(roleId, stageId),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['role-stages'])
+            await queryClient.invalidateQueries(['currentUser'])
             toast(t('dashboard.stageApproved'))
         },
         onError: errorHandler,
@@ -62,6 +64,7 @@ export function useDeleteRoleStageApproval() {
             deleteRoleStageApproval(roleId, stageId),
         onSuccess: async () => {
             await queryClient.invalidateQueries(['role-stages'])
+            await queryClient.invalidateQueries(['currentUser'])
             toast(t('dashboard.stageRestricted'))
         },
         onError: errorHandler,
@@ -164,10 +167,22 @@ export function useDocumentNextStage() {
 
 export function useCheckIfStageMoveAllowed() {
     const { role, allowedStageIds } = useCurrentUser()
-    return (docStageId: number, docApprovedDate: string | null | undefined): boolean => {
+    const { data: myStudents } = useMyStudents()
+    return (
+        studentId: string,
+        docStageId: number,
+        docStageSerialOrder: number,
+        docApprovedDate: string | null | undefined
+    ): boolean => {
         const roleAllowed = role !== 'student'
         const stageAllowed = allowedStageIds?.includes(docStageId) ?? false
         const alreadyReviewed = !!docApprovedDate
-        return roleAllowed && stageAllowed && !alreadyReviewed
+        return (
+            roleAllowed &&
+            (stageAllowed ||
+                (docStageSerialOrder === 1 &&
+                    (myStudents?.some((st) => st.student.studentId.toString() === studentId) ?? false))) &&
+            !alreadyReviewed
+        )
     }
 }

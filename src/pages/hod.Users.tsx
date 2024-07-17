@@ -47,7 +47,7 @@ export function Users() {
                 </div>
             ),
             openUserBtn: (
-                <IconButton onClick={() => navigate(routes.user(u.userId.toString()))}>
+                <IconButton onClick={() => navigate(routes.aUser(u.userId.toString()))}>
                     <i className='ri-pencil-fill' />
                 </IconButton>
             ),
@@ -81,17 +81,16 @@ export function Users() {
                                 id='upload-csv'
                                 key={csvFile?.name}
                                 type='file'
-                                disabled={!!csvFile}
                                 accept='.csv'
                                 className='hidden'
                                 onChange={(e) => {
                                     if (e.target.files === null) return
                                     const file = e.target.files[0]
+                                    setCsvFile(file)
                                     if (confirm(t('dashboard.areYouSureInviteCsv'))) {
                                         void uploadUserInvitationCsv(accessToken, file)
                                         setTimeout(() => {
                                             toast(t('fileUploadedSuccessfully'))
-                                            setCsvFile(null)
                                         })
                                     }
                                 }}

@@ -14,8 +14,10 @@ export function useAllTeachers() {
 }
 
 export function useMyStudents() {
+    const { role } = useCurrentUser()
     const errorHandler = useErrorHandler()
     const query = useQuery({
+        enabled: role !== 'student',
         queryKey: ['myStudents'],
         queryFn: getMyStudents,
     })

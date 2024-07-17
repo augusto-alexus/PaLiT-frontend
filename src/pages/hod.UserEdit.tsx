@@ -82,6 +82,8 @@ export function UserEdit() {
     if (!roles) return <DisplayError error={Error('No roles in the system.')} />
     if (!studentRole) return <DisplayError error={Error('No "user" role in the system.')} />
 
+    const currentYear = new Date().getFullYear()
+
     return (
         <form className='mx-auto flex flex-col gap-8' onSubmit={onSubmit}>
             <div className='grid grid-cols-2 place-content-center gap-y-3'>
@@ -159,7 +161,19 @@ export function UserEdit() {
                         <Input required name='group' type='text' value={form.group} onChange={onFieldChange} />
 
                         <span className='inline-flex place-items-center font-semibold'>{t('graduationYear')}:</span>
-                        <Input required name='gradYear' type='date' value={form.gradYear} onChange={onFieldChange} />
+                        <Select required name='gradYear' value={form.gradYear} onChange={onFieldChange}>
+                            <option disabled hidden value=''>
+                                {t('enterGraduationYear')}
+                            </option>
+                            {[...Array(3).keys()].map((yearIdx) => {
+                                const val = (currentYear + yearIdx).toString()
+                                return (
+                                    <option key={val} value={val}>
+                                        {val}
+                                    </option>
+                                )
+                            })}
+                        </Select>
                     </>
                 )}
 
@@ -234,7 +248,7 @@ function getStudentCreateDTO(form: IUserUpdateForm): IStudentSignUpDTO {
         faculty: form.faculty,
         cluster: form.group,
         degree: form.degree,
-        graduateDate: form.gradYear,
+        graduateDate: new Date(form.gradYear).toISOString(),
     }
 }
 
@@ -247,7 +261,7 @@ function getStudentUpdateDTO(form: IUserUpdateForm): IStudentUpdateDTO {
         faculty: form.faculty,
         cluster: form.group,
         degree: form.degree,
-        graduateDate: form.gradYear,
+        graduateDate: new Date(form.gradYear).toISOString(),
     }
 }
 

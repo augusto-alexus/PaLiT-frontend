@@ -12,7 +12,7 @@ import {
     MainContentLoading,
     Tabs,
 } from '~/components'
-import { useAllStages, useAllStudentDocuments, useCurrentUser, useMyProject } from '~/hooks'
+import { useAllStages, useAllStudentDocuments, useCurrentUser, useMyProject, useMyStudents } from '~/hooks'
 import { DocumentFeedItem } from '~/pages/components'
 import { useFeedStore } from '~/store'
 
@@ -51,6 +51,7 @@ export function StudentFeed() {
     const studentId = currentUser.studentId?.toString() || paramsStudentId
     const { selectedStage: storedSelectedStage, setSelectedStage } = useFeedStore()
     const { myProject } = useMyProject()
+    const { data: myStudents, isInitialLoading: myStudentsLoading } = useMyStudents()
     const { isInitialLoading: isLoadingStages, error: errorStage, data: stages } = useAllStages()
     const {
         isInitialLoading: isLoadingDocuments,
@@ -59,7 +60,7 @@ export function StudentFeed() {
     } = useAllStudentDocuments(studentId)
 
     if (!studentId) return <DisplayError error={Error('studentId required to view feed')} />
-    if (isLoadingDocuments || isLoadingStages) return <MainContentLoading />
+    if (isLoadingDocuments || isLoadingStages || myStudentsLoading) return <MainContentLoading />
     if (errorDocuments) return <DisplayError error={errorDocuments} />
     if (errorStage) return <DisplayError error={errorStage} />
     if (!stages || !stages?.length) return <DisplayError error={new Error('No stages returned from the server')} />
@@ -85,7 +86,11 @@ export function StudentFeed() {
 
     const sortedFeedElements = feedElements.sort((a, b) => a.date.getTime() - b.date.getTime())
 
-    const canViewStage = currentUser.allowedStageIds?.some((s) => s === selectedStage)
+    const canViewStage =
+        currentUser.allowedStageIds?.some((s) => s === selectedStage) ||
+        (role !== 'teacher' &&
+            selectedStage === 1 &&
+            myStudents?.some((s) => s.student.studentId.toString() === studentId))
 
     const lastDocument = documents?.sort((a, b) => {
         const stageDelta = a.stageDTO.serialOrder - b.stageDTO.serialOrder

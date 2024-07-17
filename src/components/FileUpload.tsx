@@ -37,8 +37,6 @@ export function FileUpload() {
     const [file, setFile] = useState<File | null>(null)
     const fileSize: string = file ? getReadableFileSize(file.size) : '0'
 
-    console.log(file?.size)
-
     return (
         <div className='flex flex-col place-items-center gap-16'>
             <div>
@@ -60,6 +58,7 @@ export function FileUpload() {
                 </label>
                 <input
                     id='upload-document'
+                    accept='application/pdf'
                     type='file'
                     className='hidden'
                     disabled={!!file}

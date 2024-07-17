@@ -21,7 +21,7 @@ export const routes = {
     aUsers: '/users',
     user: (userId?: string) => `users/${userId ? userId : ':userId'}`,
     aUser: (userId?: string) => `/users/${userId ? userId : ':userId'}`,
-    userEdit: 'edit',
+    userEdit: 'users/edit',
     aUserEdit: '/users/edit',
 
     inviteTeachers: 'invite-teachers',

@@ -27,10 +27,10 @@ export function RequestForm({ userId }: { userId: number }) {
                     if (currentUser.role === 'student') toast(`${t('error.inviteLimitTeacher')}!`)
                     else toast(`${t('error.studentAlreadyHasTeacher')}!`)
                 } else {
-                    toast(`${t('unknownError')}! ${error.message}`)
+                    toast(`${t('error.unknownError')}! ${error.message}`)
                 }
             } else {
-                toast(`${t('unknownError')}!`)
+                toast(`${t('error.unknownError')}!`)
             }
         },
     })
