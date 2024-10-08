@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, TextareaHTMLAttributes, useState } from 'react'
+import { InputHTMLAttributes, TextareaHTMLAttributes } from 'react'
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
     return (

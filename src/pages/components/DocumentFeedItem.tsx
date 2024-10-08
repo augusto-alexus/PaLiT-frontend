@@ -47,22 +47,33 @@ export function DocumentFeedItem({
                 <div className='place-self-center'>
                     {t('feed.studentUploadedFile')}: {document.originalName}
                 </div>
-                {nextStage && isStageMoveAllowed(document.stageDTO.stageId, document.approvedDate) && (
-                    <IconButton
-                        onClick={() =>
-                            reviewDocument({
-                                documentId: documentId.toString(),
-                                studentId,
-                                verdict: 'approved',
-                                nextStageId: nextStage.stageId,
-                            })
-                        }
-                        title={t('feed.approveDocument')}
-                    >
-                        <i className='ri-check-line' />
-                    </IconButton>
-                )}
-                {isStageMoveAllowed(document.stageDTO.stageId, document.approvedDate) && (
+                {nextStage &&
+                    isStageMoveAllowed(
+                        studentId,
+                        document.stageDTO.stageId,
+                        document.stageDTO.serialOrder,
+                        document.approvedDate
+                    ) && (
+                        <IconButton
+                            onClick={() =>
+                                reviewDocument({
+                                    documentId: documentId.toString(),
+                                    studentId,
+                                    verdict: 'approved',
+                                    nextStageId: nextStage.stageId,
+                                })
+                            }
+                            title={t('feed.approveDocument')}
+                        >
+                            <i className='ri-check-line' />
+                        </IconButton>
+                    )}
+                {isStageMoveAllowed(
+                    studentId,
+                    document.stageDTO.stageId,
+                    document.stageDTO.serialOrder,
+                    document.approvedDate
+                ) && (
                     <IconButton
                         onClick={() =>
                             reviewDocument({
